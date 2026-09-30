@@ -1,0 +1,35 @@
+{
+  "name": "nextvn",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -n client,server \"npm run dev -w client\" \"npm run dev -w server\"",
+    "dev:client": "npm run dev -w client",
+    "dev:server": "npm run dev -w server",
+    "build": "npm run build -w client && npm run build -w server",
+    "build:client": "npm run build -w client",
+    "build:server": "npm run build -w server",
+    "lint": "npm run lint -w client && npm run lint -w server",
+    "lint:client": "npm run lint -w client",
+    "lint:server": "npm run lint -w server",
+    "test": "npm test -w client && npm test -w server",
+    "test:client": "npm test -w client",
+    "test:server": "npm test -w server",
+    "typecheck": "npm run typecheck -w client && npm run typecheck -w server",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build",
+    "db:emit": "npm run contract:emit -w server",
+    "db:plan": "npm run db:plan -w server",
+    "db:init": "npm run db:init -w server",
+    "db:status": "npm run db:status -w server"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "prettier": "^3.9.9"
+  }
+}

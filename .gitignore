@@ -41,3 +41,12 @@ temp/
 # Prisma local DB if ever used
 *.db
 *.db-journal
+
+# Certificates / local TLS files
+*.pem
+*.key
+*.crt
+server/certs/
+
+# Backup files
+*.broken
