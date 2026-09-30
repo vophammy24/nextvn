@@ -1,0 +1,77 @@
+// use prisma-8
+
+enum PlatformRole {
+  USER
+  ADMIN
+}
+
+enum BusinessRole {
+  OWNER
+  MANAGER
+  STAFF
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model User {
+  id           Uuid         @id @default(uuid())
+  email        String       @unique
+  passwordHash String
+  fullName     String
+  platformRole PlatformRole @default(USER)
+  status       UserStatus   @default(ACTIVE)
+
+  memberships BusinessMember[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model Business {
+  id   Uuid   @id @default(uuid())
+  name String
+
+  members  BusinessMember[]
+  branches Branch[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model BusinessMember {
+  id Uuid @id @default(uuid())
+
+  businessId Uuid
+  business   Business @relation(fields: [businessId], references: [id])
+
+  userId Uuid
+  user   User @relation(fields: [userId], references: [id])
+
+  role BusinessRole
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@unique([businessId, userId])
+  @@index([userId])
+}
+
+model Branch {
+  id Uuid @id @default(uuid())
+
+  businessId Uuid
+  business   Business @relation(fields: [businessId], references: [id])
+
+  name     String
+  address  String?
+  phone    String?
+  isActive Boolean @default(true)
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@index([businessId])
+}
