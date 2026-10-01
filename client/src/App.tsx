@@ -1,3 +1,4 @@
+import { OwnerRoute } from '@/pages/owner/OwnerRoute';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import StaffLayout from '@/layouts/StaffLayout';
 import POSPage from '@/pages/staff/POSPage';
@@ -22,6 +23,16 @@ function App() {
           <Route path="stock-transactions" element={<InventoryRoute view="stockTransactions" />} />
           <Route path="recipes" element={<InventoryRoute view="recipes" />} />
           <Route path="alerts" element={<InventoryRoute view="alerts" />} />
+          <Route path="owner" element={<OwnerRoute />} />
+          <Route path="owner/branches" element={<OwnerRoute />} />
+          <Route path="owner/revenue" element={<OwnerRoute />} />
+          <Route path="owner/menu-profit" element={<OwnerRoute />} />
+          <Route path="owner/promotions" element={<OwnerRoute />} />
+          <Route path="owner/users" element={<OwnerRoute />} />
+          <Route path="owner/settings" element={<OwnerRoute />} />
+          <Route path="owner/subscription" element={<OwnerRoute />} />
+          <Route path="owner/team" element={<Navigate to="/app/owner/users" replace />} />
+          <Route path="owner/analytics" element={<Navigate to="/app/owner/revenue" replace />} />
           <Route path="owner/inventory" element={<InventoryOverviewPage />} />
         </Route>
 
