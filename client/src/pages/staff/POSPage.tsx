@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Search, ShoppingBag, Minus, Plus, Trash2, AlertCircle } from 'lucide-react';
 import {
   fetchCategories,
@@ -23,6 +23,7 @@ export default function POSPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const cart = useCartStore();
+  const queryClient = useQueryClient();
 
   const categoriesQuery = useQuery({
     queryKey: ['categories'],
@@ -47,6 +48,7 @@ export default function POSPage() {
     mutationFn: createOrder,
     onSuccess: () => {
       cart.clearCart();
+      void queryClient.invalidateQueries();
       alert('Đơn hàng đã được tạo thành công!');
     },
     onError: () => {
@@ -59,6 +61,7 @@ export default function POSPage() {
 
     orderMutation.mutate({
       orderType: cart.orderType,
+      shiftId: shiftQuery.data?.id,
       tableId: cart.tableId,
       items: cart.items.map((i) => ({
         menuItemId: i.menuItem.id,

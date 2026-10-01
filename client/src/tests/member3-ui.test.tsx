@@ -1,3 +1,5 @@
+import { beforeEach } from 'vitest';
+beforeEach(() => localStorage.setItem('access_token', 'test-session'));
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import { fireEvent, render as renderUI, screen, waitFor } from '@testing-library/react';

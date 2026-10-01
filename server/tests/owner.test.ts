@@ -80,6 +80,7 @@ vi.mock('../src/prisma/db', () => {
       },
     },
     Business: { where: () => query([{ id: 'business-a', name: 'Doanh nghiệp thử nghiệm' }]) },
+    MenuItem: { where: () => query([]) },
     BusinessSettings: { where: () => query(mock.settings ? [mock.settings] : []) },
     BusinessSubscription: { where: () => query([]) },
     SubscriptionPlan: { where: () => query([]) },

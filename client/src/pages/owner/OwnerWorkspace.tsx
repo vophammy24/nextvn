@@ -34,7 +34,7 @@ type PageKey =
   | 'settings';
 type Envelope<T> = { data: T; source?: string };
 type Trend = { label: string; value: number };
-type Category = { name: string; value: number };
+type Category = { name?: string; label?: string; value: number };
 type Overview = {
   revenueVnd: number;
   grossProfitVnd: number | null;
@@ -368,8 +368,11 @@ function PageView(props: {
           <section className="panel chart-panel">
             <AnalyticsChart
               title="Doanh thu theo danh mục"
-              description="Chưa hỗ trợ phân bổ theo danh mục"
-              rows={item.categoryRevenue.map((row) => ({ label: row.name, value: row.value }))}
+              description="Doanh thu thực tế theo nhóm món"
+              rows={item.categoryRevenue.map((row) => ({
+                label: row.label ?? row.name ?? 'Khác',
+                value: row.value,
+              }))}
             />
           </section>
           <section className="panel">
@@ -391,8 +394,8 @@ function PageView(props: {
             <div className="rank-list">
               {!item.profitableItems.length && <p>Chưa có dữ liệu lợi nhuận món.</p>}
               {item.profitableItems.map((dish, index) => (
-                <div className="rank-row" key={dish.name}>
-                  <span className="rank-number">0{index + 1}</span>
+                <div className="rank-row" key={`${dish.name}-${index}`}>
+                  <span className="rank-number">{String(index + 1).padStart(2, '0')}</span>
                   <strong>{dish.name}</strong>
                   <b>{money(dish.grossProfitVnd)}</b>
                 </div>
@@ -556,8 +559,11 @@ function PageView(props: {
           <section className="panel chart-panel">
             <AnalyticsChart
               title="Hiệu quả danh mục"
-              description="Chưa hỗ trợ phân bổ theo danh mục"
-              rows={item.categories.map((row) => ({ label: row.name, value: row.value }))}
+              description="Doanh thu thực tế theo nhóm món"
+              rows={item.categories.map((row) => ({
+                label: row.label ?? row.name ?? 'Khác',
+                value: row.value,
+              }))}
             />
           </section>
           <section className="panel wide">
@@ -839,7 +845,17 @@ function PageView(props: {
           <div>
             <span className="eyebrow">GÓI HIỆN TẠI</span>
             <h2>{item.plan}</h2>
-            <p>{item.status}</p>
+            <p>
+              {(
+                {
+                  ACTIVE: 'Đang hoạt động',
+                  TRIALING: 'Dùng thử',
+                  PAST_DUE: 'Quá hạn',
+                  CANCELED: 'Đã hủy',
+                  EXPIRED: 'Hết hạn',
+                } as Record<string, string>
+              )[item.status] ?? item.status}
+            </p>
           </div>
           <div className="subscription-usage">
             <span>Mức sử dụng</span>
@@ -889,7 +905,16 @@ function PageView(props: {
                       <td>{formatDate(record.date)}</td>
                       <td>{record.description}</td>
                       <td>{money(record.amountVnd)}</td>
-                      <td>{record.status}</td>
+                      <td>
+                        {(
+                          {
+                            PENDING: 'Chờ thanh toán',
+                            PAID: 'Đã thanh toán',
+                            FAILED: 'Thất bại',
+                            REFUNDED: 'Đã hoàn tiền',
+                          } as Record<string, string>
+                        )[record.status] ?? record.status}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

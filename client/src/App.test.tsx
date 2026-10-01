@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import App from '@/App';
 
@@ -22,6 +22,12 @@ function renderApp(initialRoute = '/app/pos') {
 }
 
 describe('App', () => {
+  beforeEach(() => localStorage.setItem('access_token', 'test-session'));
+  it('redirects unauthenticated users to local login', () => {
+    localStorage.removeItem('access_token');
+    renderApp();
+    expect(screen.getByRole('heading', { name: 'Đăng nhập' })).toBeInTheDocument();
+  });
   it('renders POS page with Vietnamese header', () => {
     renderApp('/app/pos');
 

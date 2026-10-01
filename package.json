@@ -26,7 +26,8 @@
     "db:emit": "npm run contract:emit -w server",
     "db:plan": "npm run db:plan -w server",
     "db:init": "npm run db:init -w server",
-    "db:status": "npm run db:status -w server"
+    "db:status": "npm run db:status -w server",
+    "db:seed": "npm run db:seed -w server"
   },
   "devDependencies": {
     "concurrently": "^10.0.5",

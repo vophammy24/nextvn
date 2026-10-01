@@ -7,7 +7,7 @@ const days = { week: 7, month: 30, quarter: 90 };
 export interface SalesRow {
   createdAt: string;
   total: number;
-  items: { menuItemId: string; name: string; quantity: number; total: number }[];
+  items: { menuItemId: string; name: string; quantity: number; total: number; category?: string }[];
 }
 export function aggregateSales(orders: SalesRow[]) {
   const byItem = new Map<
@@ -16,6 +16,7 @@ export function aggregateSales(orders: SalesRow[]) {
   >();
   const dates = new Map<string, number>(),
     hours = new Map<string, number>();
+  const categories = new Map<string, number>();
   for (const order of orders) {
     const date = new Intl.DateTimeFormat('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }).format(
       new Date(order.createdAt),
@@ -30,6 +31,12 @@ export function aggregateSales(orders: SalesRow[]) {
     hours.set(hour, (hours.get(hour) ?? 0) + 1);
     const subtotal = order.items.reduce((sum, i) => sum + i.total, 0);
     for (const item of order.items) {
+      const category = item.category ?? 'Khác';
+      categories.set(
+        category,
+        (categories.get(category) ?? 0) +
+          (subtotal > 0 ? (item.total / subtotal) * order.total : 0),
+      );
       const row = byItem.get(item.menuItemId) ?? {
         itemId: item.menuItemId,
         name: item.name,
@@ -50,7 +57,7 @@ export function aggregateSales(orders: SalesRow[]) {
       [...hours].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0] ??
       'Chưa có dữ liệu',
     trend: [...dates].map(([label, value]) => ({ label, value })),
-    categories: [],
+    categories: [...categories].map(([label, value]) => ({ label, value })),
     topItems: [...byItem.values()].sort((a, b) => b.revenueVnd - a.revenueVnd),
     peakHours: [...hours].sort().map(([label, value]) => ({ label, value })),
   };
@@ -61,13 +68,22 @@ export async function salesAnalytics(businessId: string, period: AnalyticsPeriod
   const branches = await db.orm.public.Branch.where({ businessId }).select('id').all();
   const orders: SalesRow[] = [];
   for (const branch of branches) {
+    const menu = await db.orm.public.MenuItem.where({ branchId: branch.id })
+      .include('category')
+      .all();
     const rows = await db.orm.public.Order.where({ branchId: branch.id, status: 'PAID' })
       .include('items')
       .all();
     orders.push(
-      ...rows.filter(
-        (o) => Date.parse(o.createdAt) >= start && Date.parse(o.createdAt) <= Date.now(),
-      ),
+      ...rows
+        .map((o) => ({
+          ...o,
+          items: o.items.map((i) => ({
+            ...i,
+            category: menu.find((m) => m.id === i.menuItemId)?.category.name,
+          })),
+        }))
+        .filter((o) => Date.parse(o.createdAt) >= start && Date.parse(o.createdAt) <= Date.now()),
     );
   }
   return aggregateSales(orders.sort((a, b) => a.createdAt.localeCompare(b.createdAt)));

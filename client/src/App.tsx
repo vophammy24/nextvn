@@ -1,4 +1,6 @@
 import { OwnerRoute } from '@/pages/owner/OwnerRoute';
+import LoginPage from '@/pages/auth/LoginPage';
+import RegisterPage from '@/pages/auth/RegisterPage';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import StaffLayout from '@/layouts/StaffLayout';
 import POSPage from '@/pages/staff/POSPage';
@@ -13,6 +15,8 @@ function App() {
   return (
     <WorkspaceProvider>
       <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         {/* Sales Operations — shared by Staff and Manager */}
         <Route path="/app" element={<StaffLayout />}>
           <Route path="pos" element={<POSPage />} />

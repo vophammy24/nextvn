@@ -1128,3 +1128,163 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Shared feedback and responsive shell for all integrated role pages. */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+.main-content {
+  min-width: 0;
+}
+.sidebar button.sidebar-link {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.mobile-navigation {
+  display: none;
+}
+.feedback-state {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 32px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+.error-state {
+  color: #b42332;
+  background: #fff1f2;
+}
+.feedback-state .button {
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 9px 16px;
+  background: white;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.spinner {
+  animation: spin 1s linear infinite;
+}
+.inventory-integration {
+  padding: 24px;
+}
+.inventory-integration .page-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.inventory-integration .page-header h1 {
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+.inventory-integration .page-header p {
+  color: var(--text-secondary);
+}
+.pos-layout {
+  grid-template-columns: minmax(0, 1fr) 360px;
+}
+.pos-menu,
+.pos-cart,
+.card,
+.owner-app {
+  min-width: 0;
+}
+.card:has(> .data-table) {
+  overflow-x: auto;
+}
+@media (max-width: 1200px) {
+  .pos-layout {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 16px;
+  }
+}
+@media (max-width: 1000px) {
+  .pos-layout {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+  }
+  .pos-items-grid {
+    max-height: 55vh;
+  }
+  .pos-cart {
+    min-height: 450px;
+  }
+}
+@media (max-width: 760px) {
+  .app-layout {
+    flex-direction: column;
+  }
+  .mobile-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--bg-sidebar);
+    color: white;
+  }
+  .sidebar {
+    display: none;
+    position: static;
+    width: 100%;
+  }
+  .sidebar.is-open {
+    display: flex;
+  }
+  .sidebar-brand {
+    display: none;
+  }
+  .sidebar-nav {
+    max-height: 60vh;
+  }
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    min-height: calc(100dvh - 68px);
+  }
+  .page-content,
+  .inventory-integration {
+    padding: 16px;
+  }
+  .top-header {
+    height: auto;
+    min-height: 64px;
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .pos-items-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .tables-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .input,
+  .filter-select {
+    max-width: 100%;
+  }
+  .filters-bar > * {
+    min-width: 0;
+  }
+  .modal {
+    max-width: calc(100vw - 32px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}

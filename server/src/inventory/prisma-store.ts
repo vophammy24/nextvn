@@ -1,4 +1,4 @@
-import { db } from '../prisma/db';
+﻿import { db } from '../prisma/db.js';
 import { randomUUID } from 'node:crypto';
 import {
   fail,
@@ -7,7 +7,7 @@ import {
   type Modifier,
   type Scope,
   type StockItem,
-} from './domain';
+} from './domain.js';
 type Database = typeof db;
 export class PrismaInventoryStore implements InventoryStore {
   constructor(private database: Database = db) {}
@@ -29,29 +29,17 @@ export class PrismaInventoryStore implements InventoryStore {
       if (!locked.length)
         fail('BRANCH_NOT_FOUND', 'Chi nhánh không tồn tại hoặc không hoạt động.', 404);
       const orm = tx.orm.public;
-      const ingredients = await orm.Ingredient.where(scope).all();
-      const balances: {
-        ingredientId: string;
-        quantityMilli: number;
-        minimumMilli: number;
-        unitCost: number;
-      }[] = [];
-      const lots = [];
-      for (const ingredient of ingredients) {
-        const balance = await orm.InventoryBalance.where({ ingredientId: ingredient.id }).first();
-        if (!balance) fail('INVENTORY_INCONSISTENT', 'Dữ liệu tồn kho cần được kiểm tra.', 409);
-        balances.push(balance!);
-        lots.push(...(await orm.InventoryLot.where({ ingredientId: ingredient.id }).all()));
-      }
-      const recipes = await orm.Recipe.where(scope).all();
-      const recipeParts: {
-        recipeId: string;
-        ingredientId: string;
-        quantityMilli: number;
-        modifierKey: string;
-      }[] = [];
-      for (const recipe of recipes)
-        recipeParts.push(...(await orm.RecipeIngredient.where({ recipeId: recipe.id }).all()));
+      const ingredients = await orm.Ingredient.where(scope)
+        .include('balance')
+        .include('lots')
+        .all();
+      const balances = ingredients.map((i) => {
+        if (!i.balance) fail('INVENTORY_INCONSISTENT', 'Dữ liệu tồn kho cần được kiểm tra.', 409);
+        return i.balance!;
+      });
+      const lots = ingredients.flatMap((i) => i.lots);
+      const recipes = await orm.Recipe.where(scope).include('ingredients').all();
+      const recipeParts = recipes.flatMap((r) => r.ingredients);
       const transactions = await orm.StockTransaction.where(scope).all();
       const alerts = await orm.InventoryAlert.where(scope).all();
       const state: InventoryState = {

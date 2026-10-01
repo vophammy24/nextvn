@@ -49,6 +49,7 @@ enum ShiftStatus {
 model User {
   id           Uuid         @id @default(uuid())
   email        String       @unique
+  username     String?      @unique
   passwordHash String
   fullName     String
   platformRole PlatformRole @default(USER)

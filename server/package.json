@@ -14,7 +14,8 @@
     "contract:emit": "prisma contract emit",
     "db:plan": "prisma db init --dry-run",
     "db:init": "prisma db init",
-    "db:status": "prisma migration status"
+    "db:status": "prisma migration status",
+    "db:seed": "tsx src/prisma/seed.ts"
   },
   "keywords": [],
   "author": "",

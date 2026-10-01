@@ -21,7 +21,7 @@ import {
   type StockItem,
   type StockTransaction,
   type Unit,
-} from './domain';
+} from './domain.js';
 export const EXPIRY_WARNING_DAYS = 3;
 const day = (now: Date) =>
   new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' }).format(now);

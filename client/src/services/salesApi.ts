@@ -11,28 +11,24 @@ import type {
   ShiftSummary,
 } from '@/types/sales';
 
-// For demo/development — in production these come from auth context
-const BUSINESS_ID = import.meta.env['VITE_BUSINESS_ID'] || 'demo-business-id';
-const BRANCH_ID = import.meta.env['VITE_BRANCH_ID'] || 'demo-branch-id';
-
-function getBase() {
-  return `/business/${BUSINESS_ID}`;
+// Resolve scope from the verified session, never from build-time demo IDs.
+async function salesScope() {
+  const { data } =
+    await api.get<import('@/features/auth/workspaceContext').WorkspaceContext>('/workspace');
+  if (!data.branch || !['STAFF', 'MANAGER'].includes(data.role))
+    throw new Error('A sales branch assignment is required.');
+  return { base: '/business/' + data.business.id, branchId: data.branch.id };
 }
-
-export function getBranchId() {
-  return BRANCH_ID;
+export async function getBusinessId() {
+  return (await api.get('/workspace')).data.business.id;
 }
-
-export function getBusinessId() {
-  return BUSINESS_ID;
+export async function getBranchId() {
+  return (await salesScope()).branchId;
 }
-
-// ─── Menu ──────────────────────────────────────────
 
 export async function fetchCategories(): Promise<MenuCategory[]> {
-  const res = await api.get<ApiResponse<MenuCategory[]>>(
-    `${getBase()}/menu/${BRANCH_ID}/categories`,
-  );
+  const { base, branchId } = await salesScope();
+  const res = await api.get<ApiResponse<MenuCategory[]>>(`${base}/menu/${branchId}/categories`);
   return res.data.data;
 }
 
@@ -40,7 +36,8 @@ export async function fetchMenuItems(params?: {
   categoryId?: string;
   search?: string;
 }): Promise<MenuItem[]> {
-  const res = await api.get<ApiResponse<MenuItem[]>>(`${getBase()}/menu/${BRANCH_ID}/items`, {
+  const { base, branchId } = await salesScope();
+  const res = await api.get<ApiResponse<MenuItem[]>>(`${base}/menu/${branchId}/items`, {
     params,
   });
   return res.data.data;
@@ -49,30 +46,32 @@ export async function fetchMenuItems(params?: {
 // ─── Tables ────────────────────────────────────────
 
 export async function fetchAreas(): Promise<RestaurantArea[]> {
-  const res = await api.get<ApiResponse<RestaurantArea[]>>(
-    `${getBase()}/tables/${BRANCH_ID}/areas`,
-  );
+  const { base, branchId } = await salesScope();
+  const res = await api.get<ApiResponse<RestaurantArea[]>>(`${base}/tables/${branchId}/areas`);
   return res.data.data;
 }
 
 export async function fetchTables(areaId?: string): Promise<RestaurantTable[]> {
-  const res = await api.get<ApiResponse<RestaurantTable[]>>(`${getBase()}/tables/${BRANCH_ID}`, {
+  const { base, branchId } = await salesScope();
+  const res = await api.get<ApiResponse<RestaurantTable[]>>(`${base}/tables/${branchId}`, {
     params: areaId ? { areaId } : {},
   });
   return res.data.data;
 }
 
 export async function updateTableStatus(tableId: string, status: string): Promise<RestaurantTable> {
+  const { base, branchId } = await salesScope();
   const res = await api.patch<ApiResponse<RestaurantTable>>(
-    `${getBase()}/tables/${BRANCH_ID}/${tableId}/status`,
+    `${base}/tables/${branchId}/${tableId}/status`,
     { status },
   );
   return res.data.data;
 }
 
 export async function fetchTableBill(tableId: string): Promise<Order | null> {
+  const { base, branchId } = await salesScope();
   const res = await api.get<ApiResponse<Order | null>>(
-    `${getBase()}/tables/${BRANCH_ID}/${tableId}/bill`,
+    `${base}/tables/${branchId}/${tableId}/bill`,
   );
   return res.data.data;
 }
@@ -84,12 +83,14 @@ export async function createOrder(data: {
   tableId?: string | null;
   items: Array<{ menuItemId: string; quantity: number; note?: string }>;
   paymentMethod: string;
+  shiftId?: string;
   discount?: number;
   note?: string;
 }): Promise<Order> {
-  const res = await api.post<ApiResponse<Order>>(`${getBase()}/orders`, {
+  const { base, branchId } = await salesScope();
+  const res = await api.post<ApiResponse<Order>>(`${base}/orders`, {
     ...data,
-    branchId: BRANCH_ID,
+    branchId: branchId,
   });
   return res.data.data;
 }
@@ -102,47 +103,53 @@ export async function fetchOrders(params?: {
   today?: string;
   shiftId?: string;
 }): Promise<PaginatedResponse<Order>> {
-  const res = await api.get<ApiResponse<PaginatedResponse<Order>>>(
-    `${getBase()}/orders/${BRANCH_ID}`,
-    { params },
-  );
+  const { base, branchId } = await salesScope();
+  const res = await api.get<ApiResponse<PaginatedResponse<Order>>>(`${base}/orders/${branchId}`, {
+    params,
+  });
   return res.data.data;
 }
 
 export async function fetchOrderById(orderId: string): Promise<Order> {
-  const res = await api.get<ApiResponse<Order>>(`${getBase()}/orders/${BRANCH_ID}/${orderId}`);
+  const { base, branchId } = await salesScope();
+  const res = await api.get<ApiResponse<Order>>(`${base}/orders/${branchId}/${orderId}`);
   return res.data.data;
 }
 
 // ─── Shifts ────────────────────────────────────────
 
 export async function startShift(): Promise<Shift> {
-  const res = await api.post<ApiResponse<Shift>>(`${getBase()}/shifts/start`, {
-    branchId: BRANCH_ID,
+  const { base, branchId } = await salesScope();
+  const res = await api.post<ApiResponse<Shift>>(`${base}/shifts/start`, {
+    branchId: branchId,
   });
   return res.data.data;
 }
 
 export async function endShift(shiftId: string): Promise<Shift> {
-  const res = await api.post<ApiResponse<Shift>>(`${getBase()}/shifts/end`, {
+  const { base } = await salesScope();
+  const res = await api.post<ApiResponse<Shift>>(`${base}/shifts/end`, {
     shiftId,
   });
   return res.data.data;
 }
 
 export async function fetchActiveShift(): Promise<Shift | null> {
-  const res = await api.get<ApiResponse<Shift | null>>(`${getBase()}/shifts/${BRANCH_ID}/active`);
+  const { base, branchId } = await salesScope();
+  const res = await api.get<ApiResponse<Shift | null>>(`${base}/shifts/${branchId}/active`);
   return res.data.data;
 }
 
 export async function fetchShiftSummary(shiftId: string): Promise<ShiftSummary> {
+  const { base, branchId } = await salesScope();
   const res = await api.get<ApiResponse<ShiftSummary>>(
-    `${getBase()}/shifts/${BRANCH_ID}/${shiftId}/summary`,
+    `${base}/shifts/${branchId}/${shiftId}/summary`,
   );
   return res.data.data;
 }
 
 export async function fetchShifts(): Promise<Shift[]> {
-  const res = await api.get<ApiResponse<Shift[]>>(`${getBase()}/shifts/${BRANCH_ID}`);
+  const { base, branchId } = await salesScope();
+  const res = await api.get<ApiResponse<Shift[]>>(`${base}/shifts/${branchId}`);
   return res.data.data;
 }

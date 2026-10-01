@@ -1,6 +1,7 @@
 import ownerRouter from './owner/ownerRouter.js';
 import express from 'express';
 import cors from 'cors';
+import { authRouter } from './modules/auth/auth.routes.js';
 
 import { authenticate } from './middleware/auth.js';
 import { resolveMembership } from './middleware/membership.js';
@@ -20,6 +21,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/auth', authRouter);
 
 const inventoryService = new InventoryService(new PrismaInventoryStore());
 

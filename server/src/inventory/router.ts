@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from 'express';
 import { z } from 'zod';
-import { InventoryError, parse, type Principal } from './domain';
-import type { InventoryService } from './service';
+import { InventoryError, parse, type Principal } from './domain.js';
+import type { InventoryService } from './service.js';
 export type ResolveInventoryPrincipal = (req: Request, res: Response) => Promise<Principal | null>;
 // Member 1 supplies this adapter AFTER verifying session + business membership + branch grants.
 // No role/business identity is accepted from request headers, query, or body.

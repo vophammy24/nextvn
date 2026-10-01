@@ -1,20 +1,47 @@
-import { OrderRepo, OrderItemRepo, OrderPaymentRepo } from '../../lib/repositories.js';
+﻿import { OrderRepo, OrderItemRepo, OrderPaymentRepo } from '../../lib/repositories.js';
 import { getMenuItemsByIds } from '../menu/menu.service.js';
 
-/**
- * Integration boundary for inventory consumption.
- * When the inventory module is merged, this function should delegate to:
- *   InventoryConsumptionService.consumeOrder(orderId)
- *
- * Currently a no-op stub that documents the integration contract.
- */
-export async function notifyInventoryConsumption(_orderId: string): Promise<void> {
-  // TODO: Inventory team (Member 2) will implement:
-  // Order → Recipe → Ingredient consumption
-  // This is the explicit integration boundary.
-  // Do NOT fake stock deductions here.
-  console.log(
-    `[InventoryIntegration] Order ${_orderId} ready for consumption — awaiting inventory module.`,
+import { atomicSale, salesDatabase, salesTransaction } from '../../lib/repositories.js';
+import { db } from '../../prisma/db.js';
+import { InventoryService } from '../../inventory/service.js';
+import { PrismaInventoryStore } from '../../inventory/prisma-store.js';
+
+export async function notifyInventoryConsumption(orderId: string): Promise<void> {
+  const database = salesDatabase();
+  const order = await database.orm.public.Order.where({ id: orderId }).include('items').first();
+  if (!order || !['PAID', 'CONFIRMED'].includes(order.status))
+    throw new Error('Đơn hàng chưa sẵn sàng thanh toán.');
+  const branch = await database.orm.public.Branch.where({ id: order.branchId }).first();
+  if (!branch) throw new Error('Chi nhánh không tồn tại.');
+  const member = await database.orm.public.BusinessMember.where({
+    businessId: branch.businessId,
+    userId: order.cashierId,
+    isActive: true,
+  }).first();
+  if (!member || member.branchId !== branch.id || member.role === 'OWNER')
+    throw new Error('Thu ngân không thuộc chi nhánh.');
+  // Reuse the caller's transaction; inventory acquires its usual branch lock.
+  const storeDatabase = {
+    raw: db.raw,
+    transaction: async <T>(run: (tx: typeof database) => Promise<T>) => run(database),
+  } as typeof db;
+  await new InventoryService(new PrismaInventoryStore(storeDatabase)).consumeSale(
+    {
+      userId: order.cashierId,
+      businessId: branch.businessId,
+      role: member.role,
+      branchIds: [branch.id],
+    },
+    { businessId: branch.businessId, branchId: branch.id },
+    {
+      orderId,
+      state: order.status,
+      items: order.items.map((i) => ({
+        menuItemId: i.menuItemId,
+        quantity: i.quantity,
+        modifiers: [],
+      })),
+    },
   );
 }
 
@@ -42,6 +69,9 @@ interface MenuItemRecord {
 }
 
 export async function createOrder(input: CreateOrderInput) {
+  return atomicSale(() => createOrderInTransaction(input));
+}
+async function createOrderInTransaction(input: CreateOrderInput) {
   // 1. Fetch authoritative menu prices from DB — NEVER trust frontend prices
   const menuItemIds = input.items.map((i) => i.menuItemId);
   const menuItems = (await getMenuItemsByIds(menuItemIds, input.branchId)) as MenuItemRecord[];
@@ -68,7 +98,12 @@ export async function createOrder(input: CreateOrderInput) {
   if (input.shiftId) {
     const { ShiftRepo } = await import('../../lib/repositories.js');
     const shift = await ShiftRepo.findFirst({
-      where: { id: input.shiftId, branchId: input.branchId },
+      where: {
+        id: input.shiftId,
+        branchId: input.branchId,
+        staffId: input.cashierId,
+        status: 'ACTIVE',
+      },
     });
     if (!shift) throw new Error('Ca làm việc không hợp lệ hoặc không thuộc chi nhánh này.');
   }
@@ -211,7 +246,7 @@ export async function getOrderById(id: string, branchId: string) {
   return order;
 }
 
-export async function updateOrderStatus(
+async function updateOrderStatusInTransaction(
   id: string,
   branchId: string,
   status: 'CONFIRMED' | 'PAID' | 'CANCELLED',
@@ -263,5 +298,24 @@ export async function updateOrderStatus(
   return OrderRepo.update({
     where: { id },
     data: { status },
+  });
+}
+
+export async function updateOrderStatus(
+  id: string,
+  branchId: string,
+  status: 'CONFIRMED' | 'PAID' | 'CANCELLED',
+  paymentMethod?: 'CASH' | 'BANK_TRANSFER',
+) {
+  return atomicSale(async () => {
+    await salesTransaction
+      .getStore()!
+      .query(
+        db.raw
+          .sql`SELECT id FROM public."Order" WHERE id = ${id}::uuid AND "branchId" = ${branchId}::uuid FOR UPDATE`
+          .returnsRow({ id: 'pg/uuid@1' })
+          .build(),
+      );
+    return updateOrderStatusInTransaction(id, branchId, status, paymentMethod);
   });
 }

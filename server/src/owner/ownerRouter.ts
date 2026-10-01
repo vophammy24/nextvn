@@ -97,17 +97,36 @@ const branchInput = z
     phone: z.string().trim().max(30).optional(),
   })
   .strict();
-router.get('/branches', async (req, res) =>
-  envelope(
-    res,
-    (await branchRepository.list(business(req))).map((row) => ({
-      ...row,
-      managerName: null,
-      orderCount: null,
-      revenueVnd: null,
-    })),
-  ),
-);
+router.get('/branches', async (req, res) => {
+  const rows = await branchRepository.list(business(req));
+  const data = await Promise.all(
+    rows.map(async (row) => {
+      const [orders, managers] = await Promise.all([
+        db.orm.public.Order.where({ branchId: row.id, status: 'PAID' }).all(),
+        db.orm.public.BusinessMember.where({
+          businessId: business(req),
+          branchId: row.id,
+          role: 'MANAGER',
+          isActive: true,
+        })
+          .include('user')
+          .all(),
+      ]);
+      const recent = orders.filter(
+        (o) =>
+          Date.parse(o.createdAt) >= Date.now() - 30 * 86400000 &&
+          Date.parse(o.createdAt) <= Date.now(),
+      );
+      return {
+        ...row,
+        managerName: managers.map((m) => m.user.fullName).join(', ') || null,
+        orderCount: recent.length,
+        revenueVnd: recent.reduce((sum, o) => sum + o.total, 0),
+      };
+    }),
+  );
+  return envelope(res, data);
+});
 router.post('/branches', async (req, res) => {
   const input = branchInput.safeParse(req.body);
   if (!input.success) return res.status(400).json({ message: 'Thông tin chi nhánh không hợp lệ.' });

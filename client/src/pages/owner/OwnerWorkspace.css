@@ -1130,3 +1130,40 @@
   width: 100%;
   min-width: 0;
 }
+
+/* Foundation StatCard is used by the integrated dashboard. */
+.owner-app .stat-card {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.owner-app .stat-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.owner-app .stat-heading svg {
+  width: 20px;
+  height: 20px;
+  color: var(--green);
+}
+.owner-app .stat-value {
+  display: block;
+  margin: 14px 0 8px;
+  font-size: clamp(20px, 2vw, 28px);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.owner-app .stat-card p {
+  color: var(--muted);
+  font-size: 12px;
+}
+.owner-app .rank-list {
+  max-height: 360px;
+  overflow-y: auto;
+}
