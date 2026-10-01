@@ -19,7 +19,7 @@ it('submits the existing registration contract and explains membership setup', a
   await user.type(screen.getByLabelText('Họ và tên'), 'Nguyễn An');
   await user.type(screen.getByLabelText('Email'), 'an@example.test');
   await user.type(screen.getByLabelText('Mật khẩu'), 'Example@2026');
-  await user.click(screen.getByRole('button', { name: 'Đăng ký', exact: true }));
+  await user.click(screen.getByRole('button', { name: /^Đăng ký$/,}));
   expect(post).toHaveBeenCalledWith('/auth/register', {
     username: 'new.demo',
     fullName: 'Nguyễn An',
@@ -27,7 +27,7 @@ it('submits the existing registration contract and explains membership setup', a
     password: 'Example@2026',
   });
   expect(await screen.findByRole('status')).toHaveTextContent('Quản trị viên cần thêm bạn');
-  expect(screen.getByRole('link', { name: 'Đăng nhập', exact: true })).toHaveAttribute(
+  expect(screen.getByRole('link', { name: /^Đăng nhập$/, })).toHaveAttribute(
     'href',
     '/login',
   );
