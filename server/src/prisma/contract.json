@@ -16,6 +16,22 @@
       "model": "BusinessMember",
       "namespace": "public"
     },
+    "Ingredient": {
+      "model": "Ingredient",
+      "namespace": "public"
+    },
+    "InventoryAlert": {
+      "model": "InventoryAlert",
+      "namespace": "public"
+    },
+    "InventoryBalance": {
+      "model": "InventoryBalance",
+      "namespace": "public"
+    },
+    "InventoryLot": {
+      "model": "InventoryLot",
+      "namespace": "public"
+    },
     "MenuCategory": {
       "model": "MenuCategory",
       "namespace": "public"
@@ -36,6 +52,14 @@
       "model": "OrderPayment",
       "namespace": "public"
     },
+    "Recipe": {
+      "model": "Recipe",
+      "namespace": "public"
+    },
+    "RecipeIngredient": {
+      "model": "RecipeIngredient",
+      "namespace": "public"
+    },
     "RestaurantArea": {
       "model": "RestaurantArea",
       "namespace": "public"
@@ -46,6 +70,10 @@
     },
     "Shift": {
       "model": "Shift",
+      "namespace": "public"
+    },
+    "StockTransaction": {
+      "model": "StockTransaction",
       "namespace": "public"
     },
     "User": {
@@ -71,6 +99,57 @@
               {
                 "name": "STAFF",
                 "value": "STAFF"
+              }
+            ]
+          },
+          "InventoryAlertStatus": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "OPEN",
+                "value": "OPEN"
+              },
+              {
+                "name": "IN_PROGRESS",
+                "value": "IN_PROGRESS"
+              },
+              {
+                "name": "RESOLVED",
+                "value": "RESOLVED"
+              }
+            ]
+          },
+          "InventoryAlertType": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "LOW_STOCK",
+                "value": "LOW_STOCK"
+              },
+              {
+                "name": "OUT_OF_STOCK",
+                "value": "OUT_OF_STOCK"
+              },
+              {
+                "name": "NEAR_EXPIRY",
+                "value": "NEAR_EXPIRY"
+              }
+            ]
+          },
+          "InventoryUnit": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "G",
+                "value": "G"
+              },
+              {
+                "name": "ML",
+                "value": "ML"
+              },
+              {
+                "name": "PIECE",
+                "value": "PIECE"
               }
             ]
           },
@@ -144,6 +223,31 @@
               {
                 "name": "CLOSED",
                 "value": "CLOSED"
+              }
+            ]
+          },
+          "StockTransactionType": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "IMPORT",
+                "value": "IMPORT"
+              },
+              {
+                "name": "EXPORT",
+                "value": "EXPORT"
+              },
+              {
+                "name": "ADJUSTMENT",
+                "value": "ADJUSTMENT"
+              },
+              {
+                "name": "WASTE",
+                "value": "WASTE"
+              },
+              {
+                "name": "SALE_CONSUMPTION",
+                "value": "SALE_CONSUMPTION"
               }
             ]
           },
@@ -263,6 +367,36 @@
                   "namespace": "public"
                 }
               },
+              "ingredients": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "branchId"
+                  ]
+                },
+                "to": {
+                  "model": "Ingredient",
+                  "namespace": "public"
+                }
+              },
+              "members": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "branchId"
+                  ]
+                },
+                "to": {
+                  "model": "BusinessMember",
+                  "namespace": "public"
+                }
+              },
               "menuCategories": {
                 "cardinality": "1:N",
                 "on": {
@@ -308,6 +442,21 @@
                   "namespace": "public"
                 }
               },
+              "recipes": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "branchId"
+                  ]
+                },
+                "to": {
+                  "model": "Recipe",
+                  "namespace": "public"
+                }
+              },
               "restaurantAreas": {
                 "cardinality": "1:N",
                 "on": {
@@ -350,6 +499,21 @@
                 },
                 "to": {
                   "model": "Shift",
+                  "namespace": "public"
+                }
+              },
+              "stockTransactions": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "branchId"
+                  ]
+                },
+                "to": {
+                  "model": "StockTransaction",
                   "namespace": "public"
                 }
               }
@@ -469,6 +633,13 @@
           },
           "BusinessMember": {
             "fields": {
+              "branchId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
               "businessId": {
                 "nullable": false,
                 "type": {
@@ -487,6 +658,13 @@
                 "nullable": false,
                 "type": {
                   "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "isActive": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
                   "kind": "scalar"
                 }
               },
@@ -519,6 +697,22 @@
               }
             },
             "relations": {
+              "branch": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "branchId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Branch",
+                  "namespace": "public"
+                }
+              },
               "business": {
                 "cardinality": "N:1",
                 "nullable": false,
@@ -554,6 +748,9 @@
             },
             "storage": {
               "fields": {
+                "branchId": {
+                  "column": "branchId"
+                },
                 "businessId": {
                   "column": "businessId"
                 },
@@ -562,6 +759,9 @@
                 },
                 "id": {
                   "column": "id"
+                },
+                "isActive": {
+                  "column": "isActive"
                 },
                 "role": {
                   "column": "role"
@@ -575,6 +775,437 @@
               },
               "namespaceId": "public",
               "table": "BusinessMember"
+            }
+          },
+          "Ingredient": {
+            "fields": {
+              "branchId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "businessId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "category": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "unit": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "InventoryUnit",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              }
+            },
+            "relations": {
+              "alerts": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "ingredientId"
+                  ]
+                },
+                "to": {
+                  "model": "InventoryAlert",
+                  "namespace": "public"
+                }
+              },
+              "balance": {
+                "cardinality": "1:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "ingredientId"
+                  ]
+                },
+                "to": {
+                  "model": "InventoryBalance",
+                  "namespace": "public"
+                }
+              },
+              "branch": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "branchId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Branch",
+                  "namespace": "public"
+                }
+              },
+              "lots": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "ingredientId"
+                  ]
+                },
+                "to": {
+                  "model": "InventoryLot",
+                  "namespace": "public"
+                }
+              },
+              "recipeParts": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "ingredientId"
+                  ]
+                },
+                "to": {
+                  "model": "RecipeIngredient",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "branchId": {
+                  "column": "branchId"
+                },
+                "businessId": {
+                  "column": "businessId"
+                },
+                "category": {
+                  "column": "category"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "unit": {
+                  "column": "unit"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Ingredient"
+            }
+          },
+          "InventoryAlert": {
+            "fields": {
+              "branchId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "businessId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "conditionActive": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "ingredientId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "InventoryAlertStatus",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "type": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "InventoryAlertType",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "ingredient": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "ingredientId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Ingredient",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "branchId": {
+                  "column": "branchId"
+                },
+                "businessId": {
+                  "column": "businessId"
+                },
+                "conditionActive": {
+                  "column": "conditionActive"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "ingredientId": {
+                  "column": "ingredientId"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "type": {
+                  "column": "type"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "InventoryAlert"
+            }
+          },
+          "InventoryBalance": {
+            "fields": {
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "ingredientId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "minimumMilli": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "quantityMilli": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "unitCost": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/float8@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "ingredient": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "ingredientId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Ingredient",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "id": {
+                  "column": "id"
+                },
+                "ingredientId": {
+                  "column": "ingredientId"
+                },
+                "minimumMilli": {
+                  "column": "minimumMilli"
+                },
+                "quantityMilli": {
+                  "column": "quantityMilli"
+                },
+                "unitCost": {
+                  "column": "unitCost"
+                }
+              },
+              "namespaceId": "public",
+              "table": "InventoryBalance"
+            }
+          },
+          "InventoryLot": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "expiry": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "ingredientId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "quantityMilli": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "ingredient": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "ingredientId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Ingredient",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "expiry": {
+                  "column": "expiry"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "ingredientId": {
+                  "column": "ingredientId"
+                },
+                "quantityMilli": {
+                  "column": "quantityMilli"
+                }
+              },
+              "namespaceId": "public",
+              "table": "InventoryLot"
             }
           },
           "MenuCategory": {
@@ -810,6 +1441,22 @@
                   "model": "OrderItem",
                   "namespace": "public"
                 }
+              },
+              "recipe": {
+                "cardinality": "1:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "menuItemId"
+                  ]
+                },
+                "to": {
+                  "model": "Recipe",
+                  "namespace": "public"
+                }
               }
             },
             "storage": {
@@ -969,6 +1616,21 @@
                 },
                 "to": {
                   "model": "Branch",
+                  "namespace": "public"
+                }
+              },
+              "inventoryTransactions": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "orderId"
+                  ]
+                },
+                "to": {
+                  "model": "StockTransaction",
                   "namespace": "public"
                 }
               },
@@ -1307,6 +1969,239 @@
               },
               "namespaceId": "public",
               "table": "OrderPayment"
+            }
+          },
+          "Recipe": {
+            "fields": {
+              "branchId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "businessId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "menuItemId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "modifiers": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "sellingPrice": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/float8@1",
+                  "kind": "scalar"
+                }
+              },
+              "version": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "branch": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "branchId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Branch",
+                  "namespace": "public"
+                }
+              },
+              "ingredients": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "recipeId"
+                  ]
+                },
+                "to": {
+                  "model": "RecipeIngredient",
+                  "namespace": "public"
+                }
+              },
+              "menuItem": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "menuItemId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "MenuItem",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "branchId": {
+                  "column": "branchId"
+                },
+                "businessId": {
+                  "column": "businessId"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "menuItemId": {
+                  "column": "menuItemId"
+                },
+                "modifiers": {
+                  "column": "modifiers"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "sellingPrice": {
+                  "column": "sellingPrice"
+                },
+                "version": {
+                  "column": "version"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Recipe"
+            }
+          },
+          "RecipeIngredient": {
+            "fields": {
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "ingredientId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "modifierKey": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "quantityMilli": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "recipeId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "ingredient": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "ingredientId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Ingredient",
+                  "namespace": "public"
+                }
+              },
+              "recipe": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "recipeId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Recipe",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "id": {
+                  "column": "id"
+                },
+                "ingredientId": {
+                  "column": "ingredientId"
+                },
+                "modifierKey": {
+                  "column": "modifierKey"
+                },
+                "quantityMilli": {
+                  "column": "quantityMilli"
+                },
+                "recipeId": {
+                  "column": "recipeId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "RecipeIngredient"
             }
           },
           "RestaurantArea": {
@@ -1686,6 +2581,176 @@
               "table": "Shift"
             }
           },
+          "StockTransaction": {
+            "fields": {
+              "actorId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "branchId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "businessId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "items": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
+              "note": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "orderId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "requestHash": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "requestKey": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "supplier": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "type": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "StockTransactionType",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              }
+            },
+            "relations": {
+              "branch": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "branchId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Branch",
+                  "namespace": "public"
+                }
+              },
+              "order": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "orderId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Order",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "actorId": {
+                  "column": "actorId"
+                },
+                "branchId": {
+                  "column": "branchId"
+                },
+                "businessId": {
+                  "column": "businessId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "items": {
+                  "column": "items"
+                },
+                "note": {
+                  "column": "note"
+                },
+                "orderId": {
+                  "column": "orderId"
+                },
+                "requestHash": {
+                  "column": "requestHash"
+                },
+                "requestKey": {
+                  "column": "requestKey"
+                },
+                "supplier": {
+                  "column": "supplier"
+                },
+                "type": {
+                  "column": "type"
+                }
+              },
+              "namespaceId": "public",
+              "table": "StockTransaction"
+            }
+          },
           "User": {
             "fields": {
               "createdAt": {
@@ -1945,6 +3010,11 @@
                 }
               ],
               "columns": {
+                "branchId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
                 "businessId": {
                   "codecId": "pg/uuid@1",
                   "nativeType": "uuid",
@@ -1962,6 +3032,15 @@
                 "id": {
                   "codecId": "pg/uuid@1",
                   "nativeType": "uuid",
+                  "nullable": false
+                },
+                "isActive": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
                   "nullable": false
                 },
                 "role": {
@@ -2018,9 +3097,33 @@
                     "namespaceId": "public",
                     "tableName": "User"
                   }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "branchId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "BusinessMember"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Branch"
+                  }
                 }
               ],
               "indexes": [
+                {
+                  "columns": [
+                    "branchId"
+                  ],
+                  "name": "BusinessMember_branchId_idx_d04da5bb",
+                  "prefix": "BusinessMember_branchId_idx",
+                  "unique": false
+                },
                 {
                   "columns": [
                     "businessId"
@@ -2051,6 +3154,358 @@
                   ]
                 }
               ]
+            },
+            "Ingredient": {
+              "checks": [
+                {
+                  "expression": "\"unit\" IN ('G', 'ML', 'PIECE')",
+                  "name": "Ingredient_unit_check_14fe66ae",
+                  "prefix": "Ingredient_unit_check"
+                }
+              ],
+              "columns": {
+                "branchId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "businessId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "category": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "unit": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "InventoryUnit",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "branchId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Ingredient"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Branch"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "branchId"
+                  ],
+                  "name": "Ingredient_branchId_idx_d04da5bb",
+                  "prefix": "Ingredient_branchId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "businessId",
+                    "branchId"
+                  ],
+                  "name": "Ingredient_businessId_branchId_idx_7a898ccb",
+                  "prefix": "Ingredient_businessId_branchId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "InventoryAlert": {
+              "checks": [
+                {
+                  "expression": "\"status\" IN ('OPEN', 'IN_PROGRESS', 'RESOLVED')",
+                  "name": "InventoryAlert_status_check_91a6794e",
+                  "prefix": "InventoryAlert_status_check"
+                },
+                {
+                  "expression": "\"type\" IN ('LOW_STOCK', 'OUT_OF_STOCK', 'NEAR_EXPIRY')",
+                  "name": "InventoryAlert_type_check_0ee724c9",
+                  "prefix": "InventoryAlert_type_check"
+                }
+              ],
+              "columns": {
+                "branchId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "businessId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "conditionActive": {
+                  "codecId": "pg/bool@1",
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "ingredientId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "InventoryAlertStatus",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "type": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "InventoryAlertType",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "ingredientId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "InventoryAlert"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Ingredient"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "branchId"
+                  ],
+                  "name": "InventoryAlert_branchId_idx_d04da5bb",
+                  "prefix": "InventoryAlert_branchId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "ingredientId"
+                  ],
+                  "name": "InventoryAlert_ingredientId_idx_0bb57833",
+                  "prefix": "InventoryAlert_ingredientId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "businessId",
+                    "branchId",
+                    "ingredientId",
+                    "type"
+                  ]
+                }
+              ]
+            },
+            "InventoryBalance": {
+              "columns": {
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "ingredientId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "minimumMilli": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "quantityMilli": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "unitCost": {
+                  "codecId": "pg/float8@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "float8",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "ingredientId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "InventoryBalance"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Ingredient"
+                  }
+                }
+              ],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "ingredientId"
+                  ]
+                }
+              ]
+            },
+            "InventoryLot": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "expiry": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "ingredientId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "quantityMilli": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "ingredientId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "InventoryLot"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Ingredient"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "ingredientId"
+                  ],
+                  "name": "InventoryLot_ingredientId_idx_0bb57833",
+                  "prefix": "InventoryLot_ingredientId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
             },
             "MenuCategory": {
               "columns": {
@@ -2664,6 +4119,214 @@
               },
               "uniques": []
             },
+            "Recipe": {
+              "columns": {
+                "branchId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "businessId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "menuItemId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "modifiers": {
+                  "codecId": "pg/json@1",
+                  "nativeType": "json",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "sellingPrice": {
+                  "codecId": "pg/float8@1",
+                  "nativeType": "float8",
+                  "nullable": false
+                },
+                "version": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 1
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "branchId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Recipe"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Branch"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "menuItemId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Recipe"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "MenuItem"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "branchId"
+                  ],
+                  "name": "Recipe_branchId_idx_d04da5bb",
+                  "prefix": "Recipe_branchId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "businessId",
+                    "branchId"
+                  ],
+                  "name": "Recipe_businessId_branchId_idx_7a898ccb",
+                  "prefix": "Recipe_businessId_branchId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "menuItemId"
+                  ]
+                }
+              ]
+            },
+            "RecipeIngredient": {
+              "columns": {
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "ingredientId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "modifierKey": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "quantityMilli": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "recipeId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "recipeId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "RecipeIngredient"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Recipe"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "ingredientId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "RecipeIngredient"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Ingredient"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "ingredientId"
+                  ],
+                  "name": "RecipeIngredient_ingredientId_idx_0bb57833",
+                  "prefix": "RecipeIngredient_ingredientId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "recipeId"
+                  ],
+                  "name": "RecipeIngredient_recipeId_idx_037d8d32",
+                  "prefix": "RecipeIngredient_recipeId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "recipeId",
+                    "ingredientId",
+                    "modifierKey"
+                  ]
+                }
+              ]
+            },
             "RestaurantArea": {
               "columns": {
                 "branchId": {
@@ -2978,6 +4641,159 @@
               },
               "uniques": []
             },
+            "StockTransaction": {
+              "checks": [
+                {
+                  "expression": "\"type\" IN ('IMPORT', 'EXPORT', 'ADJUSTMENT', 'WASTE', 'SALE_CONSUMPTION')",
+                  "name": "StockTransaction_type_check_cb25a620",
+                  "prefix": "StockTransaction_type_check"
+                }
+              ],
+              "columns": {
+                "actorId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "branchId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "businessId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "items": {
+                  "codecId": "pg/json@1",
+                  "nativeType": "json",
+                  "nullable": false
+                },
+                "note": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "orderId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "requestHash": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "requestKey": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "supplier": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "type": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "StockTransactionType",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "branchId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "StockTransaction"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Branch"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "orderId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "StockTransaction"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Order"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "branchId"
+                  ],
+                  "name": "StockTransaction_branchId_idx_d04da5bb",
+                  "prefix": "StockTransaction_branchId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "orderId"
+                  ],
+                  "name": "StockTransaction_orderId_idx_d284871b",
+                  "prefix": "StockTransaction_orderId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "businessId",
+                    "branchId",
+                    "requestKey"
+                  ]
+                },
+                {
+                  "columns": [
+                    "businessId",
+                    "orderId"
+                  ]
+                }
+              ]
+            },
             "User": {
               "checks": [
                 {
@@ -3082,6 +4898,30 @@
                 "STAFF"
               ]
             },
+            "InventoryAlertStatus": {
+              "kind": "valueSet",
+              "values": [
+                "OPEN",
+                "IN_PROGRESS",
+                "RESOLVED"
+              ]
+            },
+            "InventoryAlertType": {
+              "kind": "valueSet",
+              "values": [
+                "LOW_STOCK",
+                "OUT_OF_STOCK",
+                "NEAR_EXPIRY"
+              ]
+            },
+            "InventoryUnit": {
+              "kind": "valueSet",
+              "values": [
+                "G",
+                "ML",
+                "PIECE"
+              ]
+            },
             "OrderStatus": {
               "kind": "valueSet",
               "values": [
@@ -3119,6 +4959,16 @@
                 "CLOSED"
               ]
             },
+            "StockTransactionType": {
+              "kind": "valueSet",
+              "values": [
+                "IMPORT",
+                "EXPORT",
+                "ADJUSTMENT",
+                "WASTE",
+                "SALE_CONSUMPTION"
+              ]
+            },
             "TableStatus": {
               "kind": "valueSet",
               "values": [
@@ -3142,10 +4992,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "4dd7a857fd29bec7fbdde6c0dee9453cb5ba8dc4297a08647c7b7caab352eadd"
+    "storageHash": "ed7d348b0ab2b4b01f62834f1f5f5ab7bbfa551df973089aaec2c96e814f53a7"
   },
   "execution": {
-    "executionHash": "5ab05f0cf01bcc18c02e5dd104ed448d9e6993e86944e3a5333fd084d5e6a9cc",
+    "executionHash": "814439a94bbe2e09e8dcc64b0b4c703912fbec1dcc31705a50f0d5ee7d3ec414",
     "mutations": {
       "defaults": [
         {
@@ -3223,6 +5073,50 @@
           "ref": {
             "entry": "BusinessMember",
             "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Ingredient",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "InventoryAlert",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "InventoryBalance",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "InventoryLot",
+            "field": "id",
             "namespace": "public"
           }
         },
@@ -3347,6 +5241,28 @@
             "kind": "generator"
           },
           "ref": {
+            "entry": "Recipe",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "RecipeIngredient",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
             "entry": "RestaurantArea",
             "field": "id",
             "namespace": "public"
@@ -3416,6 +5332,17 @@
           "ref": {
             "entry": "Shift",
             "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "StockTransaction",
+            "field": "id",
             "namespace": "public"
           }
         },

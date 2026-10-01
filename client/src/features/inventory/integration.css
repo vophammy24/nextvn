@@ -1,0 +1,169 @@
+/* Scoped Foundation bridge: do not override the existing Sales design system. */
+.inventory-integration {
+  --border: var(--gray-200);
+  --surface: var(--bg-primary);
+  --surface-muted: var(--gray-100);
+  --text-primary: var(--gray-900);
+  --text-secondary: var(--gray-600);
+  --primary-action: var(--primary);
+  --secondary-blue: #1d4ed8;
+  min-width: 0;
+}
+.inventory-integration .section-card,
+.inventory-integration .stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 0;
+}
+.inventory-integration .section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.inventory-integration .section-heading h2 {
+  font-size: 18px;
+}
+.inventory-integration .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+.inventory-integration .button-secondary {
+  background: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+.inventory-integration button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.inventory-integration :focus-visible {
+  outline: 3px solid var(--secondary-blue);
+  outline-offset: 3px;
+}
+.inventory-integration .feedback-state {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 32px;
+  text-align: center;
+}
+.inventory-integration .error-state {
+  color: var(--danger);
+}
+.inventory-integration .search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+.inventory-integration .search-field input {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+}
+.inventory-integration .filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.inventory-integration .filter-tabs button {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.inventory-integration .filter-tabs button[aria-pressed='true'] {
+  background: var(--primary);
+  color: white;
+}
+.inventory-integration .table-scroll {
+  max-width: 100%;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.inventory-integration table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+  background: var(--surface);
+}
+.inventory-integration th,
+.inventory-integration td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.inventory-integration .numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.inventory-integration .badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.inventory-integration .badge-success {
+  color: #166534;
+  background: #dcfce7;
+}
+.inventory-integration .badge-warning {
+  color: #92400e;
+  background: #fef3c7;
+}
+.inventory-integration .badge-danger {
+  color: #991b1b;
+  background: #fee2e2;
+}
+.inventory-integration .badge-info {
+  color: #1e40af;
+  background: #dbeafe;
+}
+.inventory-integration .badge-neutral {
+  color: #374151;
+  background: #f3f4f6;
+}
+.inventory-integration .stat-value {
+  display: block;
+  font-size: 24px;
+  margin-top: 10px;
+}
+.inventory-integration fieldset {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.inventory-integration .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
