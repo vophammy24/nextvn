@@ -16,6 +16,36 @@ enum UserStatus {
   INACTIVE
 }
 
+enum OrderType {
+  DINE_IN
+  TAKEAWAY
+}
+
+enum OrderStatus {
+  OPEN
+  CONFIRMED
+  PAID
+  CANCELLED
+}
+
+enum TableStatus {
+  AVAILABLE
+  OCCUPIED
+  RESERVED
+  CLEANING
+  NEED_PAYMENT
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+}
+
+enum ShiftStatus {
+  ACTIVE
+  CLOSED
+}
+
 model User {
   id           Uuid         @id @default(uuid())
   email        String       @unique
@@ -70,8 +100,186 @@ model Branch {
   phone    String?
   isActive Boolean @default(true)
 
+  menuCategories  MenuCategory[]
+  menuItems       MenuItem[]
+  restaurantAreas RestaurantArea[]
+  restaurantTables RestaurantTable[]
+  orders          Order[]
+  shifts          Shift[]
+
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
 
   @@index([businessId])
+}
+
+model MenuCategory {
+  id Uuid @id @default(uuid())
+
+  branchId Uuid
+  branch   Branch @relation(fields: [branchId], references: [id])
+
+  name        String
+  displayOrder Int    @default(0)
+  isActive     Boolean @default(true)
+
+  items MenuItem[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@index([branchId])
+}
+
+model MenuItem {
+  id Uuid @id @default(uuid())
+
+  branchId Uuid
+  branch   Branch @relation(fields: [branchId], references: [id])
+
+  categoryId Uuid
+  category   MenuCategory @relation(fields: [categoryId], references: [id])
+
+  name        String
+  description String?
+  price       Int
+  imageUrl    String?
+  isActive    Boolean @default(true)
+
+  orderItems OrderItem[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@index([branchId])
+  @@index([categoryId])
+}
+
+model RestaurantArea {
+  id Uuid @id @default(uuid())
+
+  branchId Uuid
+  branch   Branch @relation(fields: [branchId], references: [id])
+
+  name         String
+  displayOrder Int    @default(0)
+
+  tables RestaurantTable[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@index([branchId])
+}
+
+model RestaurantTable {
+  id Uuid @id @default(uuid())
+
+  branchId Uuid
+  branch   Branch @relation(fields: [branchId], references: [id])
+
+  areaId Uuid
+  area   RestaurantArea @relation(fields: [areaId], references: [id])
+
+  name     String
+  seats    Int        @default(4)
+  status   TableStatus @default(AVAILABLE)
+
+  orders Order[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@index([branchId])
+  @@index([areaId])
+}
+
+model Order {
+  id Uuid @id @default(uuid())
+
+  branchId Uuid
+  branch   Branch @relation(fields: [branchId], references: [id])
+
+  tableId Uuid?
+  table   RestaurantTable? @relation(fields: [tableId], references: [id])
+
+  shiftId Uuid?
+  shift   Shift? @relation(fields: [shiftId], references: [id])
+
+  cashierId Uuid
+  orderType OrderType  @default(DINE_IN)
+  status    OrderStatus @default(OPEN)
+
+  subtotal  Int @default(0)
+  discount  Int @default(0)
+  total     Int @default(0)
+
+  note String?
+
+  items    OrderItem[]
+  payments OrderPayment[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@index([branchId])
+  @@index([shiftId])
+  @@index([cashierId])
+}
+
+model OrderItem {
+  id Uuid @id @default(uuid())
+
+  orderId Uuid
+  order   Order @relation(fields: [orderId], references: [id])
+
+  menuItemId Uuid
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+
+  name      String
+  unitPrice Int
+  quantity  Int    @default(1)
+  total     Int
+
+  note String?
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@index([orderId])
+}
+
+model OrderPayment {
+  id Uuid @id @default(uuid())
+
+  orderId Uuid
+  order   Order @relation(fields: [orderId], references: [id])
+
+  method PaymentMethod
+  amount Int
+
+  createdAt TimestamptzString @default(now())
+
+  @@index([orderId])
+}
+
+model Shift {
+  id Uuid @id @default(uuid())
+
+  branchId Uuid
+  branch   Branch @relation(fields: [branchId], references: [id])
+
+  staffId Uuid
+  status  ShiftStatus @default(ACTIVE)
+
+  startedAt TimestamptzString @default(now())
+  endedAt   TimestamptzString?
+
+  orders Order[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@index([branchId])
+  @@index([staffId])
 }
