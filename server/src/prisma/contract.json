@@ -16,6 +16,38 @@
       "model": "BusinessMember",
       "namespace": "public"
     },
+    "MenuCategory": {
+      "model": "MenuCategory",
+      "namespace": "public"
+    },
+    "MenuItem": {
+      "model": "MenuItem",
+      "namespace": "public"
+    },
+    "Order": {
+      "model": "Order",
+      "namespace": "public"
+    },
+    "OrderItem": {
+      "model": "OrderItem",
+      "namespace": "public"
+    },
+    "OrderPayment": {
+      "model": "OrderPayment",
+      "namespace": "public"
+    },
+    "RestaurantArea": {
+      "model": "RestaurantArea",
+      "namespace": "public"
+    },
+    "RestaurantTable": {
+      "model": "RestaurantTable",
+      "namespace": "public"
+    },
+    "Shift": {
+      "model": "Shift",
+      "namespace": "public"
+    },
     "User": {
       "model": "User",
       "namespace": "public"
@@ -42,6 +74,53 @@
               }
             ]
           },
+          "OrderStatus": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "OPEN",
+                "value": "OPEN"
+              },
+              {
+                "name": "CONFIRMED",
+                "value": "CONFIRMED"
+              },
+              {
+                "name": "PAID",
+                "value": "PAID"
+              },
+              {
+                "name": "CANCELLED",
+                "value": "CANCELLED"
+              }
+            ]
+          },
+          "OrderType": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "DINE_IN",
+                "value": "DINE_IN"
+              },
+              {
+                "name": "TAKEAWAY",
+                "value": "TAKEAWAY"
+              }
+            ]
+          },
+          "PaymentMethod": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "CASH",
+                "value": "CASH"
+              },
+              {
+                "name": "BANK_TRANSFER",
+                "value": "BANK_TRANSFER"
+              }
+            ]
+          },
           "PlatformRole": {
             "codecId": "pg/text@1",
             "members": [
@@ -52,6 +131,44 @@
               {
                 "name": "ADMIN",
                 "value": "ADMIN"
+              }
+            ]
+          },
+          "ShiftStatus": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "ACTIVE",
+                "value": "ACTIVE"
+              },
+              {
+                "name": "CLOSED",
+                "value": "CLOSED"
+              }
+            ]
+          },
+          "TableStatus": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "AVAILABLE",
+                "value": "AVAILABLE"
+              },
+              {
+                "name": "OCCUPIED",
+                "value": "OCCUPIED"
+              },
+              {
+                "name": "RESERVED",
+                "value": "RESERVED"
+              },
+              {
+                "name": "CLEANING",
+                "value": "CLEANING"
+              },
+              {
+                "name": "NEED_PAYMENT",
+                "value": "NEED_PAYMENT"
               }
             ]
           },
@@ -143,6 +260,96 @@
                 },
                 "to": {
                   "model": "Business",
+                  "namespace": "public"
+                }
+              },
+              "menuCategories": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "branchId"
+                  ]
+                },
+                "to": {
+                  "model": "MenuCategory",
+                  "namespace": "public"
+                }
+              },
+              "menuItems": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "branchId"
+                  ]
+                },
+                "to": {
+                  "model": "MenuItem",
+                  "namespace": "public"
+                }
+              },
+              "orders": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "branchId"
+                  ]
+                },
+                "to": {
+                  "model": "Order",
+                  "namespace": "public"
+                }
+              },
+              "restaurantAreas": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "branchId"
+                  ]
+                },
+                "to": {
+                  "model": "RestaurantArea",
+                  "namespace": "public"
+                }
+              },
+              "restaurantTables": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "branchId"
+                  ]
+                },
+                "to": {
+                  "model": "RestaurantTable",
+                  "namespace": "public"
+                }
+              },
+              "shifts": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "branchId"
+                  ]
+                },
+                "to": {
+                  "model": "Shift",
                   "namespace": "public"
                 }
               }
@@ -368,6 +575,1115 @@
               },
               "namespaceId": "public",
               "table": "BusinessMember"
+            }
+          },
+          "MenuCategory": {
+            "fields": {
+              "branchId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "displayOrder": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "isActive": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "branch": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "branchId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Branch",
+                  "namespace": "public"
+                }
+              },
+              "items": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "categoryId"
+                  ]
+                },
+                "to": {
+                  "model": "MenuItem",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "branchId": {
+                  "column": "branchId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "displayOrder": {
+                  "column": "displayOrder"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "isActive": {
+                  "column": "isActive"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "MenuCategory"
+            }
+          },
+          "MenuItem": {
+            "fields": {
+              "branchId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "categoryId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "description": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "imageUrl": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "isActive": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "price": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "branch": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "branchId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Branch",
+                  "namespace": "public"
+                }
+              },
+              "category": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "categoryId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "MenuCategory",
+                  "namespace": "public"
+                }
+              },
+              "orderItems": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "menuItemId"
+                  ]
+                },
+                "to": {
+                  "model": "OrderItem",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "branchId": {
+                  "column": "branchId"
+                },
+                "categoryId": {
+                  "column": "categoryId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "description": {
+                  "column": "description"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "imageUrl": {
+                  "column": "imageUrl"
+                },
+                "isActive": {
+                  "column": "isActive"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "price": {
+                  "column": "price"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "MenuItem"
+            }
+          },
+          "Order": {
+            "fields": {
+              "branchId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "cashierId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "discount": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "note": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "orderType": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "OrderType",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "shiftId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "OrderStatus",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "subtotal": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "tableId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "total": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "branch": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "branchId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Branch",
+                  "namespace": "public"
+                }
+              },
+              "items": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "orderId"
+                  ]
+                },
+                "to": {
+                  "model": "OrderItem",
+                  "namespace": "public"
+                }
+              },
+              "payments": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "orderId"
+                  ]
+                },
+                "to": {
+                  "model": "OrderPayment",
+                  "namespace": "public"
+                }
+              },
+              "shift": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "shiftId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Shift",
+                  "namespace": "public"
+                }
+              },
+              "table": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "tableId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "RestaurantTable",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "branchId": {
+                  "column": "branchId"
+                },
+                "cashierId": {
+                  "column": "cashierId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "discount": {
+                  "column": "discount"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "note": {
+                  "column": "note"
+                },
+                "orderType": {
+                  "column": "orderType"
+                },
+                "shiftId": {
+                  "column": "shiftId"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "subtotal": {
+                  "column": "subtotal"
+                },
+                "tableId": {
+                  "column": "tableId"
+                },
+                "total": {
+                  "column": "total"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Order"
+            }
+          },
+          "OrderItem": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "menuItemId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "note": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "orderId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "quantity": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "total": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "unitPrice": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "menuItem": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "menuItemId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "MenuItem",
+                  "namespace": "public"
+                }
+              },
+              "order": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "orderId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Order",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "menuItemId": {
+                  "column": "menuItemId"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "note": {
+                  "column": "note"
+                },
+                "orderId": {
+                  "column": "orderId"
+                },
+                "quantity": {
+                  "column": "quantity"
+                },
+                "total": {
+                  "column": "total"
+                },
+                "unitPrice": {
+                  "column": "unitPrice"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "OrderItem"
+            }
+          },
+          "OrderPayment": {
+            "fields": {
+              "amount": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "method": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "PaymentMethod",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "orderId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "order": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "orderId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Order",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "amount": {
+                  "column": "amount"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "method": {
+                  "column": "method"
+                },
+                "orderId": {
+                  "column": "orderId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "OrderPayment"
+            }
+          },
+          "RestaurantArea": {
+            "fields": {
+              "branchId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "displayOrder": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "branch": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "branchId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Branch",
+                  "namespace": "public"
+                }
+              },
+              "tables": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "areaId"
+                  ]
+                },
+                "to": {
+                  "model": "RestaurantTable",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "branchId": {
+                  "column": "branchId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "displayOrder": {
+                  "column": "displayOrder"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "RestaurantArea"
+            }
+          },
+          "RestaurantTable": {
+            "fields": {
+              "areaId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "branchId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "seats": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "TableStatus",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "area": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "areaId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "RestaurantArea",
+                  "namespace": "public"
+                }
+              },
+              "branch": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "branchId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Branch",
+                  "namespace": "public"
+                }
+              },
+              "orders": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "tableId"
+                  ]
+                },
+                "to": {
+                  "model": "Order",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "areaId": {
+                  "column": "areaId"
+                },
+                "branchId": {
+                  "column": "branchId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "seats": {
+                  "column": "seats"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "RestaurantTable"
+            }
+          },
+          "Shift": {
+            "fields": {
+              "branchId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "endedAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "staffId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "startedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "ShiftStatus",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "branch": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "branchId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Branch",
+                  "namespace": "public"
+                }
+              },
+              "orders": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "shiftId"
+                  ]
+                },
+                "to": {
+                  "model": "Order",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "branchId": {
+                  "column": "branchId"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "endedAt": {
+                  "column": "endedAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "staffId": {
+                  "column": "staffId"
+                },
+                "startedAt": {
+                  "column": "startedAt"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Shift"
             }
           },
           "User": {
@@ -736,6 +2052,932 @@
                 }
               ]
             },
+            "MenuCategory": {
+              "columns": {
+                "branchId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "displayOrder": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "isActive": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "branchId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "MenuCategory"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Branch"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "branchId"
+                  ],
+                  "name": "MenuCategory_branchId_idx_d04da5bb",
+                  "prefix": "MenuCategory_branchId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "MenuItem": {
+              "columns": {
+                "branchId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "categoryId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "description": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "imageUrl": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "isActive": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "price": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "branchId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "MenuItem"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Branch"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "categoryId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "MenuItem"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "MenuCategory"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "branchId"
+                  ],
+                  "name": "MenuItem_branchId_idx_d04da5bb",
+                  "prefix": "MenuItem_branchId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "categoryId"
+                  ],
+                  "name": "MenuItem_categoryId_idx_15c304f2",
+                  "prefix": "MenuItem_categoryId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "Order": {
+              "checks": [
+                {
+                  "expression": "\"orderType\" IN ('DINE_IN', 'TAKEAWAY')",
+                  "name": "Order_orderType_check_49ca3bcf",
+                  "prefix": "Order_orderType_check"
+                },
+                {
+                  "expression": "\"status\" IN ('OPEN', 'CONFIRMED', 'PAID', 'CANCELLED')",
+                  "name": "Order_status_check_10f58ab9",
+                  "prefix": "Order_status_check"
+                }
+              ],
+              "columns": {
+                "branchId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "cashierId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "discount": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "note": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "orderType": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "DINE_IN"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "OrderType",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "shiftId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "OPEN"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "OrderStatus",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "subtotal": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "tableId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": true
+                },
+                "total": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "branchId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Order"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Branch"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "tableId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Order"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "RestaurantTable"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "shiftId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Order"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Shift"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "branchId"
+                  ],
+                  "name": "Order_branchId_idx_d04da5bb",
+                  "prefix": "Order_branchId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "cashierId"
+                  ],
+                  "name": "Order_cashierId_idx_f55c4cfd",
+                  "prefix": "Order_cashierId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "shiftId"
+                  ],
+                  "name": "Order_shiftId_idx_fee8a58d",
+                  "prefix": "Order_shiftId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "tableId"
+                  ],
+                  "name": "Order_tableId_idx_f5c39e5c",
+                  "prefix": "Order_tableId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "OrderItem": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "menuItemId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "note": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "orderId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "quantity": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 1
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "total": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "unitPrice": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "orderId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "OrderItem"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Order"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "menuItemId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "OrderItem"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "MenuItem"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "menuItemId"
+                  ],
+                  "name": "OrderItem_menuItemId_idx_715cce4c",
+                  "prefix": "OrderItem_menuItemId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "orderId"
+                  ],
+                  "name": "OrderItem_orderId_idx_d284871b",
+                  "prefix": "OrderItem_orderId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "OrderPayment": {
+              "checks": [
+                {
+                  "expression": "\"method\" IN ('CASH', 'BANK_TRANSFER')",
+                  "name": "OrderPayment_method_check_723c0061",
+                  "prefix": "OrderPayment_method_check"
+                }
+              ],
+              "columns": {
+                "amount": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "method": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "PaymentMethod",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "orderId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "orderId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "OrderPayment"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Order"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "orderId"
+                  ],
+                  "name": "OrderPayment_orderId_idx_d284871b",
+                  "prefix": "OrderPayment_orderId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "RestaurantArea": {
+              "columns": {
+                "branchId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "displayOrder": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "branchId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "RestaurantArea"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Branch"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "branchId"
+                  ],
+                  "name": "RestaurantArea_branchId_idx_d04da5bb",
+                  "prefix": "RestaurantArea_branchId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "RestaurantTable": {
+              "checks": [
+                {
+                  "expression": "\"status\" IN ('AVAILABLE', 'OCCUPIED', 'RESERVED', 'CLEANING', 'NEED_PAYMENT')",
+                  "name": "RestaurantTable_status_check_17d9023c",
+                  "prefix": "RestaurantTable_status_check"
+                }
+              ],
+              "columns": {
+                "areaId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "branchId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "seats": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 4
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "AVAILABLE"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "TableStatus",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "branchId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "RestaurantTable"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Branch"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "areaId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "RestaurantTable"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "RestaurantArea"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "areaId"
+                  ],
+                  "name": "RestaurantTable_areaId_idx_abf7188c",
+                  "prefix": "RestaurantTable_areaId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "branchId"
+                  ],
+                  "name": "RestaurantTable_branchId_idx_d04da5bb",
+                  "prefix": "RestaurantTable_branchId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "Shift": {
+              "checks": [
+                {
+                  "expression": "\"status\" IN ('ACTIVE', 'CLOSED')",
+                  "name": "Shift_status_check_f94a3a5d",
+                  "prefix": "Shift_status_check"
+                }
+              ],
+              "columns": {
+                "branchId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "endedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "staffId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false
+                },
+                "startedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "ACTIVE"
+                  },
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "ShiftStatus",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "branchId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Shift"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Branch"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "branchId"
+                  ],
+                  "name": "Shift_branchId_idx_d04da5bb",
+                  "prefix": "Shift_branchId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "staffId"
+                  ],
+                  "name": "Shift_staffId_idx_ce92c64e",
+                  "prefix": "Shift_staffId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
             "User": {
               "checks": [
                 {
@@ -840,11 +3082,51 @@
                 "STAFF"
               ]
             },
+            "OrderStatus": {
+              "kind": "valueSet",
+              "values": [
+                "OPEN",
+                "CONFIRMED",
+                "PAID",
+                "CANCELLED"
+              ]
+            },
+            "OrderType": {
+              "kind": "valueSet",
+              "values": [
+                "DINE_IN",
+                "TAKEAWAY"
+              ]
+            },
+            "PaymentMethod": {
+              "kind": "valueSet",
+              "values": [
+                "CASH",
+                "BANK_TRANSFER"
+              ]
+            },
             "PlatformRole": {
               "kind": "valueSet",
               "values": [
                 "USER",
                 "ADMIN"
+              ]
+            },
+            "ShiftStatus": {
+              "kind": "valueSet",
+              "values": [
+                "ACTIVE",
+                "CLOSED"
+              ]
+            },
+            "TableStatus": {
+              "kind": "valueSet",
+              "values": [
+                "AVAILABLE",
+                "OCCUPIED",
+                "RESERVED",
+                "CLEANING",
+                "NEED_PAYMENT"
               ]
             },
             "UserStatus": {
@@ -860,10 +3142,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "31318467eaa714b2c8fbc0aefdb54f4032dbbc70c037b4de1bd2152554d2ea01"
+    "storageHash": "4dd7a857fd29bec7fbdde6c0dee9453cb5ba8dc4297a08647c7b7caab352eadd"
   },
   "execution": {
-    "executionHash": "9d875fedb13a6e3c1c67265e3738e18847d518f540f056ed2eb6316b480628f0",
+    "executionHash": "5ab05f0cf01bcc18c02e5dd104ed448d9e6993e86944e3a5333fd084d5e6a9cc",
     "mutations": {
       "defaults": [
         {
@@ -940,6 +3222,199 @@
           },
           "ref": {
             "entry": "BusinessMember",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "MenuCategory",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "MenuCategory",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "MenuItem",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "MenuItem",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Order",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Order",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "OrderItem",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "OrderItem",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "OrderPayment",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "RestaurantArea",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "RestaurantArea",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "RestaurantTable",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "RestaurantTable",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Shift",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Shift",
             "field": "updatedAt",
             "namespace": "public"
           }
