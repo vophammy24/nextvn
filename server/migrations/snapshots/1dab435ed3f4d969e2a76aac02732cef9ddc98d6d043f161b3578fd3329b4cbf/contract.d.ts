@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'b595b801f39961e9d44244969935b2b0f09de2a45a5bdbd962d7608abb00a06e'>;
+  StorageHashBase<'1dab435ed3f4d969e2a76aac02732cef9ddc98d6d043f161b3578fd3329b4cbf'>;
 export type ExecutionHash =
   ExecutionHashBase<'1bf9dfdf10370755e591a4e030a425fec24d3fc3cb74fa646ab6fbd0f5538e4d'>;
 export type ProfileHash =
@@ -257,7 +257,6 @@ export type FieldOutputTypes = {
       readonly currency: CodecTypes['pg/text@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly paidAt: CodecTypes['pg/timestamptz-string@1']['output'] | null;
-      readonly providerEventId: CodecTypes['pg/text@1']['output'] | null;
       readonly providerReference: CodecTypes['pg/text@1']['output'] | null;
       readonly status: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
       readonly subscriptionId: CodecTypes['pg/uuid@1']['output'];
@@ -310,7 +309,6 @@ export type FieldOutputTypes = {
       readonly contactPhone: CodecTypes['pg/text@1']['output'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
       readonly currency: CodecTypes['pg/text@1']['output'];
-      readonly invoicePrefix: CodecTypes['pg/text@1']['output'];
       readonly locale: CodecTypes['pg/text@1']['output'];
       readonly notifyLowStock: CodecTypes['pg/bool@1']['output'];
       readonly notifyNearExpiry: CodecTypes['pg/bool@1']['output'];
@@ -363,7 +361,6 @@ export type FieldInputTypes = {
       readonly currency: CodecTypes['pg/text@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly paidAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
-      readonly providerEventId: CodecTypes['pg/text@1']['input'] | null;
       readonly providerReference: CodecTypes['pg/text@1']['input'] | null;
       readonly status: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
       readonly subscriptionId: CodecTypes['pg/uuid@1']['input'];
@@ -416,7 +413,6 @@ export type FieldInputTypes = {
       readonly contactPhone: CodecTypes['pg/text@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
       readonly currency: CodecTypes['pg/text@1']['input'];
-      readonly invoicePrefix: CodecTypes['pg/text@1']['input'];
       readonly locale: CodecTypes['pg/text@1']['input'];
       readonly notifyLowStock: CodecTypes['pg/bool@1']['input'];
       readonly notifyNearExpiry: CodecTypes['pg/bool@1']['input'];
@@ -469,7 +465,6 @@ export type StorageColumnTypes = {
       readonly currency: CodecTypes['pg/text@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly paidAt: CodecTypes['pg/timestamptz-string@1']['output'] | null;
-      readonly providerEventId: CodecTypes['pg/text@1']['output'] | null;
       readonly providerReference: CodecTypes['pg/text@1']['output'] | null;
       readonly status: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
       readonly subscriptionId: CodecTypes['pg/uuid@1']['output'];
@@ -522,7 +517,6 @@ export type StorageColumnTypes = {
       readonly contactPhone: CodecTypes['pg/text@1']['output'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
       readonly currency: CodecTypes['pg/text@1']['output'];
-      readonly invoicePrefix: CodecTypes['pg/text@1']['output'];
       readonly locale: CodecTypes['pg/text@1']['output'];
       readonly notifyLowStock: CodecTypes['pg/bool@1']['output'];
       readonly notifyNearExpiry: CodecTypes['pg/bool@1']['output'];
@@ -575,7 +569,6 @@ export type StorageColumnInputTypes = {
       readonly currency: CodecTypes['pg/text@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly paidAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
-      readonly providerEventId: CodecTypes['pg/text@1']['input'] | null;
       readonly providerReference: CodecTypes['pg/text@1']['input'] | null;
       readonly status: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
       readonly subscriptionId: CodecTypes['pg/uuid@1']['input'];
@@ -628,7 +621,6 @@ export type StorageColumnInputTypes = {
       readonly contactPhone: CodecTypes['pg/text@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
       readonly currency: CodecTypes['pg/text@1']['input'];
-      readonly invoicePrefix: CodecTypes['pg/text@1']['input'];
       readonly locale: CodecTypes['pg/text@1']['input'];
       readonly notifyLowStock: CodecTypes['pg/bool@1']['input'];
       readonly notifyNearExpiry: CodecTypes['pg/bool@1']['input'];
@@ -681,7 +673,6 @@ export namespace Models {
     currency: CodecTypes['pg/text@1']['output'];
     id: CodecTypes['pg/uuid@1']['output'];
     paidAt: CodecTypes['pg/timestamptz-string@1']['output'] | null;
-    providerEventId: CodecTypes['pg/text@1']['output'] | null;
     providerReference: CodecTypes['pg/text@1']['output'] | null;
     status: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
     subscriptionId: CodecTypes['pg/uuid@1']['output'];
@@ -757,7 +748,6 @@ export namespace Models {
     contactPhone: CodecTypes['pg/text@1']['output'] | null;
     createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
     currency: CodecTypes['pg/text@1']['output'];
-    invoicePrefix: CodecTypes['pg/text@1']['output'];
     locale: CodecTypes['pg/text@1']['output'];
     notifyLowStock: CodecTypes['pg/bool@1']['output'];
     notifyNearExpiry: CodecTypes['pg/bool@1']['output'];
@@ -881,11 +871,6 @@ type ContractBase = Omit<
                   readonly codecId: 'pg/timestamptz-string@1';
                   readonly nullable: true;
                 };
-                readonly providerEventId: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
-                };
                 readonly providerReference: {
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
@@ -907,10 +892,7 @@ type ContractBase = Omit<
                 };
               };
               primaryKey: { readonly columns: readonly ['id'] };
-              uniques: readonly [
-                { readonly columns: readonly ['providerReference'] },
-                { readonly columns: readonly ['providerEventId'] },
-              ];
+              uniques: readonly [{ readonly columns: readonly ['providerReference'] }];
               indexes: readonly [
                 {
                   readonly name: 'BillingRecord_businessId_createdAt_idx_776e65e5';
@@ -1343,15 +1325,6 @@ type ContractBase = Omit<
                     readonly value: DefaultLiteralValue<'pg/text@1', 'VND'>;
                   };
                 };
-                readonly invoicePrefix: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                  readonly default: {
-                    readonly kind: 'literal';
-                    readonly value: DefaultLiteralValue<'pg/text@1', 'NEXTVN'>;
-                  };
-                };
                 readonly locale: {
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
@@ -1742,10 +1715,6 @@ type ContractBase = Omit<
                   readonly codecId: 'pg/timestamptz-string@1';
                 };
               };
-              readonly providerEventId: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
               readonly providerReference: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -1795,7 +1764,6 @@ type ContractBase = Omit<
                 readonly currency: { readonly column: 'currency' };
                 readonly id: { readonly column: 'id' };
                 readonly paidAt: { readonly column: 'paidAt' };
-                readonly providerEventId: { readonly column: 'providerEventId' };
                 readonly providerReference: { readonly column: 'providerReference' };
                 readonly status: { readonly column: 'status' };
                 readonly subscriptionId: { readonly column: 'subscriptionId' };
@@ -2242,10 +2210,6 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
-              readonly invoicePrefix: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
               readonly locale: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -2306,7 +2270,6 @@ type ContractBase = Omit<
                 readonly contactPhone: { readonly column: 'contactPhone' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly currency: { readonly column: 'currency' };
-                readonly invoicePrefix: { readonly column: 'invoicePrefix' };
                 readonly locale: { readonly column: 'locale' };
                 readonly notifyLowStock: { readonly column: 'notifyLowStock' };
                 readonly notifyNearExpiry: { readonly column: 'notifyNearExpiry' };

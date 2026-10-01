@@ -1,0 +1,442 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.Branch",
+    "label": "Create table \"Branch\"",
+    "summary": "Creates table \"Branch\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Branch"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Branch\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"Branch\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Branch\"",
+        "sql": "CREATE TABLE \"public\".\"Branch\" (\n  \"address\" text,\n  \"businessId\" uuid NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"isActive\" bool DEFAULT true NOT NULL,\n  \"name\" text NOT NULL,\n  \"phone\" text,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Branch\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"Branch\""]
+      }
+    ]
+  },
+  {
+    "id": "table.Business",
+    "label": "Create table \"Business\"",
+    "summary": "Creates table \"Business\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Business"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Business\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"Business\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Business\"",
+        "sql": "CREATE TABLE \"public\".\"Business\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"name\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Business\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"Business\""]
+      }
+    ]
+  },
+  {
+    "id": "table.BusinessMember",
+    "label": "Create table \"BusinessMember\"",
+    "summary": "Creates table \"BusinessMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "BusinessMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"BusinessMember\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessMember\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"BusinessMember\"",
+        "sql": "CREATE TABLE \"public\".\"BusinessMember\" (\n  \"businessId\" uuid NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"role\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  \"userId\" uuid NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"BusinessMember_role_check_6fc3012b\" CHECK (\"role\" IN ('OWNER', 'MANAGER', 'STAFF'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"BusinessMember\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessMember\""]
+      }
+    ]
+  },
+  {
+    "id": "table.User",
+    "label": "Create table \"User\"",
+    "summary": "Creates table \"User\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "User"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"User\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"User\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"User\"",
+        "sql": "CREATE TABLE \"public\".\"User\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"fullName\" text NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"passwordHash\" text NOT NULL,\n  \"platformRole\" text DEFAULT 'USER' NOT NULL,\n  \"status\" text DEFAULT 'ACTIVE' NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"User_platformRole_check_999f20f5\" CHECK (\"platformRole\" IN ('USER', 'ADMIN')),\n  CONSTRAINT \"User_status_check_ee520df2\" CHECK (\"status\" IN ('ACTIVE', 'INACTIVE'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"User\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"User\""]
+      }
+    ]
+  },
+  {
+    "id": "unique.BusinessMember.BusinessMember_businessId_userId_key",
+    "label": "Add unique constraint on \"BusinessMember\" (businessId, userId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "BusinessMember_businessId_userId_key",
+        "table": "BusinessMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"BusinessMember_businessId_userId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessMember_businessId_userId_key",
+          "public",
+          "\"public\".\"BusinessMember\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"BusinessMember_businessId_userId_key\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessMember\" ADD CONSTRAINT \"BusinessMember_businessId_userId_key\" UNIQUE (\"businessId\", \"userId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"BusinessMember_businessId_userId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessMember_businessId_userId_key",
+          "public",
+          "\"public\".\"BusinessMember\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.User.User_email_key",
+    "label": "Add unique constraint on \"User\" (email)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "User_email_key",
+        "table": "User"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"User_email_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["User_email_key", "public", "\"public\".\"User\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"User_email_key\"",
+        "sql": "ALTER TABLE \"public\".\"User\" ADD CONSTRAINT \"User_email_key\" UNIQUE (\"email\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"User_email_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["User_email_key", "public", "\"public\".\"User\""]
+      }
+    ]
+  },
+  {
+    "id": "index.Branch.Branch_businessId_idx_ae0ed511",
+    "label": "Create index \"Branch_businessId_idx_ae0ed511\" on \"Branch\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Branch_businessId_idx_ae0ed511",
+        "table": "Branch"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Branch_businessId_idx_ae0ed511\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"Branch_businessId_idx_ae0ed511\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Branch_businessId_idx_ae0ed511\"",
+        "sql": "CREATE INDEX \"Branch_businessId_idx_ae0ed511\" ON \"public\".\"Branch\" (\"businessId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Branch_businessId_idx_ae0ed511\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"Branch_businessId_idx_ae0ed511\""]
+      }
+    ]
+  },
+  {
+    "id": "index.BusinessMember.BusinessMember_businessId_idx_ae0ed511",
+    "label": "Create index \"BusinessMember_businessId_idx_ae0ed511\" on \"BusinessMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BusinessMember_businessId_idx_ae0ed511",
+        "table": "BusinessMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BusinessMember_businessId_idx_ae0ed511\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessMember_businessId_idx_ae0ed511\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BusinessMember_businessId_idx_ae0ed511\"",
+        "sql": "CREATE INDEX \"BusinessMember_businessId_idx_ae0ed511\" ON \"public\".\"BusinessMember\" (\"businessId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BusinessMember_businessId_idx_ae0ed511\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessMember_businessId_idx_ae0ed511\""]
+      }
+    ]
+  },
+  {
+    "id": "index.BusinessMember.BusinessMember_userId_idx_a489d58a",
+    "label": "Create index \"BusinessMember_userId_idx_a489d58a\" on \"BusinessMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BusinessMember_userId_idx_a489d58a",
+        "table": "BusinessMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BusinessMember_userId_idx_a489d58a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessMember_userId_idx_a489d58a\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BusinessMember_userId_idx_a489d58a\"",
+        "sql": "CREATE INDEX \"BusinessMember_userId_idx_a489d58a\" ON \"public\".\"BusinessMember\" (\"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BusinessMember_userId_idx_a489d58a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessMember_userId_idx_a489d58a\""]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Branch.Branch_businessId_fkey",
+    "label": "Add foreign key \"Branch_businessId_fkey\" on \"Branch\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Branch_businessId_fkey",
+        "table": "Branch"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Branch_businessId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["Branch_businessId_fkey", "public", "\"public\".\"Branch\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Branch_businessId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Branch\"\nADD CONSTRAINT \"Branch_businessId_fkey\"\nFOREIGN KEY (\"businessId\")\nREFERENCES \"public\".\"Business\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Branch_businessId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["Branch_businessId_fkey", "public", "\"public\".\"Branch\""]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BusinessMember.BusinessMember_businessId_fkey",
+    "label": "Add foreign key \"BusinessMember_businessId_fkey\" on \"BusinessMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BusinessMember_businessId_fkey",
+        "table": "BusinessMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BusinessMember_businessId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BusinessMember_businessId_fkey", "public", "\"public\".\"BusinessMember\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BusinessMember_businessId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessMember\"\nADD CONSTRAINT \"BusinessMember_businessId_fkey\"\nFOREIGN KEY (\"businessId\")\nREFERENCES \"public\".\"Business\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BusinessMember_businessId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BusinessMember_businessId_fkey", "public", "\"public\".\"BusinessMember\""]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BusinessMember.BusinessMember_userId_fkey",
+    "label": "Add foreign key \"BusinessMember_userId_fkey\" on \"BusinessMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BusinessMember_userId_fkey",
+        "table": "BusinessMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BusinessMember_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BusinessMember_userId_fkey", "public", "\"public\".\"BusinessMember\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BusinessMember_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessMember\"\nADD CONSTRAINT \"BusinessMember_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"User\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BusinessMember_userId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BusinessMember_userId_fkey", "public", "\"public\".\"BusinessMember\""]
+      }
+    ]
+  }
+]

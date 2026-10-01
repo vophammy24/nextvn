@@ -1,0 +1,36 @@
+[
+  {
+    "id": "column.public.BusinessSettings.invoicePrefix",
+    "label": "Add column \"invoicePrefix\" to \"BusinessSettings\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "invoicePrefix",
+        "table": "BusinessSettings"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"invoicePrefix\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": ["public", "BusinessSettings", "invoicePrefix"]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"invoicePrefix\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessSettings\" ADD COLUMN \"invoicePrefix\" text DEFAULT 'NEXTVN' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"invoicePrefix\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": ["public", "BusinessSettings", "invoicePrefix"]
+      }
+    ]
+  }
+]

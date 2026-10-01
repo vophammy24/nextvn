@@ -1,0 +1,70 @@
+[
+  {
+    "id": "column.public.BillingRecord.providerEventId",
+    "label": "Add column \"providerEventId\" to \"BillingRecord\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "providerEventId",
+        "table": "BillingRecord"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"providerEventId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": ["public", "BillingRecord", "providerEventId"]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"providerEventId\"",
+        "sql": "ALTER TABLE \"public\".\"BillingRecord\" ADD COLUMN \"providerEventId\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"providerEventId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": ["public", "BillingRecord", "providerEventId"]
+      }
+    ]
+  },
+  {
+    "id": "unique.BillingRecord.BillingRecord_providerEventId_key",
+    "label": "Add unique constraint on \"BillingRecord\" (providerEventId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "BillingRecord_providerEventId_key",
+        "table": "BillingRecord"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"BillingRecord_providerEventId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BillingRecord_providerEventId_key", "public", "\"public\".\"BillingRecord\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"BillingRecord_providerEventId_key\"",
+        "sql": "ALTER TABLE \"public\".\"BillingRecord\" ADD CONSTRAINT \"BillingRecord_providerEventId_key\" UNIQUE (\"providerEventId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"BillingRecord_providerEventId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BillingRecord_providerEventId_key", "public", "\"public\".\"BillingRecord\""]
+      }
+    ]
+  }
+]

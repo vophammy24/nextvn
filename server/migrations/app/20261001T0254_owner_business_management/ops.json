@@ -1,0 +1,1107 @@
+[
+  {
+    "id": "table.BillingRecord",
+    "label": "Create table \"BillingRecord\"",
+    "summary": "Creates table \"BillingRecord\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "BillingRecord"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"BillingRecord\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BillingRecord\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"BillingRecord\"",
+        "sql": "CREATE TABLE \"public\".\"BillingRecord\" (\n  \"amountVnd\" int4 NOT NULL,\n  \"businessId\" uuid NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"currency\" text DEFAULT 'VND' NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"paidAt\" timestamptz,\n  \"providerReference\" text,\n  \"status\" text DEFAULT 'PENDING' NOT NULL,\n  \"subscriptionId\" uuid NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"BillingRecord_status_check_7d4c17ff\" CHECK (\"status\" IN ('PENDING', 'PAID', 'FAILED', 'REFUNDED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"BillingRecord\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BillingRecord\""]
+      }
+    ]
+  },
+  {
+    "id": "table.BusinessInvitation",
+    "label": "Create table \"BusinessInvitation\"",
+    "summary": "Creates table \"BusinessInvitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "BusinessInvitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"BusinessInvitation\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessInvitation\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"BusinessInvitation\"",
+        "sql": "CREATE TABLE \"public\".\"BusinessInvitation\" (\n  \"acceptedAt\" timestamptz,\n  \"branchId\" uuid,\n  \"businessId\" uuid NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"expiresAt\" timestamptz NOT NULL,\n  \"fullName\" text NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"invitedByUserId\" uuid NOT NULL,\n  \"role\" text NOT NULL,\n  \"status\" text DEFAULT 'PENDING' NOT NULL,\n  \"tokenHash\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"BusinessInvitation_role_check_6fc3012b\" CHECK (\"role\" IN ('OWNER', 'MANAGER', 'STAFF')),\n  CONSTRAINT \"BusinessInvitation_status_check_c603248a\" CHECK (\"status\" IN ('PENDING', 'ACCEPTED', 'REVOKED', 'EXPIRED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"BusinessInvitation\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessInvitation\""]
+      }
+    ]
+  },
+  {
+    "id": "table.BusinessSettings",
+    "label": "Create table \"BusinessSettings\"",
+    "summary": "Creates table \"BusinessSettings\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "BusinessSettings"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"BusinessSettings\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessSettings\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"BusinessSettings\"",
+        "sql": "CREATE TABLE \"public\".\"BusinessSettings\" (\n  \"address\" text,\n  \"businessId\" uuid NOT NULL,\n  \"contactEmail\" text,\n  \"contactPhone\" text,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"currency\" text DEFAULT 'VND' NOT NULL,\n  \"locale\" text DEFAULT 'vi-VN' NOT NULL,\n  \"notifyLowStock\" bool DEFAULT true NOT NULL,\n  \"notifyNearExpiry\" bool DEFAULT true NOT NULL,\n  \"receiptFooter\" text,\n  \"receiptTitle\" text,\n  \"serviceChargeRate\" float8 DEFAULT 0 NOT NULL,\n  \"taxRate\" float8 DEFAULT 0 NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"businessId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"BusinessSettings\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessSettings\""]
+      }
+    ]
+  },
+  {
+    "id": "table.BusinessSubscription",
+    "label": "Create table \"BusinessSubscription\"",
+    "summary": "Creates table \"BusinessSubscription\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "BusinessSubscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"BusinessSubscription\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessSubscription\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"BusinessSubscription\"",
+        "sql": "CREATE TABLE \"public\".\"BusinessSubscription\" (\n  \"businessId\" uuid NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"periodEndsAt\" timestamptz,\n  \"planId\" uuid NOT NULL,\n  \"providerReference\" text,\n  \"startedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"status\" text DEFAULT 'TRIALING' NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"BusinessSubscription_status_check_f13d23d0\" CHECK (\"status\" IN ('TRIALING', 'ACTIVE', 'PAST_DUE', 'CANCELED', 'EXPIRED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"BusinessSubscription\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessSubscription\""]
+      }
+    ]
+  },
+  {
+    "id": "table.SubscriptionPlan",
+    "label": "Create table \"SubscriptionPlan\"",
+    "summary": "Creates table \"SubscriptionPlan\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "SubscriptionPlan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"SubscriptionPlan\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"SubscriptionPlan\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"SubscriptionPlan\"",
+        "sql": "CREATE TABLE \"public\".\"SubscriptionPlan\" (\n  \"annualPriceVnd\" int4,\n  \"code\" text NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"description\" text,\n  \"id\" uuid NOT NULL,\n  \"isActive\" bool DEFAULT true NOT NULL,\n  \"monthlyPriceVnd\" int4,\n  \"name\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"SubscriptionPlan\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"SubscriptionPlan\""]
+      }
+    ]
+  },
+  {
+    "id": "column.public.BusinessMember.branchId",
+    "label": "Add column \"branchId\" to \"BusinessMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "branchId",
+        "table": "BusinessMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"branchId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": ["public", "BusinessMember", "branchId"]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"branchId\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessMember\" ADD COLUMN \"branchId\" uuid"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"branchId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": ["public", "BusinessMember", "branchId"]
+      }
+    ]
+  },
+  {
+    "id": "column.public.BusinessMember.status",
+    "label": "Add column \"status\" to \"BusinessMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "status",
+        "table": "BusinessMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"status\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": ["public", "BusinessMember", "status"]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"status\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessMember\" ADD COLUMN \"status\" text DEFAULT 'ACTIVE' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"status\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": ["public", "BusinessMember", "status"]
+      }
+    ]
+  },
+  {
+    "id": "unique.BillingRecord.BillingRecord_providerReference_key",
+    "label": "Add unique constraint on \"BillingRecord\" (providerReference)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "BillingRecord_providerReference_key",
+        "table": "BillingRecord"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"BillingRecord_providerReference_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BillingRecord_providerReference_key", "public", "\"public\".\"BillingRecord\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"BillingRecord_providerReference_key\"",
+        "sql": "ALTER TABLE \"public\".\"BillingRecord\" ADD CONSTRAINT \"BillingRecord_providerReference_key\" UNIQUE (\"providerReference\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"BillingRecord_providerReference_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BillingRecord_providerReference_key", "public", "\"public\".\"BillingRecord\""]
+      }
+    ]
+  },
+  {
+    "id": "unique.BusinessInvitation.BusinessInvitation_tokenHash_key",
+    "label": "Add unique constraint on \"BusinessInvitation\" (tokenHash)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "BusinessInvitation_tokenHash_key",
+        "table": "BusinessInvitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"BusinessInvitation_tokenHash_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessInvitation_tokenHash_key",
+          "public",
+          "\"public\".\"BusinessInvitation\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"BusinessInvitation_tokenHash_key\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessInvitation\" ADD CONSTRAINT \"BusinessInvitation_tokenHash_key\" UNIQUE (\"tokenHash\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"BusinessInvitation_tokenHash_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessInvitation_tokenHash_key",
+          "public",
+          "\"public\".\"BusinessInvitation\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.BusinessInvitation.BusinessInvitation_businessId_email_key",
+    "label": "Add unique constraint on \"BusinessInvitation\" (businessId, email)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "BusinessInvitation_businessId_email_key",
+        "table": "BusinessInvitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"BusinessInvitation_businessId_email_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessInvitation_businessId_email_key",
+          "public",
+          "\"public\".\"BusinessInvitation\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"BusinessInvitation_businessId_email_key\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessInvitation\" ADD CONSTRAINT \"BusinessInvitation_businessId_email_key\" UNIQUE (\"businessId\", \"email\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"BusinessInvitation_businessId_email_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessInvitation_businessId_email_key",
+          "public",
+          "\"public\".\"BusinessInvitation\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.BusinessMember.BusinessMember_status_check_ee520df2",
+    "label": "Add check constraint \"BusinessMember_status_check_ee520df2\" on \"BusinessMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "BusinessMember_status_check_ee520df2",
+        "table": "BusinessMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"BusinessMember_status_check_ee520df2\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessMember_status_check_ee520df2",
+          "public",
+          "\"public\".\"BusinessMember\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"BusinessMember_status_check_ee520df2\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessMember\" ADD CONSTRAINT \"BusinessMember_status_check_ee520df2\" CHECK (\"status\" IN ('ACTIVE', 'INACTIVE'))"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"BusinessMember_status_check_ee520df2\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessMember_status_check_ee520df2",
+          "public",
+          "\"public\".\"BusinessMember\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.BusinessSubscription.BusinessSubscription_businessId_key",
+    "label": "Add unique constraint on \"BusinessSubscription\" (businessId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "BusinessSubscription_businessId_key",
+        "table": "BusinessSubscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"BusinessSubscription_businessId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessSubscription_businessId_key",
+          "public",
+          "\"public\".\"BusinessSubscription\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"BusinessSubscription_businessId_key\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessSubscription\" ADD CONSTRAINT \"BusinessSubscription_businessId_key\" UNIQUE (\"businessId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"BusinessSubscription_businessId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessSubscription_businessId_key",
+          "public",
+          "\"public\".\"BusinessSubscription\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.SubscriptionPlan.SubscriptionPlan_code_key",
+    "label": "Add unique constraint on \"SubscriptionPlan\" (code)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "SubscriptionPlan_code_key",
+        "table": "SubscriptionPlan"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"SubscriptionPlan_code_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["SubscriptionPlan_code_key", "public", "\"public\".\"SubscriptionPlan\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"SubscriptionPlan_code_key\"",
+        "sql": "ALTER TABLE \"public\".\"SubscriptionPlan\" ADD CONSTRAINT \"SubscriptionPlan_code_key\" UNIQUE (\"code\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"SubscriptionPlan_code_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["SubscriptionPlan_code_key", "public", "\"public\".\"SubscriptionPlan\""]
+      }
+    ]
+  },
+  {
+    "id": "index.BillingRecord.BillingRecord_businessId_createdAt_idx_776e65e5",
+    "label": "Create index \"BillingRecord_businessId_createdAt_idx_776e65e5\" on \"BillingRecord\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BillingRecord_businessId_createdAt_idx_776e65e5",
+        "table": "BillingRecord"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BillingRecord_businessId_createdAt_idx_776e65e5\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BillingRecord_businessId_createdAt_idx_776e65e5\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BillingRecord_businessId_createdAt_idx_776e65e5\"",
+        "sql": "CREATE INDEX \"BillingRecord_businessId_createdAt_idx_776e65e5\" ON \"public\".\"BillingRecord\" (\"businessId\", \"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BillingRecord_businessId_createdAt_idx_776e65e5\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BillingRecord_businessId_createdAt_idx_776e65e5\""]
+      }
+    ]
+  },
+  {
+    "id": "index.BillingRecord.BillingRecord_businessId_idx_ae0ed511",
+    "label": "Create index \"BillingRecord_businessId_idx_ae0ed511\" on \"BillingRecord\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BillingRecord_businessId_idx_ae0ed511",
+        "table": "BillingRecord"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BillingRecord_businessId_idx_ae0ed511\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BillingRecord_businessId_idx_ae0ed511\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BillingRecord_businessId_idx_ae0ed511\"",
+        "sql": "CREATE INDEX \"BillingRecord_businessId_idx_ae0ed511\" ON \"public\".\"BillingRecord\" (\"businessId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BillingRecord_businessId_idx_ae0ed511\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BillingRecord_businessId_idx_ae0ed511\""]
+      }
+    ]
+  },
+  {
+    "id": "index.BillingRecord.BillingRecord_subscriptionId_idx_edbe96bf",
+    "label": "Create index \"BillingRecord_subscriptionId_idx_edbe96bf\" on \"BillingRecord\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BillingRecord_subscriptionId_idx_edbe96bf",
+        "table": "BillingRecord"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BillingRecord_subscriptionId_idx_edbe96bf\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BillingRecord_subscriptionId_idx_edbe96bf\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BillingRecord_subscriptionId_idx_edbe96bf\"",
+        "sql": "CREATE INDEX \"BillingRecord_subscriptionId_idx_edbe96bf\" ON \"public\".\"BillingRecord\" (\"subscriptionId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BillingRecord_subscriptionId_idx_edbe96bf\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BillingRecord_subscriptionId_idx_edbe96bf\""]
+      }
+    ]
+  },
+  {
+    "id": "index.BusinessInvitation.BusinessInvitation_branchId_idx_d04da5bb",
+    "label": "Create index \"BusinessInvitation_branchId_idx_d04da5bb\" on \"BusinessInvitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BusinessInvitation_branchId_idx_d04da5bb",
+        "table": "BusinessInvitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BusinessInvitation_branchId_idx_d04da5bb\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessInvitation_branchId_idx_d04da5bb\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BusinessInvitation_branchId_idx_d04da5bb\"",
+        "sql": "CREATE INDEX \"BusinessInvitation_branchId_idx_d04da5bb\" ON \"public\".\"BusinessInvitation\" (\"branchId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BusinessInvitation_branchId_idx_d04da5bb\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessInvitation_branchId_idx_d04da5bb\""]
+      }
+    ]
+  },
+  {
+    "id": "index.BusinessInvitation.BusinessInvitation_businessId_idx_ae0ed511",
+    "label": "Create index \"BusinessInvitation_businessId_idx_ae0ed511\" on \"BusinessInvitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BusinessInvitation_businessId_idx_ae0ed511",
+        "table": "BusinessInvitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BusinessInvitation_businessId_idx_ae0ed511\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessInvitation_businessId_idx_ae0ed511\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BusinessInvitation_businessId_idx_ae0ed511\"",
+        "sql": "CREATE INDEX \"BusinessInvitation_businessId_idx_ae0ed511\" ON \"public\".\"BusinessInvitation\" (\"businessId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BusinessInvitation_businessId_idx_ae0ed511\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessInvitation_businessId_idx_ae0ed511\""]
+      }
+    ]
+  },
+  {
+    "id": "index.BusinessInvitation.BusinessInvitation_invitedByUserId_idx_ad3f61d3",
+    "label": "Create index \"BusinessInvitation_invitedByUserId_idx_ad3f61d3\" on \"BusinessInvitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BusinessInvitation_invitedByUserId_idx_ad3f61d3",
+        "table": "BusinessInvitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BusinessInvitation_invitedByUserId_idx_ad3f61d3\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessInvitation_invitedByUserId_idx_ad3f61d3\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BusinessInvitation_invitedByUserId_idx_ad3f61d3\"",
+        "sql": "CREATE INDEX \"BusinessInvitation_invitedByUserId_idx_ad3f61d3\" ON \"public\".\"BusinessInvitation\" (\"invitedByUserId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BusinessInvitation_invitedByUserId_idx_ad3f61d3\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessInvitation_invitedByUserId_idx_ad3f61d3\""]
+      }
+    ]
+  },
+  {
+    "id": "index.BusinessMember.BusinessMember_branchId_idx_d04da5bb",
+    "label": "Create index \"BusinessMember_branchId_idx_d04da5bb\" on \"BusinessMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BusinessMember_branchId_idx_d04da5bb",
+        "table": "BusinessMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BusinessMember_branchId_idx_d04da5bb\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessMember_branchId_idx_d04da5bb\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BusinessMember_branchId_idx_d04da5bb\"",
+        "sql": "CREATE INDEX \"BusinessMember_branchId_idx_d04da5bb\" ON \"public\".\"BusinessMember\" (\"branchId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BusinessMember_branchId_idx_d04da5bb\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessMember_branchId_idx_d04da5bb\""]
+      }
+    ]
+  },
+  {
+    "id": "index.BusinessSubscription.BusinessSubscription_planId_idx_5b32079a",
+    "label": "Create index \"BusinessSubscription_planId_idx_5b32079a\" on \"BusinessSubscription\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BusinessSubscription_planId_idx_5b32079a",
+        "table": "BusinessSubscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BusinessSubscription_planId_idx_5b32079a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessSubscription_planId_idx_5b32079a\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BusinessSubscription_planId_idx_5b32079a\"",
+        "sql": "CREATE INDEX \"BusinessSubscription_planId_idx_5b32079a\" ON \"public\".\"BusinessSubscription\" (\"planId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BusinessSubscription_planId_idx_5b32079a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": ["\"public\".\"BusinessSubscription_planId_idx_5b32079a\""]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BillingRecord.BillingRecord_businessId_fkey",
+    "label": "Add foreign key \"BillingRecord_businessId_fkey\" on \"BillingRecord\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BillingRecord_businessId_fkey",
+        "table": "BillingRecord"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BillingRecord_businessId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BillingRecord_businessId_fkey", "public", "\"public\".\"BillingRecord\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BillingRecord_businessId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BillingRecord\"\nADD CONSTRAINT \"BillingRecord_businessId_fkey\"\nFOREIGN KEY (\"businessId\")\nREFERENCES \"public\".\"Business\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BillingRecord_businessId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BillingRecord_businessId_fkey", "public", "\"public\".\"BillingRecord\""]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BillingRecord.BillingRecord_subscriptionId_fkey",
+    "label": "Add foreign key \"BillingRecord_subscriptionId_fkey\" on \"BillingRecord\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BillingRecord_subscriptionId_fkey",
+        "table": "BillingRecord"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BillingRecord_subscriptionId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BillingRecord_subscriptionId_fkey", "public", "\"public\".\"BillingRecord\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BillingRecord_subscriptionId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BillingRecord\"\nADD CONSTRAINT \"BillingRecord_subscriptionId_fkey\"\nFOREIGN KEY (\"subscriptionId\")\nREFERENCES \"public\".\"BusinessSubscription\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BillingRecord_subscriptionId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BillingRecord_subscriptionId_fkey", "public", "\"public\".\"BillingRecord\""]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BusinessInvitation.BusinessInvitation_businessId_fkey",
+    "label": "Add foreign key \"BusinessInvitation_businessId_fkey\" on \"BusinessInvitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BusinessInvitation_businessId_fkey",
+        "table": "BusinessInvitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BusinessInvitation_businessId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessInvitation_businessId_fkey",
+          "public",
+          "\"public\".\"BusinessInvitation\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BusinessInvitation_businessId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessInvitation\"\nADD CONSTRAINT \"BusinessInvitation_businessId_fkey\"\nFOREIGN KEY (\"businessId\")\nREFERENCES \"public\".\"Business\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BusinessInvitation_businessId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessInvitation_businessId_fkey",
+          "public",
+          "\"public\".\"BusinessInvitation\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BusinessInvitation.BusinessInvitation_branchId_fkey",
+    "label": "Add foreign key \"BusinessInvitation_branchId_fkey\" on \"BusinessInvitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BusinessInvitation_branchId_fkey",
+        "table": "BusinessInvitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BusinessInvitation_branchId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessInvitation_branchId_fkey",
+          "public",
+          "\"public\".\"BusinessInvitation\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BusinessInvitation_branchId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessInvitation\"\nADD CONSTRAINT \"BusinessInvitation_branchId_fkey\"\nFOREIGN KEY (\"branchId\")\nREFERENCES \"public\".\"Branch\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BusinessInvitation_branchId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessInvitation_branchId_fkey",
+          "public",
+          "\"public\".\"BusinessInvitation\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BusinessInvitation.BusinessInvitation_invitedByUserId_fkey",
+    "label": "Add foreign key \"BusinessInvitation_invitedByUserId_fkey\" on \"BusinessInvitation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BusinessInvitation_invitedByUserId_fkey",
+        "table": "BusinessInvitation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BusinessInvitation_invitedByUserId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessInvitation_invitedByUserId_fkey",
+          "public",
+          "\"public\".\"BusinessInvitation\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BusinessInvitation_invitedByUserId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessInvitation\"\nADD CONSTRAINT \"BusinessInvitation_invitedByUserId_fkey\"\nFOREIGN KEY (\"invitedByUserId\")\nREFERENCES \"public\".\"User\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BusinessInvitation_invitedByUserId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessInvitation_invitedByUserId_fkey",
+          "public",
+          "\"public\".\"BusinessInvitation\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BusinessMember.BusinessMember_branchId_fkey",
+    "label": "Add foreign key \"BusinessMember_branchId_fkey\" on \"BusinessMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BusinessMember_branchId_fkey",
+        "table": "BusinessMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BusinessMember_branchId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BusinessMember_branchId_fkey", "public", "\"public\".\"BusinessMember\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BusinessMember_branchId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessMember\"\nADD CONSTRAINT \"BusinessMember_branchId_fkey\"\nFOREIGN KEY (\"branchId\")\nREFERENCES \"public\".\"Branch\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BusinessMember_branchId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BusinessMember_branchId_fkey", "public", "\"public\".\"BusinessMember\""]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BusinessSettings.BusinessSettings_businessId_fkey",
+    "label": "Add foreign key \"BusinessSettings_businessId_fkey\" on \"BusinessSettings\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BusinessSettings_businessId_fkey",
+        "table": "BusinessSettings"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BusinessSettings_businessId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BusinessSettings_businessId_fkey", "public", "\"public\".\"BusinessSettings\""]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BusinessSettings_businessId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessSettings\"\nADD CONSTRAINT \"BusinessSettings_businessId_fkey\"\nFOREIGN KEY (\"businessId\")\nREFERENCES \"public\".\"Business\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BusinessSettings_businessId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": ["BusinessSettings_businessId_fkey", "public", "\"public\".\"BusinessSettings\""]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BusinessSubscription.BusinessSubscription_businessId_fkey",
+    "label": "Add foreign key \"BusinessSubscription_businessId_fkey\" on \"BusinessSubscription\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BusinessSubscription_businessId_fkey",
+        "table": "BusinessSubscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BusinessSubscription_businessId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessSubscription_businessId_fkey",
+          "public",
+          "\"public\".\"BusinessSubscription\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BusinessSubscription_businessId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessSubscription\"\nADD CONSTRAINT \"BusinessSubscription_businessId_fkey\"\nFOREIGN KEY (\"businessId\")\nREFERENCES \"public\".\"Business\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BusinessSubscription_businessId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessSubscription_businessId_fkey",
+          "public",
+          "\"public\".\"BusinessSubscription\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BusinessSubscription.BusinessSubscription_planId_fkey",
+    "label": "Add foreign key \"BusinessSubscription_planId_fkey\" on \"BusinessSubscription\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BusinessSubscription_planId_fkey",
+        "table": "BusinessSubscription"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BusinessSubscription_planId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessSubscription_planId_fkey",
+          "public",
+          "\"public\".\"BusinessSubscription\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BusinessSubscription_planId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BusinessSubscription\"\nADD CONSTRAINT \"BusinessSubscription_planId_fkey\"\nFOREIGN KEY (\"planId\")\nREFERENCES \"public\".\"SubscriptionPlan\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BusinessSubscription_planId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BusinessSubscription_planId_fkey",
+          "public",
+          "\"public\".\"BusinessSubscription\""
+        ]
+      }
+    ]
+  }
+]

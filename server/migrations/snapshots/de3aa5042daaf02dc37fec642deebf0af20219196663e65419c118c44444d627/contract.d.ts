@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'b595b801f39961e9d44244969935b2b0f09de2a45a5bdbd962d7608abb00a06e'>;
+  StorageHashBase<'de3aa5042daaf02dc37fec642deebf0af20219196663e65419c118c44444d627'>;
 export type ExecutionHash =
   ExecutionHashBase<'1bf9dfdf10370755e591a4e030a425fec24d3fc3cb74fa646ab6fbd0f5538e4d'>;
 export type ProfileHash =
@@ -257,7 +257,6 @@ export type FieldOutputTypes = {
       readonly currency: CodecTypes['pg/text@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly paidAt: CodecTypes['pg/timestamptz-string@1']['output'] | null;
-      readonly providerEventId: CodecTypes['pg/text@1']['output'] | null;
       readonly providerReference: CodecTypes['pg/text@1']['output'] | null;
       readonly status: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
       readonly subscriptionId: CodecTypes['pg/uuid@1']['output'];
@@ -363,7 +362,6 @@ export type FieldInputTypes = {
       readonly currency: CodecTypes['pg/text@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly paidAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
-      readonly providerEventId: CodecTypes['pg/text@1']['input'] | null;
       readonly providerReference: CodecTypes['pg/text@1']['input'] | null;
       readonly status: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
       readonly subscriptionId: CodecTypes['pg/uuid@1']['input'];
@@ -469,7 +467,6 @@ export type StorageColumnTypes = {
       readonly currency: CodecTypes['pg/text@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly paidAt: CodecTypes['pg/timestamptz-string@1']['output'] | null;
-      readonly providerEventId: CodecTypes['pg/text@1']['output'] | null;
       readonly providerReference: CodecTypes['pg/text@1']['output'] | null;
       readonly status: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
       readonly subscriptionId: CodecTypes['pg/uuid@1']['output'];
@@ -575,7 +572,6 @@ export type StorageColumnInputTypes = {
       readonly currency: CodecTypes['pg/text@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly paidAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
-      readonly providerEventId: CodecTypes['pg/text@1']['input'] | null;
       readonly providerReference: CodecTypes['pg/text@1']['input'] | null;
       readonly status: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
       readonly subscriptionId: CodecTypes['pg/uuid@1']['input'];
@@ -681,7 +677,6 @@ export namespace Models {
     currency: CodecTypes['pg/text@1']['output'];
     id: CodecTypes['pg/uuid@1']['output'];
     paidAt: CodecTypes['pg/timestamptz-string@1']['output'] | null;
-    providerEventId: CodecTypes['pg/text@1']['output'] | null;
     providerReference: CodecTypes['pg/text@1']['output'] | null;
     status: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
     subscriptionId: CodecTypes['pg/uuid@1']['output'];
@@ -881,11 +876,6 @@ type ContractBase = Omit<
                   readonly codecId: 'pg/timestamptz-string@1';
                   readonly nullable: true;
                 };
-                readonly providerEventId: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
-                };
                 readonly providerReference: {
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
@@ -907,10 +897,7 @@ type ContractBase = Omit<
                 };
               };
               primaryKey: { readonly columns: readonly ['id'] };
-              uniques: readonly [
-                { readonly columns: readonly ['providerReference'] },
-                { readonly columns: readonly ['providerEventId'] },
-              ];
+              uniques: readonly [{ readonly columns: readonly ['providerReference'] }];
               indexes: readonly [
                 {
                   readonly name: 'BillingRecord_businessId_createdAt_idx_776e65e5';
@@ -1742,10 +1729,6 @@ type ContractBase = Omit<
                   readonly codecId: 'pg/timestamptz-string@1';
                 };
               };
-              readonly providerEventId: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
               readonly providerReference: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -1795,7 +1778,6 @@ type ContractBase = Omit<
                 readonly currency: { readonly column: 'currency' };
                 readonly id: { readonly column: 'id' };
                 readonly paidAt: { readonly column: 'paidAt' };
-                readonly providerEventId: { readonly column: 'providerEventId' };
                 readonly providerReference: { readonly column: 'providerReference' };
                 readonly status: { readonly column: 'status' };
                 readonly subscriptionId: { readonly column: 'subscriptionId' };
