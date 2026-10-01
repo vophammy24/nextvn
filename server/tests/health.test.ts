@@ -10,7 +10,7 @@ describe('GET /api/health', () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       success: true,
-      message: 'nextvn API is running',
+      message: 'API nextvn đang hoạt động',
     });
   });
 });
