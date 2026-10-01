@@ -1,0 +1,527 @@
+.manager-workspace {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+.manager-demo {
+  border: 1px solid #eadba5;
+  background: #fff8df;
+  color: #725118;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 12px;
+}
+.manager-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.manager-kpis .stat-card {
+  padding: 20px;
+}
+.manager-kpis .stat-value {
+  font-size: clamp(21px, 2vw, 29px);
+}
+.manager-kpis .stat-heading {
+  font-size: 12px;
+}
+.manager-kpis p {
+  font-size: 11px;
+}
+.manager-chart-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 24px;
+}
+.manager-chart-grid > *,
+.manager-report-grid > *,
+.manager-bottom-grid > *,
+.manager-two-panel > * {
+  min-width: 0;
+}
+.manager-chart {
+  width: 100%;
+  min-width: 0;
+}
+.manager-workspace .chart-container figcaption {
+  font-size: 11px;
+  line-height: 1.7;
+}
+.chart-data {
+  margin-top: 15px;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.chart-data summary {
+  cursor: pointer;
+  padding-block: 8px;
+}
+.chart-data .table-scroll {
+  margin-top: 12px;
+}
+.manager-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.manager-shortcuts a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.manager-shortcuts a:hover {
+  border-color: var(--primary-action);
+  background: #eff8f5;
+}
+.manager-shortcuts a > svg:first-child {
+  color: var(--primary-action);
+}
+.manager-shortcuts a > svg:last-child {
+  margin-left: auto;
+  color: var(--text-secondary);
+}
+.manager-bottom-grid,
+.manager-report-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.manager-bottom-grid .table-scroll table {
+  min-width: 260px;
+}
+.manager-report-grid .table-scroll table {
+  min-width: 260px;
+}
+.manager-alert-list {
+  display: grid;
+  gap: 18px;
+}
+.manager-alert-list > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid var(--border);
+}
+.manager-alert-list > div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.manager-alert-list svg {
+  color: var(--warning);
+}
+.manager-alert-list strong {
+  display: block;
+  font-size: 12px;
+}
+.manager-alert-list span:not(.badge) {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 11px;
+  margin-top: 5px;
+}
+.manager-alert-list .badge {
+  margin-left: auto;
+}
+.manager-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.manager-toolbar .search-field {
+  flex: 1;
+  min-width: min(100%, 200px);
+}
+.manager-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.manager-actions .button,
+.manager-toolbar .button {
+  gap: 8px;
+}
+.manager-muted {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.manager-workspace .filter-tabs button {
+  font-size: 12px;
+}
+.manager-notice {
+  padding: 13px 16px;
+  background: #edf3fc;
+  border: 1px solid #d4e1f5;
+  border-radius: 8px;
+  color: #305376;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.manager-row-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.manager-row-actions a {
+  white-space: nowrap;
+}
+.manager-text-button {
+  background: none;
+  border: 0;
+  color: var(--secondary-blue);
+  padding: 6px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  text-align: left;
+}
+.manager-text-button:hover:not(:disabled) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.manager-danger {
+  color: var(--danger);
+}
+.manager-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 0;
+}
+.manager-field input,
+.manager-field select,
+.manager-field textarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid #bdc9dc;
+  border-radius: 7px;
+  background: white;
+  font: inherit;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+.manager-field small {
+  color: var(--text-secondary);
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.manager-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.manager-full,
+.manager-form-footer {
+  grid-column: 1 / -1;
+}
+.manager-form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+.manager-form-footer p {
+  font-size: 12px;
+}
+.manager-form-footer button {
+  flex-shrink: 0;
+}
+.manager-two-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.transaction-form {
+  margin-top: 25px;
+}
+.manager-transactions {
+  display: grid;
+  gap: 23px;
+}
+.manager-transactions article {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding-bottom: 23px;
+  border-bottom: 1px solid var(--border);
+}
+.manager-transactions article:last-child {
+  padding-bottom: 0;
+  border: 0;
+}
+.manager-transactions strong {
+  font-size: 13px;
+}
+.manager-transactions p {
+  font-size: 11px;
+  margin-top: 8px;
+  line-height: 1.6;
+}
+.manager-transactions small {
+  color: var(--text-secondary);
+  font-size: 10px;
+  display: block;
+  margin-top: 8px;
+}
+.manager-transaction-icon {
+  background: #e9f6f0;
+  color: var(--primary-action);
+  display: grid;
+  place-items: center;
+  padding: 11px;
+  border-radius: 9px;
+}
+.manager-recipes {
+  display: grid;
+  grid-template-columns: 245px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.manager-recipe-list {
+  display: grid;
+  gap: 12px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.manager-recipe-detail {
+  min-width: 0;
+  display: grid;
+  gap: 24px;
+}
+.manager-recipe-detail > *,
+.manager-recipe-list {
+  min-width: 0;
+}
+.recipe-select {
+  display: flex;
+  text-align: left;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 14px 10px;
+  background: white;
+  color: var(--text-primary);
+}
+.recipe-select[aria-pressed='true'] {
+  border-color: var(--primary-action);
+  background: #eaf7f1;
+}
+.recipe-select svg {
+  color: var(--primary-action);
+}
+.recipe-select strong {
+  display: block;
+  font-size: 12px;
+}
+.recipe-select small {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 10px;
+  margin-top: 4px;
+}
+.manager-recipe-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.manager-recipe-kpis .stat-card {
+  padding: 18px;
+}
+.manager-recipe-kpis .stat-heading {
+  font-size: 11px;
+}
+.manager-recipe-kpis .stat-value {
+  font-size: 24px;
+}
+.manager-recipe-kpis p {
+  font-size: 11px;
+}
+.manager-modifier {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 18px;
+  font-size: 12px;
+}
+.manager-modifier span {
+  color: var(--text-secondary);
+}
+.manager-alert-cards {
+  display: grid;
+  gap: 18px;
+}
+.manager-alert-cards article {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 24px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.manager-alert-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  background: #fff3da;
+  color: var(--warning);
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+.manager-alert-icon.alert-resolved {
+  background: #e9f5ed;
+  color: var(--success);
+}
+.manager-alert-icon.alert-in_progress {
+  background: #edf3ff;
+  color: var(--secondary-blue);
+}
+.manager-alert-content {
+  min-width: 0;
+  flex: 1;
+}
+.manager-alert-content > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.manager-alert-content h2 {
+  margin-top: 12px;
+  font-size: 15px;
+}
+.manager-alert-content > p {
+  font-size: 11px;
+  margin-block: 8px 15px;
+}
+.manager-alert-detail {
+  border-top: 1px solid var(--border);
+  margin-top: 17px;
+  padding-top: 17px;
+  display: grid;
+  gap: 12px;
+  font-size: 12px;
+}
+@media (max-width: 1250px) {
+  .manager-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .manager-shortcuts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .manager-chart-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .manager-recipes {
+    grid-template-columns: 200px minmax(0, 1fr);
+  }
+  .manager-recipe-kpis {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 1050px) {
+  .manager-bottom-grid,
+  .manager-report-grid,
+  .manager-two-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .manager-form-footer {
+    flex-wrap: wrap;
+  }
+  .manager-recipes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .manager-recipe-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .manager-recipe-list .search-field {
+    grid-column: 1 / -1;
+  }
+  .manager-recipe-kpis {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .manager-kpis {
+    gap: 12px;
+  }
+  .manager-kpis .stat-card {
+    padding: 15px;
+  }
+  .manager-kpis .stat-value {
+    font-size: 19px;
+    overflow-wrap: anywhere;
+  }
+  .manager-kpis .stat-heading {
+    font-size: 11px;
+  }
+  .manager-shortcuts {
+    gap: 12px;
+  }
+  .manager-shortcuts a {
+    padding: 12px;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .manager-shortcuts a > svg:last-child {
+    display: none;
+  }
+  .manager-alert-list > div {
+    flex-wrap: wrap;
+  }
+  .manager-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .manager-recipe-kpis {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .manager-alert-cards article {
+    padding: 17px;
+    gap: 12px;
+  }
+  .manager-alert-content > div:first-child {
+    flex-wrap: wrap;
+  }
+  .manager-alert-icon {
+    width: 34px;
+    height: 34px;
+  }
+  .manager-modifier {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .manager-field input,
+  .manager-field select,
+  .manager-field textarea {
+    font-size: 16px;
+  }
+  .manager-toolbar > .manager-actions {
+    width: 100%;
+  }
+  .manager-toolbar > .manager-actions .button {
+    flex: 1;
+    font-size: 12px;
+  }
+}

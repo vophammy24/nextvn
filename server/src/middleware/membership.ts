@@ -5,6 +5,7 @@ import { sendError } from '../lib/api-response.js';
 
 export interface Membership {
   businessId: string;
+  branchId: string | null;
   role: 'OWNER' | 'MANAGER' | 'STAFF';
   isActive: boolean;
 }
@@ -12,9 +13,6 @@ export interface Membership {
 export interface MemberRequest extends AuthenticatedRequest {
   membership: Membership;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const rawDb = db as any;
 
 /**
  * Middleware to verify that the authenticated user is an active member
@@ -36,15 +34,10 @@ export async function resolveMembership(
   }
 
   try {
-    const memberRecords: Array<{ businessId: string; role: string; isActive: boolean }> =
-      (await rawDb.BusinessMember?.findMany({
-        where: {
-          userId: authReq.user.userId,
-          businessId,
-        },
-      })) ?? [];
-
-    const membership = memberRecords[0];
+    const membership = await db.orm.public.BusinessMember.where({
+      userId: authReq.user.userId,
+      businessId,
+    }).first();
 
     if (!membership || !membership.isActive) {
       sendError(res, 'Tài khoản không có quyền truy cập vào doanh nghiệp này.', 403);
@@ -53,7 +46,8 @@ export async function resolveMembership(
 
     (req as MemberRequest).membership = {
       businessId: membership.businessId,
-      role: membership.role as 'OWNER' | 'MANAGER' | 'STAFF',
+      branchId: membership.branchId,
+      role: membership.role,
       isActive: membership.isActive,
     };
 
@@ -71,11 +65,12 @@ export async function validateBranchOwnership(
   branchId: string,
 ): Promise<boolean> {
   try {
-    const branches: Array<{ id: string }> =
-      (await rawDb.Branch?.findMany({
-        where: { id: branchId, businessId },
-      })) ?? [];
-    return branches.length > 0;
+    const branch = await db.orm.public.Branch.where({
+      id: branchId,
+      businessId,
+      isActive: true,
+    }).first();
+    return !!branch;
   } catch {
     return false;
   }

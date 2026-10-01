@@ -80,13 +80,18 @@ model BusinessMember {
   userId Uuid
   user   User @relation(fields: [userId], references: [id])
 
-  role BusinessRole
+  branchId Uuid?
+  branch   Branch? @relation(fields: [branchId], references: [id])
+
+  role     BusinessRole
+  isActive Boolean      @default(true)
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
 
   @@unique([businessId, userId])
   @@index([userId])
+  @@index([branchId])
 }
 
 model Branch {
@@ -106,6 +111,11 @@ model Branch {
   restaurantTables RestaurantTable[]
   orders          Order[]
   shifts          Shift[]
+
+  members           BusinessMember[]
+  ingredients       Ingredient[]
+  recipes           Recipe[]
+  stockTransactions StockTransaction[]
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
@@ -147,6 +157,7 @@ model MenuItem {
   isActive    Boolean @default(true)
 
   orderItems OrderItem[]
+  recipe Recipe?
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
@@ -218,6 +229,7 @@ model Order {
 
   items    OrderItem[]
   payments OrderPayment[]
+  inventoryTransactions StockTransaction[]
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
@@ -282,4 +294,159 @@ model Shift {
 
   @@index([branchId])
   @@index([staffId])
+}
+
+enum InventoryUnit {
+  G
+  ML
+  PIECE
+}
+
+enum StockTransactionType {
+  IMPORT
+  EXPORT
+  ADJUSTMENT
+  WASTE
+  SALE_CONSUMPTION
+}
+
+enum InventoryAlertType {
+  LOW_STOCK
+  OUT_OF_STOCK
+  NEAR_EXPIRY
+}
+
+enum InventoryAlertStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+model Ingredient {
+  id Uuid @id @default(uuid())
+
+  businessId Uuid
+
+  branchId Uuid
+  branch   Branch @relation(fields: [branchId], references: [id])
+
+  name     String
+  category String
+  unit     InventoryUnit
+
+  balance     InventoryBalance?
+  lots        InventoryLot[]
+  recipeParts RecipeIngredient[]
+  alerts      InventoryAlert[]
+
+  @@index([businessId, branchId])
+}
+
+model InventoryBalance {
+  id Uuid @id @default(uuid())
+
+  ingredientId Uuid       @unique
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  quantityMilli Int   @default(0)
+  minimumMilli  Int   @default(0)
+  unitCost      Float @default(0)
+}
+
+model InventoryLot {
+  id Uuid @id @default(uuid())
+
+  ingredientId Uuid
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  quantityMilli Int
+  expiry        String?
+
+  createdAt TimestamptzString @default(now())
+
+  @@index([ingredientId])
+}
+
+model Recipe {
+  id Uuid @id @default(uuid())
+
+  businessId Uuid
+
+  branchId Uuid
+  branch   Branch @relation(fields: [branchId], references: [id])
+
+  menuItemId Uuid     @unique
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+
+  name         String
+  sellingPrice Float
+  version      Int    @default(1)
+  modifiers    Json
+
+  ingredients RecipeIngredient[]
+
+  @@index([businessId, branchId])
+}
+
+model RecipeIngredient {
+  id Uuid @id @default(uuid())
+
+  recipeId Uuid
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  ingredientId Uuid
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  quantityMilli Int
+  modifierKey   String
+
+  @@unique([recipeId, ingredientId, modifierKey])
+}
+
+model StockTransaction {
+  id Uuid @id @default(uuid())
+
+  businessId Uuid
+
+  branchId Uuid
+  branch   Branch @relation(fields: [branchId], references: [id])
+
+  actorId Uuid
+
+  type StockTransactionType
+
+  requestKey  String
+  requestHash String
+
+  orderId Uuid?
+  order   Order? @relation(fields: [orderId], references: [id])
+
+  note     String
+  supplier String
+  items    Json
+
+  createdAt TimestamptzString @default(now())
+
+  @@unique([businessId, branchId, requestKey])
+  @@unique([businessId, orderId])
+  @@index([branchId])
+}
+
+model InventoryAlert {
+  id Uuid @id @default(uuid())
+
+  businessId Uuid
+  branchId   Uuid
+
+  ingredientId Uuid
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  type            InventoryAlertType
+  status          InventoryAlertStatus
+  conditionActive Boolean
+
+  updatedAt TimestamptzString @default(now())
+
+  @@unique([businessId, branchId, ingredientId, type])
+  @@index([branchId])
 }

@@ -1,7 +1,11 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { ShoppingCart, LayoutGrid, ClipboardList, Clock, LogOut } from 'lucide-react';
+import { useContext } from 'react';
+import { WorkspaceSessionContext } from '@/features/auth/workspaceContext';
+import { navigation } from '@/app/navigation';
 
 export default function StaffLayout() {
+  const workspace = useContext(WorkspaceSessionContext);
   return (
     <div className="app-layout">
       <aside className="sidebar">
@@ -40,6 +44,45 @@ export default function StaffLayout() {
             <span>Ca làm việc</span>
           </NavLink>
 
+          {workspace?.context.role === 'MANAGER' && (
+            <>
+              <div className="sidebar-section-title">Quản lý kho</div>
+              {navigation
+                .filter((item) =>
+                  ['inventory', 'stockTransactions', 'recipes', 'alerts'].includes(item.key),
+                )
+                .map((item) => (
+                  <NavLink
+                    key={item.key}
+                    to={item.path}
+                    className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}
+                  >
+                    <item.icon />
+                    <span>
+                      {
+                        (
+                          {
+                            inventory: 'Kho hàng',
+                            stockTransactions: 'Nhập / Xuất kho',
+                            recipes: 'Công thức',
+                            alerts: 'Cảnh báo',
+                          } as Record<string, string>
+                        )[item.key]
+                      }
+                    </span>
+                  </NavLink>
+                ))}
+            </>
+          )}
+          {workspace?.context.role === 'OWNER' && (
+            <NavLink
+              to="/app/owner/inventory"
+              className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}
+            >
+              <LayoutGrid />
+              <span>Tổng quan kho doanh nghiệp</span>
+            </NavLink>
+          )}
           <div className="sidebar-section-title" style={{ marginTop: 'auto' }}>
             Tài khoản
           </div>
