@@ -58,7 +58,7 @@ export async function resolveMembership(
     };
 
     next();
-  } catch (err) {
+  } catch {
     sendError(res, 'Lỗi xác thực quyền hạn.', 500);
   }
 }
