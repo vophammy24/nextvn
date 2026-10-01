@@ -7,7 +7,7 @@ export function AuthCard({ title, children }: { title: string; children: ReactNo
   return (
     <main className="auth-page">
       <div className="auth-container">
-        <Link className="auth-brand" to="/login" aria-label="NextVN — Đăng nhập">
+        <Link className="auth-brand" to="/" aria-label="NextVN — Trang chủ">
           <span>
             <Coffee aria-hidden="true" />
           </span>
