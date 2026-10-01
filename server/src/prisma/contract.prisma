@@ -66,6 +66,9 @@ model Business {
 
   members  BusinessMember[]
   branches Branch[]
+  settings BusinessSettings?
+  subscription BusinessSubscription?
+  billingRecords BillingRecord[]
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
@@ -449,4 +452,97 @@ model InventoryAlert {
 
   @@unique([businessId, branchId, ingredientId, type])
   @@index([branchId])
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  EXPIRED
+}
+
+enum BillingStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model BusinessSettings {
+  businessId Uuid @id
+  business Business @relation(fields: [businessId], references: [id])
+
+  contactEmail String?
+  contactPhone String?
+  address String?
+  taxRate Float @default(0)
+  serviceChargeRate Float @default(0)
+  currency String @default("VND")
+  locale String @default("vi-VN")
+  invoicePrefix String @default("NEXTVN")
+  receiptTitle String?
+  receiptFooter String?
+  notifyLowStock Boolean @default(true)
+  notifyNearExpiry Boolean @default(true)
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model SubscriptionPlan {
+  id Uuid @id
+
+  code String @unique
+  name String
+  description String?
+  monthlyPriceVnd Int?
+  annualPriceVnd Int?
+  isActive Boolean @default(true)
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  subscriptions BusinessSubscription[]
+}
+
+model BusinessSubscription {
+  id Uuid @id
+
+  businessId Uuid @unique
+  business Business @relation(fields: [businessId], references: [id])
+
+  planId Uuid
+  plan SubscriptionPlan @relation(fields: [planId], references: [id])
+
+  status SubscriptionStatus @default(TRIALING)
+  startedAt TimestamptzString @default(now())
+  periodEndsAt TimestamptzString?
+  providerReference String?
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  billingRecords BillingRecord[]
+}
+
+model BillingRecord {
+  id Uuid @id
+
+  businessId Uuid
+  business Business @relation(fields: [businessId], references: [id])
+
+  subscriptionId Uuid
+  subscription BusinessSubscription @relation(fields: [subscriptionId], references: [id])
+
+  amountVnd Int
+  currency String @default("VND")
+  status BillingStatus @default(PENDING)
+  providerReference String? @unique
+  providerEventId String? @unique
+  createdAt TimestamptzString @default(now())
+  paidAt TimestamptzString?
+
+  @@index([businessId, createdAt])
+  @@index([subscriptionId])
 }

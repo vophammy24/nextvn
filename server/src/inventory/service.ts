@@ -497,4 +497,20 @@ export class InventoryService {
     }
     return { costingMethod: 'MOVING_WEIGHTED_AVERAGE', branches: results };
   }
+  async ownerRecipeCosts(principal: Principal) {
+    authorize(principal, { businessId: principal.businessId, branchId: '' }, 'owner');
+    const result: { menuItemId: string; foodCost: number }[] = [];
+    for (const branch of await this.store.branches(principal.businessId)) {
+      const rows = await this.store.transaction(
+        { businessId: principal.businessId, branchId: branch.id },
+        (state) =>
+          state.recipes.map((recipe) => ({
+            menuItemId: recipe.menuItemId,
+            foodCost: foodCost(recipe, state).foodCost,
+          })),
+      );
+      result.push(...rows);
+    }
+    return result;
+  }
 }

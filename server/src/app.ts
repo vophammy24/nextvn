@@ -1,3 +1,4 @@
+import ownerRouter from './owner/ownerRouter.js';
 import express from 'express';
 import cors from 'cors';
 
@@ -42,5 +43,7 @@ app.use(
   resolveMembership,
   createInventoryRouter(inventoryService, resolveInventoryPrincipal),
 );
+
+app.use('/api/business/:businessId/owner', ownerRouter);
 
 export default app;

@@ -75,6 +75,31 @@ export default function StaffLayout() {
             </>
           )}
           {workspace?.context.role === 'OWNER' && (
+            <>
+              <div className="sidebar-section-title">CHỦ DOANH NGHIỆP</div>
+              {[
+                ['/app/owner', 'Tổng quan'],
+                ['/app/owner/branches', 'Chi nhánh'],
+                ['/app/owner/revenue', 'Doanh thu'],
+                ['/app/owner/menu-profit', 'Lợi nhuận món'],
+                ['/app/owner/promotions', 'Gợi ý khuyến mãi'],
+                ['/app/owner/users', 'Người dùng & vai trò'],
+                ['/app/owner/subscription', 'Gói dịch vụ'],
+                ['/app/owner/settings', 'Cài đặt doanh nghiệp'],
+              ].map(([path, label]) => (
+                <NavLink
+                  key={path}
+                  to={path}
+                  end
+                  className={({ isActive }) => 'sidebar-link' + (isActive ? ' active' : '')}
+                >
+                  <LayoutGrid />
+                  <span>{label}</span>
+                </NavLink>
+              ))}
+            </>
+          )}
+          {workspace?.context.role === 'OWNER' && (
             <NavLink
               to="/app/owner/inventory"
               className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}

@@ -24,6 +24,15 @@ export function authenticate(req: Request, res: Response, next: NextFunction): v
 
   try {
     const decoded = jwt.verify(token, env.JWT_ACCESS_SECRET) as JwtPayload;
+    if (
+      typeof decoded !== 'object' ||
+      decoded === null ||
+      typeof decoded.userId !== 'string' ||
+      !decoded.userId.trim()
+    ) {
+      sendUnauthorized(res, 'Token không hợp lệ.');
+      return;
+    }
     (req as AuthenticatedRequest).user = decoded;
     next();
   } catch {
