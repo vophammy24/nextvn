@@ -18,6 +18,8 @@ const envSchema = z.object({
 
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
 
+  GOOGLE_CLIENT_ID: z.string().min(1).optional(),
+
   PAYOS_CLIENT_ID: z.string().optional(),
 
   PAYOS_API_KEY: z.string().optional(),

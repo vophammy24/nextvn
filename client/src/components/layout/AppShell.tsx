@@ -3,16 +3,16 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { useWorkspace } from '@/features/auth/workspaceContext';
+import { useSignOut } from '@/features/auth/hooks/useSignOut';
 import { PageErrorBoundary } from '@/components/common/PageErrorBoundary';
 
 export function AppShell({
-  onSignOut,
   onNotifications,
 }: {
-  onSignOut?: () => void;
   onNotifications?: () => void;
 }) {
   const { context } = useWorkspace();
+  const signOut = useSignOut();
   const [collapsed, setCollapsed] = useState(false);
   const mobileDialog = useRef<HTMLDialogElement>(null);
   const main = useRef<HTMLElement>(null);
@@ -42,7 +42,9 @@ export function AppShell({
           context={context}
           collapsed={collapsed}
           onToggle={() => setCollapsed(!collapsed)}
-          onSignOut={onSignOut}
+          onSignOut={signOut.signOut}
+          signingOut={signOut.isPending}
+          signOutError={!!signOut.error}
         />
       </aside>
       <dialog ref={mobileDialog} className="mobile-navigation" aria-label="Điều hướng ứng dụng">
@@ -51,7 +53,9 @@ export function AppShell({
           mobile
           onToggle={() => mobileDialog.current?.close()}
           onNavigate={() => mobileDialog.current?.close()}
-          onSignOut={onSignOut}
+          onSignOut={signOut.signOut}
+          signingOut={signOut.isPending}
+          signOutError={!!signOut.error}
         />
       </dialog>
       <div className="workspace">

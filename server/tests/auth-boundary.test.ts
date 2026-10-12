@@ -3,6 +3,14 @@ import { describe, expect, it } from 'vitest';
 import app from '../src/app';
 
 describe('Ranh giới API khi xác thực chưa được triển khai', () => {
+  it('đăng xuất kết thúc phiên và xóa cookie session', async () => {
+    const response = await request(app).post('/api/auth/logout');
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.headers['set-cookie']?.[0]).toContain('nextvn_session=;');
+    expect(response.headers['cache-control']).toBe('no-store');
+  });
+
   it('JSON lỗi trả phản hồi tiếng Việt, không lộ stack hoặc dữ liệu gửi lên', async () => {
     const response = await request(app)
       .post('/api/auth/login')
@@ -13,18 +21,18 @@ describe('Ranh giới API khi xác thực chưa được triển khai', () => {
     expect(response.body.message).toContain('Không thể xử lý yêu cầu');
     expect(response.text).not.toMatch(/private-test|SyntaxError|stack/);
   });
-  it.each(['/api/auth/me', '/api/auth/google'])(
-    '%s không cấp danh tính hoặc token',
-    async (path) => {
+  it.each([
+    ['/api/auth/me', 401, 'AUTH_REQUIRED'],
+    ['/api/auth/google', 501, 'AUTH_NOT_CONFIGURED'],
+  ])('%s không cấp danh tính hoặc token', async (path, status, code) => {
       const response = await request(app).get(path);
-      expect(response.status).toBe(501);
-      expect(response.body.code).toBe('AUTH_NOT_CONFIGURED');
+      expect(response.status).toBe(status);
+      expect(response.body.code).toBe(code);
       expect(response.body.user).toBeUndefined();
       expect(response.body.token).toBeUndefined();
       expect(response.headers['set-cookie']).toBeUndefined();
-      expect(response.headers['cache-control']).toBe('no-store');
-    },
-  );
+      if (path === '/api/auth/me') expect(response.headers['cache-control']).toBe('no-store');
+    });
   it('đăng nhập trả cùng phản hồi cho mọi thông tin, không phản chiếu mật khẩu', async () => {
     const first = await request(app)
       .post('/api/auth/login')

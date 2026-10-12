@@ -139,7 +139,7 @@ describe('Giao diện xác thực', () => {
     const user = userEvent.setup();
     expect(screen.getByRole('button', { name: 'Tiếp tục với Google' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Tiếp tục với Google' })).toHaveAccessibleDescription(
-      'Đăng nhập Google chưa được cấu hình cho môi trường này.',
+      'Bạn sẽ được chuyển hướng sau khi xác thực Google.',
     );
     await user.click(screen.getByRole('link', { name: /Đăng nhập bằng tài khoản doanh nghiệp/ }));
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
@@ -148,6 +148,17 @@ describe('Giao diện xác thực', () => {
     await user.click(screen.getByRole('link', { name: 'Về trang chủ' }));
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Quản lý bán hàng');
     expect(post).not.toHaveBeenCalled();
+  });
+  it('đăng xuất qua API, hiện trạng thái tải và điều hướng về đăng nhập', async () => {
+    vi.spyOn(api, 'post').mockResolvedValue({ status: 200, data: { success: true } });
+    useWorkspaceStore.setState({ previewRole: 'OWNER' });
+    renderApp('/app');
+    const user = userEvent.setup();
+    const button = await screen.findByRole('button', { name: 'Đăng xuất' });
+    await user.click(button);
+    expect(await screen.findByRole('heading', { name: /Bắt đầu từ/ })).toBeInTheDocument();
+    expect(api.post).toHaveBeenCalledWith('/auth/logout', {}, { withCredentials: true });
+    useWorkspaceStore.setState({ previewRole: null });
   });
   it('quên mật khẩu chỉ giải thích chưa hỗ trợ, không gửi yêu cầu', async () => {
     const post = vi.spyOn(api, 'post');

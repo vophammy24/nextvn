@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 const envSchema = z.object({
   VITE_API_URL: z.string().url('VITE_API_URL must be a valid URL'),
+  VITE_GOOGLE_CLIENT_ID: z.string().min(1).optional(),
 });
 
 const result = envSchema.safeParse(import.meta.env);

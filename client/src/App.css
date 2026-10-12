@@ -126,6 +126,40 @@
   min-height: 44px;
   margin-top: var(--space-2);
   padding: var(--space-2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+.sign-out:not(:disabled):hover {
+  color: white;
+  background: rgb(255 255 255 / 10%);
+  transform: translateX(2px);
+}
+.sign-out:focus-visible {
+  outline: 2px solid var(--brand-accent);
+  outline-offset: 2px;
+}
+.sign-out:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+.sign-out-spinner {
+  animation: sign-out-spin 800ms linear infinite;
+}
+@keyframes sign-out-spin {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sign-out,
+  .sign-out-spinner {
+    animation: none;
+    transition: none;
+  }
 }
 .sidebar-hint {
   color: var(--sidebar-text);

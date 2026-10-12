@@ -12,6 +12,8 @@ export function Sidebar({
   onNavigate,
   mobile = false,
   onSignOut,
+  signingOut = false,
+  signOutError = false,
 }: {
   context: WorkspaceContext | null;
   collapsed?: boolean;
@@ -19,6 +21,8 @@ export function Sidebar({
   onNavigate?: () => void;
   mobile?: boolean;
   onSignOut?: () => void;
+  signingOut?: boolean;
+  signOutError?: boolean;
 }) {
   return (
     <div className={`sidebar ${collapsed ? 'is-collapsed' : ''}`}>
@@ -81,14 +85,26 @@ export function Sidebar({
           </div>
         </div>
         <button
-          className="sign-out"
-          disabled={!onSignOut}
+          className={`sign-out${signingOut ? ' is-signing-out' : ''}`}
+          disabled={!onSignOut || signingOut}
           onClick={onSignOut}
           title={!onSignOut ? 'Đăng xuất chưa được kết nối' : copy.common.signOut}
+          aria-busy={signingOut}
         >
-          <LogOut size={18} aria-hidden="true" />
-          <span className={collapsed ? 'sr-only' : undefined}>{copy.common.signOut}</span>
+          <LogOut
+            className={signingOut ? 'sign-out-spinner' : undefined}
+            size={18}
+            aria-hidden="true"
+          />
+          <span className={collapsed ? 'sr-only' : undefined}>
+            {signingOut ? 'Đang đăng xuất…' : copy.common.signOut}
+          </span>
         </button>
+        {signOutError && (
+          <p className={collapsed ? 'sr-only' : 'sidebar-hint'} role="alert">
+            Không thể đăng xuất. Vui lòng thử lại.
+          </p>
+        )}
       </footer>
     </div>
   );

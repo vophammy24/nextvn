@@ -9,10 +9,12 @@ import {
   Avatar,
 } from '@/components/common/Foundation';
 import { useAuthMe } from '../session';
+import { useSignOut } from '../hooks/useSignOut';
 import '@/features/operations/operations.css';
 export function ProfilePage() {
   const me = useAuthMe();
   const [notice, setNotice] = useState('');
+  const signOut = useSignOut();
   return (
     <>
       <PageHeader title="Hồ sơ cá nhân" description="Thông tin từ phiên đăng nhập của bạn" />
@@ -73,16 +75,23 @@ export function ProfilePage() {
               </button>
               <button
                 className="button button-secondary"
-                onClick={() =>
-                  setNotice(
-                    'Dịch vụ đăng xuất chưa được kết nối. Phiên đăng nhập chưa được kết thúc.',
-                  )
-                }
+                disabled={signOut.isPending}
+                aria-busy={signOut.isPending}
+                onClick={() => signOut.signOut()}
               >
-                <LogOut size={18} aria-hidden="true" />
-                Đăng xuất
+                <LogOut
+                  className={signOut.isPending ? 'sign-out-spinner' : undefined}
+                  size={18}
+                  aria-hidden="true"
+                />
+                {signOut.isPending ? 'Đang đăng xuất…' : 'Đăng xuất'}
               </button>
             </div>
+            {signOut.error && (
+              <p className="ops-inline-note" role="alert">
+                Không thể đăng xuất lúc này. Vui lòng thử lại.
+              </p>
+            )}
             {notice && (
               <p className="ops-inline-note" role="status">
                 {notice}
