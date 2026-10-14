@@ -61,17 +61,22 @@ authRouter.post('/login', async (req, res) => {
   } catch (error) {
     console.error('[AUTH_LOGIN_ERROR]', {
       name: error instanceof Error ? error.name : 'Unknown',
-      message: error instanceof Error ? error.message : 'Unknown error',
-      code:
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error
-          ? error.code
-          : undefined,
-    });
+      message: error instanceof Error ? error.message : 'Unknown',
+      code: (error as any)?.code,
+      why: (error as any)?.why,
+      fix: (error as any)?.fix,
 
-    return res.status(503).json({
-      message: 'Không thể đăng nhập. Vui lòng thử lại.',
+      cause: {
+        name: (error as any)?.cause?.name,
+        kind: (error as any)?.cause?.kind,
+        transient: (error as any)?.cause?.transient,
+
+        rootCause: {
+          name: (error as any)?.cause?.cause?.name,
+          code: (error as any)?.cause?.cause?.code,
+          syscall: (error as any)?.cause?.cause?.syscall,
+        },
+      },
     });
   }
 });
