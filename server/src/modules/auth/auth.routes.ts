@@ -58,8 +58,21 @@ authRouter.post('/login', async (req, res) => {
       return;
     }
     res.json(session(user));
-  } catch {
-    res.status(503).json({ message: 'Không thể đăng nhập. Vui lòng thử lại.' });
+  } catch (error) {
+    console.error('[AUTH_LOGIN_ERROR]', {
+      name: error instanceof Error ? error.name : 'Unknown',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      code:
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error
+          ? error.code
+          : undefined,
+    });
+
+    return res.status(503).json({
+      message: 'Không thể đăng nhập. Vui lòng thử lại.',
+    });
   }
 });
 authRouter.post('/register', async (req, res) => {
