@@ -1,0 +1,311 @@
+{
+  "method": "Browser-isolated synthetic data, external requests blocked. Not a live backend test.",
+  "results": [
+    {
+      "role": "PUBLIC",
+      "url": "/",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bán hàng và tồn kho F&B trên cùng một hệ thống.",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bán hàng và tồn kho F&B trên cùng một hệ thống.",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bán hàng và tồn kho F&B trên cùng một hệ thống.",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bán hàng và tồn kho F&B trên cùng một hệ thống.",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bán hàng và tồn kho F&B trên cùng một hệ thống.",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bán hàng và tồn kho F&B trên cùng một hệ thống.",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/login",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng nhập",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/login",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng nhập",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/login",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng nhập",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/login",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng nhập",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/login",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng nhập",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/login",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng nhập",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/register",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng ký",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/register",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng ký",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/register",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng ký",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/register",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng ký",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/register",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng ký",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/register",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng ký",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    }
+  ],
+  "errors": [],
+  "unmapped": [],
+  "interactions": [
+    {
+      "url": "/",
+      "mobileMenuEscape": true,
+      "loginCta": true,
+      "registrationCta": true
+    },
+    {
+      "url": "/login",
+      "passwordVisibility": true
+    },
+    {
+      "url": "/register",
+      "passwordVisibility": true
+    }
+  ]
+}

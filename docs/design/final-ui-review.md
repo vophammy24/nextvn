@@ -1,0 +1,41 @@
+# NextVN final UI review — Phases A–G
+
+Date: 2026-10-15 (Asia/Saigon). Branch: `develop`. This review covers the repository working tree; no release or deployment was performed.
+
+The later [working-tree release review](release-review.md) records the production URL guard, backend timeout investigation, fresh validation and proposed commits. The findings below describe the Phase G checkpoint before those changes.
+
+## Final route inventory
+
+| Area                   | Implemented routes                                                                                                                                                                                         | Status                                                                                                                                        |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Public (3)             | `/`, `/login`, `/register`                                                                                                                                                                                 | **PASS** in isolated responsive/browser fixtures; live authentication and registration **NOT TESTED**.                                        |
+| Staff/shared sales (4) | `/app/pos`, `/app/tables`, `/app/orders`, `/app/shift`                                                                                                                                                     | **PASS** in browser fixtures and targeted mocked tests; live orders, tables and shifts **NOT TESTED**.                                        |
+| Manager additions (4)  | `/app/inventory`, `/app/stock-transactions`, `/app/recipes`, `/app/alerts`                                                                                                                                 | **PASS** in browser fixtures and targeted mocked tests; live stock mutation **NOT TESTED**. Manager also retains the four shared sales links. |
+| Owner (9)              | `/app/owner`, `/app/owner/branches`, `/app/owner/revenue`, `/app/owner/menu-profit`, `/app/owner/promotions`, `/app/owner/users`, `/app/owner/settings`, `/app/owner/subscription`, `/app/owner/inventory` | **PASS** in browser fixtures and presentation/mutation mocks; live analytics and business management **NOT TESTED**.                          |
+
+`/app/owner/team` and `/app/owner/analytics` remain redirects to Users and Revenue. `/app` has no index child; the wildcard redirects to `/`. Admin, Dashboard, Reports, Staff management and Profile are not implemented routes and were not exposed in the shell.
+
+## What changed and what was validated
+
+- **Brand and components — PASS:** one NextVN BrandLogo, blue/navy/white palette with restrained yellow, semantic status tokens, shared typography, fields, buttons, badges, dialogs, tables and feedback. The clean official logo vector remains unavailable, so the interim wordmark is used.
+- **Navigation — PASS:** one role-driven shell for Staff, Manager and Owner, distinct destination icons, active states, business/branch display, profile/logout, keyboard-accessible mobile drawer and preserved route guards. No unsupported branch switcher was invented.
+- **Responsive — PASS in sampled states:** 20 routes × six widths = 120 final Phase F cases with no document overflow or page errors. Primary sampled actions were reachable, mobile table actions had named keyboard-scroll regions, and POS quantity controls measured 44×44px. [Phase F evidence and limitations](phase-f-report.md).
+- **Accessibility — PASS in sampled states:** labeled forms, visible focus, native dialogs with Escape and focus restoration, loading/error announcements, reduced-motion support, and zero flags in the final 360px solid-background contrast sample. This is not a full WCAG conformance claim: populated charts, screen readers, zoom/reflow, all error states and other browsers remain **NOT TESTED**.
+- **Functional regression — PASS with client mocks; root check intermittent:** 79 client tests cover auth/routing, cart/checkout payloads, inventory/recipes/alerts, table status retry, shift actions, Owner branch/member payloads and subscription UI. One root run passed 79 server tests, but the latest root run failed because an existing demo-data test timed out. [Exact validation](phase-g-report.md).
+
+## Open issues and release gate
+
+| Issue                                                                                                                               | Status                       | Next action                                                                                                                                                    |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Real API workflows, branch isolation, checkout, recipe deduction, duplicate prevention and analytics reconciliation                 | **BLOCKED for release**      | Execute and document the [isolated staging checklist](staging-test-checklist.md). No production state-changing operation was performed.                        |
+| Local build embeds an HTTP localhost API URL                                                                                        | **BLOCKED for deployment**   | Confirm the Cloudflare build receives the intended HTTPS Render API URL through build-time `VITE_API_URL`; rebuild and inspect the artifact before deployment. |
+| Full server demo-data test sometimes exceeds its 5-second timeout                                                                   | **OPEN ISSUE**               | Investigate timing or fixture cost in a separate backend/test task; do not treat one passing root run as proof of reliability.                                 |
+| Bundle is 980.41 kB JavaScript / 287.15 kB gzip                                                                                     | **OPEN ISSUE**               | Review route splitting/performance before a production release target is set.                                                                                  |
+| Owner branch editing uses a native prompt; subscription payment has no completion handler; Owner branch-context switching is absent | **OPEN ISSUE**               | Design and approve behavior changes separately; do not imply these workflows are complete.                                                                     |
+| External Inter font and long/populated datasets                                                                                     | **NOT TESTED on deployment** | Check font loading, fallback, dense tables and analytics with staging network and data.                                                                        |
+
+**Production readiness: BLOCKED.** The latest root check failed, and the release also requires staging evidence for critical real API behavior and a production-targeted frontend build. The [Phase A audit](ui-audit.md), [design system](design-system.md), [Phase B](phase-b-report.md), [Phase C](phase-c-report.md), [Phase D](phase-d-report.md), [Phase E](phase-e-report.md), [Phase F](phase-f-report.md) and [Phase G](phase-g-report.md) reports contain the implementation and risk history.
+
+## Working tree
+
+All changes remain uncommitted on `develop`. Phase F application and test files, Phase G test/format changes, design reports, browser evidence and pre-existing Phase A–E work are present in the working tree. The pre-existing untracked DB diagnostic script was only formatted, not executed. No backend API, Prisma schema, PostgreSQL data, authentication logic, calculation, deployment secret, commit, push or deployment was changed or performed.

@@ -1,0 +1,559 @@
+{
+  "method": "Browser-isolated synthetic data, external requests blocked. Not a live backend test.",
+  "results": [
+    {
+      "role": "OWNER",
+      "url": "/app/owner",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan doanh nghiệp",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": [],
+      "mobileActions": [],
+      "contrastFindings": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/branches",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý chi nhánh",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": [],
+      "mobileActions": [
+        {
+          "name": "Thêm chi nhánh",
+          "tag": "BUTTON",
+          "width": 160,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Sửa",
+          "tag": "BUTTON",
+          "width": 39,
+          "height": 44,
+          "outside": true,
+          "scrollRegion": "Danh sách chi nhánh",
+          "scrollRegionKeyboard": true
+        },
+        {
+          "name": "Tạm ngưng",
+          "tag": "BUTTON",
+          "width": 87,
+          "height": 44,
+          "outside": true,
+          "scrollRegion": "Danh sách chi nhánh",
+          "scrollRegionKeyboard": true
+        }
+      ],
+      "contrastFindings": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/revenue",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Phân tích doanh thu",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": [],
+      "mobileActions": [
+        {
+          "name": "Tuần",
+          "tag": "BUTTON",
+          "width": 72,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Tháng",
+          "tag": "BUTTON",
+          "width": 72,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Quý",
+          "tag": "BUTTON",
+          "width": 72,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        }
+      ],
+      "contrastFindings": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/menu-profit",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Hiệu quả thực đơn",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": [],
+      "mobileActions": [],
+      "contrastFindings": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/promotions",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gợi ý chương trình bán hàng",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": [],
+      "mobileActions": [],
+      "contrastFindings": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/users",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Người dùng & vai trò",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": [],
+      "mobileActions": [
+        {
+          "name": "Mời thành viên",
+          "tag": "BUTTON",
+          "width": 154,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        }
+      ],
+      "contrastFindings": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/settings",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cài đặt doanh nghiệp",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": [],
+      "mobileActions": [
+        {
+          "name": "Tên doanh nghiệp",
+          "tag": "INPUT",
+          "width": 294,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Email liên hệ",
+          "tag": "INPUT",
+          "width": 294,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Điện thoại liên hệ",
+          "tag": "INPUT",
+          "width": 294,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Địa chỉ doanh nghiệp",
+          "tag": "INPUT",
+          "width": 294,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Mã tiền tệVND · Đồng Việt Nam",
+          "tag": "SELECT",
+          "width": 294,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Khu vựcViệt Nam · vi-VN",
+          "tag": "SELECT",
+          "width": 294,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Thuế (%)",
+          "tag": "INPUT",
+          "width": 294,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Phí dịch vụ (%)",
+          "tag": "INPUT",
+          "width": 294,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Tiêu đề biên nhận",
+          "tag": "INPUT",
+          "width": 294,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Lời nhắn cuối biên nhận",
+          "tag": "INPUT",
+          "width": 294,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Tiền tố hóa đơn",
+          "tag": "INPUT",
+          "width": 294,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Cảnh báo tồn kho thấpThông báo khi nguyên liệu cần bổ sung",
+          "tag": "INPUT",
+          "width": 20,
+          "height": 20,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Cảnh báo gần hết hạnNhắc khi nguyên liệu sắp đến hạn sử dụng",
+          "tag": "INPUT",
+          "width": 20,
+          "height": 20,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        },
+        {
+          "name": "Lưu cài đặt",
+          "tag": "BUTTON",
+          "width": 328,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        }
+      ],
+      "contrastFindings": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/subscription",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gói dịch vụ",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": [],
+      "mobileActions": [
+        {
+          "name": "Thanh toán chưa khả dụng",
+          "tag": "BUTTON",
+          "width": 228,
+          "height": 44,
+          "outside": false,
+          "scrollRegion": null,
+          "scrollRegionKeyboard": false
+        }
+      ],
+      "contrastFindings": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/inventory",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan kho doanh nghiệp",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": [],
+      "mobileActions": [],
+      "contrastFindings": []
+    }
+  ],
+  "errors": [],
+  "unmapped": [],
+  "interactions": [
+    {
+      "url": "/app/owner",
+      "focus": {
+        "tag": "BUTTON",
+        "name": "Mở menu",
+        "visible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid"
+      },
+      "primaryControl": null,
+      "reducedMotion": null
+    },
+    {
+      "url": "/app/owner",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/branches",
+      "focus": {
+        "tag": "BUTTON",
+        "name": "Mở menu",
+        "visible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid"
+      },
+      "primaryControl": {
+        "name": "Thêm chi nhánh",
+        "reachable": true
+      },
+      "reducedMotion": {
+        "matches": true,
+        "animationDuration": "1e-05s",
+        "transitionDuration": "1e-05s"
+      }
+    },
+    {
+      "url": "/app/owner/branches",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/revenue",
+      "focus": {
+        "tag": "BUTTON",
+        "name": "Mở menu",
+        "visible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid"
+      },
+      "primaryControl": {
+        "name": "Tuần",
+        "reachable": true
+      },
+      "reducedMotion": {
+        "matches": true,
+        "animationDuration": "1e-05s",
+        "transitionDuration": "1e-05s"
+      }
+    },
+    {
+      "url": "/app/owner/revenue",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/menu-profit",
+      "focus": {
+        "tag": "BUTTON",
+        "name": "Mở menu",
+        "visible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid"
+      },
+      "primaryControl": null,
+      "reducedMotion": null
+    },
+    {
+      "url": "/app/owner/menu-profit",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/promotions",
+      "focus": {
+        "tag": "BUTTON",
+        "name": "Mở menu",
+        "visible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid"
+      },
+      "primaryControl": null,
+      "reducedMotion": null
+    },
+    {
+      "url": "/app/owner/promotions",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/users",
+      "focus": {
+        "tag": "BUTTON",
+        "name": "Mở menu",
+        "visible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid"
+      },
+      "primaryControl": {
+        "name": "Mời thành viên",
+        "reachable": true
+      },
+      "reducedMotion": {
+        "matches": true,
+        "animationDuration": "1e-05s",
+        "transitionDuration": "1e-05s"
+      }
+    },
+    {
+      "url": "/app/owner/users",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/settings",
+      "focus": {
+        "tag": "BUTTON",
+        "name": "Mở menu",
+        "visible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid"
+      },
+      "primaryControl": {
+        "name": null,
+        "reachable": true
+      },
+      "reducedMotion": {
+        "matches": true,
+        "animationDuration": "1e-05s",
+        "transitionDuration": "1e-05s"
+      }
+    },
+    {
+      "url": "/app/owner/settings",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/subscription",
+      "focus": {
+        "tag": "BUTTON",
+        "name": "Mở menu",
+        "visible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid"
+      },
+      "primaryControl": null,
+      "reducedMotion": {
+        "matches": true,
+        "animationDuration": "1e-05s",
+        "transitionDuration": "1e-05s"
+      }
+    },
+    {
+      "url": "/app/owner/subscription",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/inventory",
+      "focus": {
+        "tag": "BUTTON",
+        "name": "Mở menu",
+        "visible": true,
+        "outlineWidth": "3px",
+        "outlineStyle": "solid"
+      },
+      "primaryControl": null,
+      "reducedMotion": null
+    },
+    {
+      "url": "/app/owner/inventory",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    }
+  ]
+}

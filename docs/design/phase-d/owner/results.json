@@ -1,0 +1,918 @@
+{
+  "method": "Browser-isolated synthetic data, external requests blocked. Not a live backend test.",
+  "results": [
+    {
+      "role": "OWNER",
+      "url": "/app/owner",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan doanh nghiệp",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan doanh nghiệp",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan doanh nghiệp",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan doanh nghiệp",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan doanh nghiệp",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan doanh nghiệp",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/branches",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý chi nhánh",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/branches",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý chi nhánh",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/branches",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý chi nhánh",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/branches",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý chi nhánh",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/branches",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý chi nhánh",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/branches",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý chi nhánh",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/revenue",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Phân tích doanh thu",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/revenue",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Phân tích doanh thu",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/revenue",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Phân tích doanh thu",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/revenue",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Phân tích doanh thu",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/revenue",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Phân tích doanh thu",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/revenue",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Phân tích doanh thu",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/menu-profit",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Hiệu quả thực đơn",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/menu-profit",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Hiệu quả thực đơn",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/menu-profit",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Hiệu quả thực đơn",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/menu-profit",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Hiệu quả thực đơn",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/menu-profit",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Hiệu quả thực đơn",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/menu-profit",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Hiệu quả thực đơn",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/promotions",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gợi ý chương trình bán hàng",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/promotions",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gợi ý chương trình bán hàng",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/promotions",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gợi ý chương trình bán hàng",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/promotions",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gợi ý chương trình bán hàng",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/promotions",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gợi ý chương trình bán hàng",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/promotions",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gợi ý chương trình bán hàng",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/users",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Người dùng & vai trò",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/users",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Người dùng & vai trò",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/users",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Người dùng & vai trò",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/users",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Người dùng & vai trò",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/users",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Người dùng & vai trò",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/users",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Người dùng & vai trò",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/settings",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cài đặt doanh nghiệp",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/settings",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cài đặt doanh nghiệp",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/settings",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cài đặt doanh nghiệp",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/settings",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cài đặt doanh nghiệp",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/settings",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cài đặt doanh nghiệp",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/settings",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cài đặt doanh nghiệp",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/subscription",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gói dịch vụ",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/subscription",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gói dịch vụ",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/subscription",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gói dịch vụ",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/subscription",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gói dịch vụ",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/subscription",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gói dịch vụ",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/subscription",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gói dịch vụ",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/inventory",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan kho doanh nghiệp",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/inventory",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan kho doanh nghiệp",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/inventory",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan kho doanh nghiệp",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/inventory",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan kho doanh nghiệp",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/inventory",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan kho doanh nghiệp",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/inventory",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan kho doanh nghiệp",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    }
+  ],
+  "errors": [],
+  "unmapped": [],
+  "interactions": [
+    {
+      "url": "/app/owner",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/branches",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/revenue",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/menu-profit",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/promotions",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/users",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/settings",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/subscription",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/owner/inventory",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    }
+  ]
+}

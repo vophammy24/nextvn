@@ -1,0 +1,410 @@
+{
+  "method": "Browser-isolated synthetic data, external requests blocked. Not a live backend test.",
+  "results": [
+    {
+      "role": "PUBLIC",
+      "url": "/",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bán hàng và tồn kho F&B trên cùng một hệ thống.",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/login",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng nhập",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "PUBLIC",
+      "url": "/register",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đăng ký",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/pos",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "POS / Bán hàng",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/tables",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bàn",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/orders",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đơn hàng",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/shift",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Ca làm việc",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/inventory",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý kho",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/stock-transactions",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Nhập / Xuất kho",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/recipes",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý công thức",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/alerts",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cảnh báo",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan doanh nghiệp",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/branches",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý chi nhánh",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/revenue",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Phân tích doanh thu",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/menu-profit",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Hiệu quả thực đơn",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/promotions",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gợi ý chương trình bán hàng",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/users",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Người dùng & vai trò",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/settings",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cài đặt doanh nghiệp",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/subscription",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Gói dịch vụ",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "OWNER",
+      "url": "/app/owner/inventory",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Tổng quan kho doanh nghiệp",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [
+    {
+      "url": "/",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/login",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/register",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/pos",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/tables",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/orders",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/shift",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/inventory",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/stock-transactions",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/recipes",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/alerts",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/owner",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/owner/branches",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/owner/revenue",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/owner/menu-profit",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/owner/promotions",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/owner/users",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/owner/settings",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/owner/subscription",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "url": "/app/owner/inventory",
+      "message": "Failed to load resource: net::ERR_FAILED"
+    }
+  ],
+  "unmapped": [],
+  "interactions": []
+}

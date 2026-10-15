@@ -1,0 +1,62 @@
+[
+  {
+    "foreground": "--text-primary",
+    "background": "--bg-primary",
+    "ratio": 14.1
+  },
+  {
+    "foreground": "--text-secondary",
+    "background": "--bg-secondary",
+    "ratio": 7.11
+  },
+  {
+    "foreground": "--white",
+    "background": "--primary",
+    "ratio": 6.42
+  },
+  {
+    "foreground": "--white",
+    "background": "--primary-dark",
+    "ratio": 9.1
+  },
+  {
+    "foreground": "--navy",
+    "background": "--accent",
+    "ratio": 9.47
+  },
+  {
+    "foreground": "--success-text",
+    "background": "--success-bg",
+    "ratio": 6.49
+  },
+  {
+    "foreground": "--warning-text",
+    "background": "--warning-bg",
+    "ratio": 6.37
+  },
+  {
+    "foreground": "--danger-text",
+    "background": "--danger-bg",
+    "ratio": 6.8
+  },
+  {
+    "foreground": "--info-text",
+    "background": "--info-bg",
+    "ratio": 7.15
+  },
+  {
+    "foreground": "--white",
+    "background": "--danger",
+    "ratio": 4.83
+  },
+  {
+    "foreground": "--white",
+    "background": "--success-action",
+    "ratio": 5.02
+  },
+  {
+    "foreground": "--text-sidebar",
+    "background": "--navy",
+    "ratio": 10.49
+  }
+]

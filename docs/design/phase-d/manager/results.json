@@ -1,0 +1,413 @@
+{
+  "method": "Browser-isolated synthetic data, external requests blocked. Not a live backend test.",
+  "results": [
+    {
+      "role": "MANAGER",
+      "url": "/app/inventory",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý kho",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/inventory",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý kho",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/inventory",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý kho",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/inventory",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý kho",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/inventory",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý kho",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/inventory",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý kho",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/stock-transactions",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Nhập / Xuất kho",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/stock-transactions",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Nhập / Xuất kho",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/stock-transactions",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Nhập / Xuất kho",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/stock-transactions",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Nhập / Xuất kho",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/stock-transactions",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Nhập / Xuất kho",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/stock-transactions",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Nhập / Xuất kho",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/recipes",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý công thức",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/recipes",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý công thức",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/recipes",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý công thức",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/recipes",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý công thức",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/recipes",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý công thức",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/recipes",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý công thức",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/alerts",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cảnh báo",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/alerts",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cảnh báo",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/alerts",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cảnh báo",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/alerts",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cảnh báo",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/alerts",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cảnh báo",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "MANAGER",
+      "url": "/app/alerts",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Cảnh báo",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    }
+  ],
+  "errors": [],
+  "unmapped": [],
+  "interactions": [
+    {
+      "url": "/app/inventory",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/stock-transactions",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/recipes",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/alerts",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    }
+  ]
+}

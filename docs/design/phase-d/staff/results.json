@@ -1,0 +1,463 @@
+{
+  "method": "Browser-isolated synthetic data, external requests blocked. Not a live backend test.",
+  "results": [
+    {
+      "role": "STAFF",
+      "url": "/app/pos",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "POS / Bán hàng",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/pos",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "POS / Bán hàng",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/pos",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "POS / Bán hàng",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/pos",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "POS / Bán hàng",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/pos",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "POS / Bán hàng",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/pos",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "POS / Bán hàng",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/tables",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bàn",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/tables",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bàn",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/tables",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bàn",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/tables",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bàn",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/tables",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bàn",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/tables",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Quản lý bàn",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/orders",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đơn hàng",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/orders",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đơn hàng",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/orders",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đơn hàng",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/orders",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đơn hàng",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/orders",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đơn hàng",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/orders",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Đơn hàng",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/shift",
+      "width": 1920,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Ca làm việc",
+      "scrollWidth": 1920,
+      "viewport": 1920,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/shift",
+      "width": 1366,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Ca làm việc",
+      "scrollWidth": 1366,
+      "viewport": 1366,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/shift",
+      "width": 1024,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Ca làm việc",
+      "scrollWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/shift",
+      "width": 768,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Ca làm việc",
+      "scrollWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/shift",
+      "width": 390,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Ca làm việc",
+      "scrollWidth": 390,
+      "viewport": 390,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    },
+    {
+      "role": "STAFF",
+      "url": "/app/shift",
+      "width": 360,
+      "title": "NextVN — Quản lý F&B",
+      "theme": {
+        "primary": "#0754d8",
+        "bodyFont": "Inter, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+      },
+      "heading": "Ca làm việc",
+      "scrollWidth": 360,
+      "viewport": 360,
+      "overflow": false,
+      "alerts": [],
+      "unlabelled": []
+    }
+  ],
+  "errors": [],
+  "unmapped": [],
+  "interactions": [
+    {
+      "url": "/app/pos",
+      "keyboardQuantity": "2",
+      "quantityControlSizes": [
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "url": "/app/pos",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/tables",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/tables",
+      "modal": {
+        "width": 328,
+        "viewport": 360,
+        "role": null,
+        "tag": "DIALOG"
+      }
+    },
+    {
+      "url": "/app/tables",
+      "focusContained": true,
+      "escapeAndReturnFocus": true,
+      "closeButton": true,
+      "backdrop": true
+    },
+    {
+      "url": "/app/orders",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    },
+    {
+      "url": "/app/orders",
+      "modal": {
+        "width": 328,
+        "viewport": 360,
+        "role": null,
+        "tag": "DIALOG"
+      }
+    },
+    {
+      "url": "/app/orders",
+      "focusContained": true,
+      "escapeAndReturnFocus": true,
+      "closeButton": true,
+      "backdrop": true
+    },
+    {
+      "url": "/app/shift",
+      "mobileOpen": true,
+      "mobileClosedAfterLink": true
+    }
+  ]
+}
