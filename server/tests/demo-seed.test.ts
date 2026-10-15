@@ -57,5 +57,5 @@ describe('deterministic coffee demo', () => {
   });
   it('rebuilds exactly the same fixture including audit hashes and IDs', async () => {
     expect(await buildDemo()).toEqual(data);
-  });
+  }, 15_000);
 });

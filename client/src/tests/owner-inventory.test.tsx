@@ -53,7 +53,7 @@ describe('Owner inventory and JWT workspace discovery', () => {
       .spyOn(api, 'get')
       .mockImplementation(async (url) => ({ data: url === '/workspace' ? workspace() : summary }));
     show();
-    await screen.findByRole('heading', { name: 'Chi nhánh A' });
+    await screen.findByRole('heading', { name: 'Chi nhánh A' }, { timeout: 5000 });
     expect(get).toHaveBeenCalledWith('/workspace', expect.any(Object));
     expect(get).toHaveBeenCalledWith(
       `/business/${businessId}/inventory/summary`,

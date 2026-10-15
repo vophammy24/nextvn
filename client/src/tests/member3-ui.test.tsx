@@ -233,6 +233,44 @@ describe('Owner routes', () => {
     expect(screen.getAllByRole('option', { name: 'Chi nhánh thử nghiệm' })).toHaveLength(2);
   });
 
+  it('submits member invitation and role changes through the existing Owner endpoints', async () => {
+    render(
+      <MemoryRouter initialEntries={['/app/owner/users']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    await screen.findByRole('heading', { name: 'Thành viên doanh nghiệp' });
+    fireEvent.click(screen.getByRole('button', { name: 'Mời thành viên' }));
+    fireEvent.change(screen.getByLabelText('Họ tên'), { target: { value: 'Nguyễn An' } });
+    fireEvent.change(screen.getByLabelText('Email'), {
+      target: { value: 'an@example.test' },
+    });
+    fireEvent.change(screen.getByLabelText('Vai trò của thành viên mới'), {
+      target: { value: 'MANAGER' },
+    });
+    fireEvent.change(screen.getByLabelText('Chi nhánh của thành viên mới'), {
+      target: { value: 'branch-test' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Gửi lời mời' }));
+    await waitFor(() =>
+      expect(api.post).toHaveBeenCalledWith('/business/business-test/owner/members', {
+        fullName: 'Nguyễn An',
+        email: 'an@example.test',
+        role: 'MANAGER',
+        branchId: 'branch-test',
+      }),
+    );
+    fireEvent.change(await screen.findByLabelText('Vai trò của Phạm Thu Hà'), {
+      target: { value: 'MANAGER' },
+    });
+    await waitFor(() =>
+      expect(api.patch).toHaveBeenCalledWith('/business/business-test/owner/members/member-staff', {
+        role: 'MANAGER',
+      }),
+    );
+  });
+
   it('renders business revenue metrics and chart headings', async () => {
     render(
       <MemoryRouter initialEntries={['/app/owner/revenue']}>
