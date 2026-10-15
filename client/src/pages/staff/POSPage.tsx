@@ -1,6 +1,7 @@
+import { Input } from '@/components/common/Input';
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Search, ShoppingBag, Minus, Plus, Trash2, AlertCircle } from 'lucide-react';
+import { Search, ShoppingBag, ShoppingCart, Minus, Plus, Trash2, AlertCircle } from 'lucide-react';
 import {
   fetchCategories,
   fetchMenuItems,
@@ -18,9 +19,34 @@ function formatCurrency(amount: number): string {
   }).format(amount);
 }
 
+function ProductImage({ item }: { item: MenuItem }) {
+  const [failed, setFailed] = useState(false);
+  if (!item.imageUrl || failed) {
+    return (
+      <span className="item-icon" aria-hidden="true">
+        🍽️
+      </span>
+    );
+  }
+  return (
+    <img
+      className="item-image"
+      src={item.imageUrl}
+      alt=""
+      loading="lazy"
+      decoding="async"
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 export default function POSPage() {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [checkoutMessage, setCheckoutMessage] = useState<{
+    tone: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   const cart = useCartStore();
   const queryClient = useQueryClient();
@@ -49,15 +75,16 @@ export default function POSPage() {
     onSuccess: () => {
       cart.clearCart();
       void queryClient.invalidateQueries();
-      alert('Đơn hàng đã được tạo thành công!');
+      setCheckoutMessage({ tone: 'success', text: 'Đơn hàng đã được tạo thành công.' });
     },
     onError: () => {
-      alert('Không thể tạo đơn hàng. Vui lòng thử lại.');
+      setCheckoutMessage({ tone: 'error', text: 'Không thể tạo đơn hàng. Vui lòng thử lại.' });
     },
   });
 
   const handleSubmitOrder = () => {
     if (cart.items.length === 0) return;
+    setCheckoutMessage(null);
 
     orderMutation.mutate({
       orderType: cart.orderType,
@@ -80,22 +107,22 @@ export default function POSPage() {
 
   return (
     <>
-      <header className="top-header">
-        <h2>POS / Bán hàng</h2>
-        {shiftQuery.data && <span className="badge badge-success">Ca đang hoạt động</span>}
-        {!shiftQuery.data && !shiftQuery.isLoading && (
-          <span className="badge badge-warning">Chưa bắt đầu ca</span>
-        )}
-      </header>
-
       <div className="page-content">
+        <h1 className="sr-only">POS / Bán hàng</h1>
+        <div className="staff-page-status">
+          {shiftQuery.data && <span className="badge badge-success">Ca đang hoạt động</span>}
+          {!shiftQuery.data && !shiftQuery.isLoading && (
+            <span className="badge badge-warning">Chưa bắt đầu ca</span>
+          )}
+        </div>
         <div className="pos-layout">
           {/* Menu Panel */}
           <div className="pos-menu">
             <div className="pos-menu-header">
               <div className="search-input-wrapper" style={{ flex: 1 }}>
                 <Search />
-                <input
+                <Input
+                  aria-label="Tìm món"
                   className="input"
                   placeholder="Tìm món..."
                   value={search}
@@ -111,6 +138,7 @@ export default function POSPage() {
               <button
                 type="button"
                 className={`pos-category-tab${selectedCategory === null ? ' active' : ''}`}
+                aria-pressed={selectedCategory === null}
                 onClick={() => setSelectedCategory(null)}
               >
                 Tất cả
@@ -120,6 +148,7 @@ export default function POSPage() {
                   type="button"
                   key={cat.id}
                   className={`pos-category-tab${selectedCategory === cat.id ? ' active' : ''}`}
+                  aria-pressed={selectedCategory === cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
                 >
                   {cat.name}
@@ -129,15 +158,15 @@ export default function POSPage() {
 
             {/* Menu Items Grid */}
             {menuQuery.isLoading && (
-              <div className="loading-state">
-                <div className="spinner" />
+              <div className="loading-state" role="status">
+                <div className="spinner" aria-hidden="true" />
                 <span>Đang tải thực đơn...</span>
               </div>
             )}
 
             {menuQuery.isError && (
-              <div className="error-state">
-                <AlertCircle />
+              <div className="error-state" role="alert">
+                <AlertCircle aria-hidden="true" />
                 <span>Không thể tải thực đơn.</span>
               </div>
             )}
@@ -150,27 +179,38 @@ export default function POSPage() {
             )}
 
             <div className="pos-items-grid">
-              {menuQuery.data?.map((item) => (
-                <div
-                  key={item.id}
-                  className="pos-item-card"
-                  onClick={() => handleAddItem(item)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleAddItem(item);
-                  }}
-                >
-                  <div className="item-icon">🍽️</div>
-                  <div className="item-name">{item.name}</div>
-                  <div className="item-price">{formatCurrency(item.price)}</div>
-                </div>
-              ))}
+              {menuQuery.data?.map((item) => {
+                const quantity =
+                  cart.items.find((entry) => entry.menuItem.id === item.id)?.quantity ?? 0;
+                return (
+                  <button
+                    type="button"
+                    key={item.id}
+                    className={'pos-item-card' + (quantity > 0 ? ' is-in-cart' : '')}
+                    onClick={() => handleAddItem(item)}
+                  >
+                    <ProductImage item={item} />
+                    <span className="item-name">{item.name}</span>
+                    {item.description && (
+                      <span className="item-description">{item.description}</span>
+                    )}
+                    <span className="item-price">{formatCurrency(item.price)}</span>
+                    {quantity > 0 && (
+                      <span className="item-added-count">Trong đơn: {quantity}</span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
+            <a className="pos-cart-jump" href="#pos-cart">
+              <ShoppingCart aria-hidden="true" size={18} />
+              <span>Xem đơn hàng · {cart.getItemCount()} món</span>
+              <strong>{formatCurrency(cart.getTotal())}</strong>
+            </a>
           </div>
 
           {/* Cart Panel */}
-          <div className="cart-panel">
+          <div className="cart-panel" id="pos-cart" tabIndex={-1}>
             <div className="cart-header">
               <h3>Đơn hàng hiện tại</h3>
               <span className="badge badge-default">{cart.getItemCount()} món</span>
@@ -182,6 +222,7 @@ export default function POSPage() {
                 <button
                   type="button"
                   className={`payment-method-btn${cart.orderType === 'DINE_IN' ? ' selected' : ''}`}
+                  aria-pressed={cart.orderType === 'DINE_IN'}
                   onClick={() => cart.setOrderType('DINE_IN')}
                 >
                   Tại chỗ
@@ -189,6 +230,7 @@ export default function POSPage() {
                 <button
                   type="button"
                   className={`payment-method-btn${cart.orderType === 'TAKEAWAY' ? ' selected' : ''}`}
+                  aria-pressed={cart.orderType === 'TAKEAWAY'}
                   onClick={() => cart.setOrderType('TAKEAWAY')}
                 >
                   Mang đi
@@ -243,6 +285,14 @@ export default function POSPage() {
 
             {/* Cart Footer */}
             <div className="cart-footer">
+              {checkoutMessage && (
+                <div
+                  className={'pos-checkout-message ' + checkoutMessage.tone}
+                  role={checkoutMessage.tone === 'error' ? 'alert' : 'status'}
+                >
+                  {checkoutMessage.text}
+                </div>
+              )}
               <div className="cart-summary-row">
                 <span>Tạm tính</span>
                 <span>{formatCurrency(cart.getSubtotal())}</span>
@@ -261,6 +311,7 @@ export default function POSPage() {
                 <button
                   type="button"
                   className={`payment-method-btn${cart.paymentMethod === 'CASH' ? ' selected' : ''}`}
+                  aria-pressed={cart.paymentMethod === 'CASH'}
                   onClick={() => cart.setPaymentMethod('CASH')}
                 >
                   💵 Tiền mặt
@@ -268,6 +319,7 @@ export default function POSPage() {
                 <button
                   type="button"
                   className={`payment-method-btn${cart.paymentMethod === 'BANK_TRANSFER' ? ' selected' : ''}`}
+                  aria-pressed={cart.paymentMethod === 'BANK_TRANSFER'}
                   onClick={() => cart.setPaymentMethod('BANK_TRANSFER')}
                 >
                   🏦 Chuyển khoản
@@ -284,7 +336,7 @@ export default function POSPage() {
               >
                 {orderMutation.isPending ? (
                   <>
-                    <div className="spinner" />
+                    <div className="spinner" aria-hidden="true" />
                     Đang xử lý...
                   </>
                 ) : (

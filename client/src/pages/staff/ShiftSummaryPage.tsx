@@ -1,4 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { TableScroll } from '@/components/common/DataTable';
+import { Modal } from '@/components/common/Modal';
+import { Button } from '@/components/common/Button';
+import { useState } from 'react';
 import {
   Clock,
   PlayCircle,
@@ -81,6 +85,8 @@ function ShiftSummaryPanel({ summary }: { summary: ShiftSummary }) {
 
 export default function ShiftSummaryPage() {
   const queryClient = useQueryClient();
+  const [confirmEnd, setConfirmEnd] = useState(false);
+  const [mutationError, setMutationError] = useState('');
 
   const activeShiftQuery = useQuery({
     queryKey: ['activeShift'],
@@ -101,50 +107,58 @@ export default function ShiftSummaryPage() {
   const startMutation = useMutation({
     mutationFn: startShift,
     onSuccess: () => {
+      setMutationError('');
       queryClient.invalidateQueries({ queryKey: ['activeShift'] });
       queryClient.invalidateQueries({ queryKey: ['shifts'] });
     },
     onError: () => {
-      alert('Không thể bắt đầu ca. Vui lòng thử lại.');
+      setMutationError('Không thể bắt đầu ca. Vui lòng thử lại.');
     },
   });
 
   const endMutation = useMutation({
     mutationFn: () => endShift(activeShiftQuery.data!.id),
     onSuccess: () => {
+      setMutationError('');
       queryClient.invalidateQueries({ queryKey: ['activeShift'] });
       queryClient.invalidateQueries({ queryKey: ['shifts'] });
       queryClient.invalidateQueries({ queryKey: ['shiftSummary'] });
     },
     onError: () => {
-      alert('Không thể kết thúc ca. Vui lòng thử lại.');
+      setMutationError('Không thể kết thúc ca. Vui lòng thử lại.');
     },
   });
 
   return (
     <>
-      <header className="top-header">
-        <h2>Ca làm việc</h2>
-      </header>
-
       <div className="page-content">
+        <h1 className="sr-only">Ca làm việc</h1>
         <div className="shift-panel">
+          {mutationError && (
+            <div className="error-state" role="alert">
+              <AlertCircle aria-hidden="true" />
+              <span>{mutationError}</span>
+            </div>
+          )}
           {/* Active Shift Status */}
           {activeShiftQuery.isLoading && (
-            <div className="loading-state">
-              <div className="spinner" />
+            <div className="loading-state" role="status">
+              <div className="spinner" aria-hidden="true" />
               <span>Đang tải...</span>
             </div>
           )}
 
           {activeShiftQuery.isError && (
-            <div className="error-state">
-              <AlertCircle />
+            <div className="error-state" role="alert">
+              <AlertCircle aria-hidden="true" />
               <span>Không thể tải ca hiện tại.</span>
+              <Button variant="secondary" onClick={() => void activeShiftQuery.refetch()}>
+                Thử lại
+              </Button>
             </div>
           )}
 
-          {!activeShiftQuery.isLoading && !activeShiftQuery.data && (
+          {!activeShiftQuery.isLoading && !activeShiftQuery.isError && !activeShiftQuery.data && (
             <div className="card">
               <div className="card-body" style={{ textAlign: 'center', padding: '40px' }}>
                 <Clock size={48} style={{ color: 'var(--text-tertiary)', marginBottom: '16px' }} />
@@ -155,7 +169,10 @@ export default function ShiftSummaryPage() {
                 <button
                   type="button"
                   className="btn btn-primary btn-lg"
-                  onClick={() => startMutation.mutate()}
+                  onClick={() => {
+                    setMutationError('');
+                    startMutation.mutate();
+                  }}
                   disabled={startMutation.isPending}
                   id="shift-start-btn"
                 >
@@ -175,7 +192,7 @@ export default function ShiftSummaryPage() {
                   <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => endMutation.mutate()}
+                    onClick={() => setConfirmEnd(true)}
                     disabled={endMutation.isPending}
                     id="shift-end-btn"
                   >
@@ -187,6 +204,43 @@ export default function ShiftSummaryPage() {
 
               {/* Shift Summary */}
               {shiftSummaryQuery.data && <ShiftSummaryPanel summary={shiftSummaryQuery.data} />}
+              {shiftSummaryQuery.isError && (
+                <div className="error-state" role="alert">
+                  <AlertCircle aria-hidden="true" />
+                  <span>Không thể tải tổng kết ca.</span>
+                  <Button variant="secondary" onClick={() => void shiftSummaryQuery.refetch()}>
+                    Thử lại
+                  </Button>
+                </div>
+              )}
+              <Modal
+                open={confirmEnd}
+                onClose={() => setConfirmEnd(false)}
+                title="Xác nhận kết thúc ca"
+              >
+                <p>Ca hiện tại sẽ kết thúc. Bạn có chắc muốn tiếp tục?</p>
+                <div className="shift-confirm-actions">
+                  <button
+                    className="btn btn-secondary"
+                    type="button"
+                    onClick={() => setConfirmEnd(false)}
+                  >
+                    Quay lại
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    type="button"
+                    disabled={endMutation.isPending}
+                    onClick={() => {
+                      setConfirmEnd(false);
+                      setMutationError('');
+                      endMutation.mutate();
+                    }}
+                  >
+                    Kết thúc ca
+                  </button>
+                </div>
+              </Modal>
             </>
           )}
 
@@ -197,9 +251,18 @@ export default function ShiftSummaryPage() {
             </div>
             <div className="card-body" style={{ padding: 0 }}>
               {shiftsQuery.isLoading && (
-                <div className="loading-state">
-                  <div className="spinner" />
+                <div className="loading-state" role="status">
+                  <div className="spinner" aria-hidden="true" />
                   <span>Đang tải...</span>
+                </div>
+              )}
+              {shiftsQuery.isError && (
+                <div className="error-state" role="alert">
+                  <AlertCircle aria-hidden="true" />
+                  <span>Không thể tải lịch sử ca.</span>
+                  <Button variant="secondary" onClick={() => void shiftsQuery.refetch()}>
+                    Thử lại
+                  </Button>
                 </div>
               )}
 
@@ -211,30 +274,32 @@ export default function ShiftSummaryPage() {
               )}
 
               {shiftsQuery.data && shiftsQuery.data.length > 0 && (
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Bắt đầu</th>
-                      <th>Kết thúc</th>
-                      <th>Trạng thái</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {shiftsQuery.data.map((shift: Shift) => (
-                      <tr key={shift.id}>
-                        <td>{formatTime(shift.startedAt)}</td>
-                        <td>{shift.endedAt ? formatTime(shift.endedAt) : '—'}</td>
-                        <td>
-                          <span
-                            className={`badge ${shift.status === 'ACTIVE' ? 'badge-success' : 'badge-default'}`}
-                          >
-                            {shift.status === 'ACTIVE' ? 'Đang hoạt động' : 'Đã kết thúc'}
-                          </span>
-                        </td>
+                <TableScroll caption="Lịch sử ca">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Bắt đầu</th>
+                        <th>Kết thúc</th>
+                        <th>Trạng thái</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {shiftsQuery.data.map((shift: Shift) => (
+                        <tr key={shift.id}>
+                          <td>{formatTime(shift.startedAt)}</td>
+                          <td>{shift.endedAt ? formatTime(shift.endedAt) : '—'}</td>
+                          <td>
+                            <span
+                              className={`badge ${shift.status === 'ACTIVE' ? 'badge-success' : 'badge-default'}`}
+                            >
+                              {shift.status === 'ACTIVE' ? 'Đang hoạt động' : 'Đã kết thúc'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </TableScroll>
               )}
             </div>
           </div>

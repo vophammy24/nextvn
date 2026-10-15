@@ -1,3 +1,5 @@
+import { Button } from './Button';
+import { Badge, type BadgeTone } from './Badge';
 import { useId, type ReactNode } from 'react';
 import { Inbox, LoaderCircle, CircleAlert, Search } from 'lucide-react';
 import type { BusinessRole } from '@/app/navigation';
@@ -120,14 +122,14 @@ export function ErrorState({
       <CircleAlert aria-hidden="true" />
       <p>{message}</p>
       {onRetry && (
-        <button className="button button-secondary" onClick={onRetry}>
+        <Button variant="secondary" onClick={onRetry}>
           {copy.common.retry}
-        </button>
+        </Button>
       )}
     </div>
   );
 }
-const statusTones: Record<Status, string> = {
+const statusTones: Record<Status, BadgeTone> = {
   AVAILABLE: 'success',
   OCCUPIED: 'info',
   RESERVED: 'info',
@@ -146,10 +148,10 @@ const statusTones: Record<Status, string> = {
   RESOLVED: 'success',
 };
 export function StatusBadge({ status }: { status: Status }) {
-  return <span className={`badge badge-${statusTones[status]}`}>{copy.statuses[status]}</span>;
+  return <Badge tone={statusTones[status]}>{copy.statuses[status]}</Badge>;
 }
 export function RoleBadge({ role }: { role: BusinessRole }) {
-  return <span className="badge badge-role">{copy.roles[role]}</span>;
+  return <Badge tone="role">{copy.roles[role]}</Badge>;
 }
 export function Avatar({ name }: { name: string }) {
   return (

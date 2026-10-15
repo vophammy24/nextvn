@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Coffee } from 'lucide-react';
+import { BrandLogo } from '@/components/common/BrandLogo';
 import { Link } from 'react-router-dom';
 import './auth.css';
 
@@ -8,10 +8,7 @@ export function AuthCard({ title, children }: { title: string; children: ReactNo
     <main className="auth-page">
       <div className="auth-container">
         <Link className="auth-brand" to="/" aria-label="NextVN — Trang chủ">
-          <span>
-            <Coffee aria-hidden="true" />
-          </span>
-          NextVN
+          <BrandLogo />
         </Link>
         <section className="auth-card" aria-labelledby="auth-title">
           <header className="auth-heading">

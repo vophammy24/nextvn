@@ -5,7 +5,7 @@
   color: #27362e;
 }
 .owner-app .profile-placeholder h1 {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-sans);
   font-size: 30px;
   font-weight: 500;
   letter-spacing: 0;
@@ -16,21 +16,22 @@
 }
 
 .owner-app {
-  --ink: #18251f;
-  --muted: #77827d;
-  --line: #e4eae6;
-  --paper: #ffffff;
-  --canvas: #f3f6f3;
-  --green: #176b5b;
-  --green-deep: #105344;
-  --green-soft: #e6f1ed;
-  --amber: #e6a33a;
-  --red: #b84e39;
+  /* Compatibility aliases: page structure stays unchanged in Phase B. */
+  --ink: var(--text-primary);
+  --muted: var(--text-secondary);
+  --line: var(--border-light);
+  --paper: var(--bg-primary);
+  --canvas: var(--bg-secondary);
+  --green: var(--primary);
+  --green-deep: var(--primary-dark);
+  --green-soft: var(--primary-bg);
+  --amber: var(--warning-text);
+  --red: var(--danger-text);
   display: flex;
   min-height: 100vh;
   color: var(--ink);
   background: var(--canvas);
-  font-family: 'Aptos', 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.45;
   letter-spacing: 0;
@@ -56,9 +57,9 @@
 .owner-app h1 {
   margin-bottom: 8px;
   color: var(--ink);
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 30px;
-  font-weight: 500;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--weight-bold);
   line-height: 1.2;
   letter-spacing: 0;
 }
@@ -114,7 +115,7 @@
   border-radius: 9px 9px 9px 3px;
   background: var(--green);
   color: white;
-  font-family: Georgia, serif;
+  font-family: var(--font-sans);
   font-size: 21px;
 }
 .owner-app .brand-lockup strong,
@@ -627,7 +628,7 @@
 }
 .owner-app .rank-number {
   color: #98a49d;
-  font-family: Georgia, serif;
+  font-family: var(--font-sans);
   font-size: 13px;
 }
 
@@ -858,11 +859,11 @@
   padding: 20px;
   border: 1px solid #d9e5dc;
   border-radius: 6px;
-  background: linear-gradient(105deg, #eaf3ed 0%, #f9fbf9 66%);
+  background: var(--primary-bg);
 }
 .owner-app .subscription-current h2 {
   margin: 4px 0;
-  font-family: Georgia, serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 500;
 }
@@ -896,7 +897,7 @@
 }
 .owner-app .plan-card h2 {
   margin: 3px 0 5px;
-  font-family: Georgia, serif;
+  font-family: var(--font-sans);
   font-size: 19px;
   font-weight: 500;
 }
@@ -1166,4 +1167,278 @@
 .owner-app .rank-list {
   max-height: 360px;
   overflow-y: auto;
+}
+
+/* Phase D: Owner content follows the shared type, control and surface scale. */
+.owner-app .page-content {
+  padding: var(--space-6) var(--page-padding) var(--space-12);
+}
+.owner-app .page-heading {
+  margin-bottom: var(--space-6);
+}
+.owner-app .page-heading > div > p:last-child,
+.owner-app .stat-card p {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+}
+.owner-app .eyebrow {
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.06em;
+}
+.owner-app .button {
+  min-height: var(--control-height);
+  padding: var(--space-2) var(--space-4);
+  border-color: var(--border-light);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+}
+.owner-app .button:hover:not(:disabled) {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+}
+.owner-app .button-primary,
+.owner-app .button-primary:hover:not(:disabled) {
+  color: var(--text-inverse);
+}
+.owner-app .button-primary:hover:not(:disabled) {
+  border-color: var(--primary-dark);
+  background: var(--primary-dark);
+}
+.owner-app .inline-notice {
+  min-height: var(--control-height);
+  border-color: var(--success);
+  border-radius: var(--radius-md);
+  background: var(--success-bg);
+  color: var(--success-text);
+  font-size: var(--font-size-base);
+}
+.owner-app .error-panel {
+  border-color: var(--danger);
+  border-radius: var(--radius-md);
+  background: var(--danger-bg);
+  color: var(--danger-text);
+  font-size: var(--font-size-base);
+}
+.owner-app .error-panel strong {
+  color: var(--danger-text);
+}
+.owner-app .loading-panel {
+  border-color: var(--border-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+}
+.owner-app .metric-grid,
+.owner-app .dashboard-grid,
+.owner-app .plan-grid {
+  gap: var(--space-4);
+}
+.owner-app .metric-tile,
+.owner-app .panel,
+.owner-app .stat-card {
+  border-color: var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.owner-app .metric-tile,
+.owner-app .panel {
+  padding: var(--card-padding);
+}
+.owner-app .metric-top,
+.owner-app .metric-tile > small,
+.owner-app .panel-title p,
+.owner-app .donut-center small,
+.owner-app .legend-list > div,
+.owner-app .legend-list strong,
+.owner-app .insight-list li,
+.owner-app .rank-row,
+.owner-app .rank-row b,
+.owner-app .footnote,
+.owner-app .assignment-note,
+.owner-app .promotion-content > p,
+.owner-app .promotion-content dt,
+.owner-app .promotion-content dd,
+.owner-app .promotion-content > small,
+.owner-app .subscription-current p,
+.owner-app .subscription-usage,
+.owner-app .plan-card p {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+}
+.owner-app .metric-tile > strong {
+  overflow: visible;
+  font-size: clamp(22px, 2vw, 28px);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+.owner-app .metric-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--primary-bg);
+}
+.owner-app .rank-row {
+  min-height: var(--control-height);
+  border-color: var(--border-light);
+}
+.owner-app .table-scroll {
+  max-width: 100%;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+}
+.owner-app .table-scroll:has(tbody:empty) {
+  display: none;
+}
+.owner-app table {
+  min-width: 640px;
+}
+.owner-app th {
+  padding: var(--space-3);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+.owner-app td {
+  padding: var(--space-3);
+  border-color: var(--border-light);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+}
+.owner-app td strong {
+  color: var(--text-primary);
+}
+.owner-app .status-pill,
+.owner-app .role-label,
+.owner-app .recommendation-tag,
+.owner-app .rule-label {
+  min-height: 28px;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-xs);
+}
+.owner-app .role-label,
+.owner-app .recommendation-tag {
+  background: var(--primary-bg);
+  color: var(--primary-dark);
+}
+.owner-app .rule-label {
+  background: var(--warning-bg);
+  color: var(--warning-text);
+}
+.owner-app .text-button {
+  min-height: var(--control-height);
+  padding: var(--space-2);
+  color: var(--primary-dark);
+  font-size: var(--font-size-sm);
+}
+.owner-app .inline-form {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-color: var(--border-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+}
+.owner-app .inline-form label {
+  display: grid;
+  gap: var(--space-2);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-semibold);
+}
+.owner-app .inline-form .button {
+  align-self: end;
+}
+.owner-app input:not([type='checkbox']),
+.owner-app select {
+  min-height: var(--control-height);
+  padding: var(--space-2) var(--space-3);
+  border-color: var(--border-control);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+}
+.owner-app input:focus-visible,
+.owner-app select:focus-visible {
+  border-color: var(--primary);
+  box-shadow: none;
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+.owner-app .period-tabs {
+  gap: var(--space-1);
+  border-radius: var(--radius-md);
+}
+.owner-app .period-tabs button {
+  min-width: 72px;
+  min-height: var(--control-height);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+}
+.owner-app .period-tabs button.selected {
+  color: var(--text-inverse);
+}
+.owner-app .subscription-current {
+  border-color: var(--primary-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.owner-app .subscription-current p,
+.owner-app .subscription-usage {
+  color: var(--text-secondary);
+}
+.owner-app .subscription-current h2,
+.owner-app .plan-card h2 {
+  font-weight: var(--weight-bold);
+}
+.owner-app .plan-card {
+  min-height: 208px;
+}
+.owner-app .empty-state {
+  min-height: 140px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+}
+.owner-app .empty-state strong {
+  color: var(--text-primary);
+}
+.owner-app .settings-section > label:not(.toggle-row),
+.owner-app .settings-grid label {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--weight-semibold);
+}
+.owner-app .toggle-row {
+  min-height: var(--control-height);
+  border-color: var(--border-light);
+}
+.owner-app .toggle-row strong,
+.owner-app .toggle-row small {
+  font-size: var(--font-size-base);
+}
+.owner-app .toggle-row input {
+  width: 20px;
+  height: 20px;
+}
+@media (max-width: 760px) {
+  .owner-app .page-content {
+    padding: var(--space-5) var(--space-4) var(--space-8);
+  }
+  .owner-app .metric-tile,
+  .owner-app .panel {
+    padding: var(--space-4);
+  }
+  .owner-app .metric-tile > strong {
+    font-size: var(--font-size-xl);
+  }
+  .owner-app input:not([type='checkbox']),
+  .owner-app select {
+    font-size: var(--font-size-md);
+  }
+  .owner-app .inline-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

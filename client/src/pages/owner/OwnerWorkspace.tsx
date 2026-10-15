@@ -1,5 +1,6 @@
 ﻿import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
 import { AnalyticsChart } from '@/components/common/AnalyticsChart';
 import { StatCard, StatusBadge, EmptyState } from '@/components/common/Foundation';
 import { useLocation } from 'react-router-dom';
@@ -270,8 +271,8 @@ export default function OwnerWorkspace() {
             </div>
           )}
           {loading ? (
-            <div className="loading-panel">
-              <span className="spinner" />
+            <div className="loading-panel" role="status">
+              <span className="spinner" aria-hidden="true" />
               Đang tải dữ liệu doanh nghiệp…
             </div>
           ) : (
@@ -317,6 +318,10 @@ function PageView(props: {
   setSettingsForm: (form: SettingsData) => void;
   submit: (path: string, method: 'post' | 'patch', body: unknown) => Promise<void>;
 }) {
+  const [branchFormOpen, setBranchFormOpen] = useState(false);
+  const [memberFormOpen, setMemberFormOpen] = useState(false);
+  const branchFirstField = useRef<HTMLInputElement>(null);
+  const memberFirstField = useRef<HTMLInputElement>(null);
   const {
     page,
     data,
@@ -330,6 +335,12 @@ function PageView(props: {
     setSettingsForm,
     submit,
   } = props;
+  useEffect(() => {
+    if (page === 'branches' && branchFormOpen) branchFirstField.current?.focus();
+  }, [page, branchFormOpen]);
+  useEffect(() => {
+    if (page === 'users' && memberFormOpen) memberFirstField.current?.focus();
+  }, [page, memberFormOpen]);
   const updateBranch = (branch: Branch) => {
     const name = window.prompt('Tên chi nhánh', branch.name);
     if (name?.trim()) void submit(`branches/${branch.id}`, 'patch', { name: name.trim() });
@@ -423,9 +434,11 @@ function PageView(props: {
           <PanelTitle title="Danh sách chi nhánh" detail={`${branches.length} cơ sở`} />
           <button
             className="button button-primary"
+            type="button"
+            aria-expanded={branchFormOpen}
+            aria-controls="branch-form"
             onClick={() => {
-              const form = document.getElementById('branch-form');
-              form?.classList.toggle('hidden');
+              setBranchFormOpen(!branchFormOpen);
             }}
           >
             <Plus size={16} /> Thêm chi nhánh
@@ -433,38 +446,45 @@ function PageView(props: {
         </div>
         <form
           id="branch-form"
-          className="inline-form hidden"
+          className={'inline-form' + (branchFormOpen ? '' : ' hidden')}
           onSubmit={(event) => {
             event.preventDefault();
             void submit('branches', 'post', branchForm);
             setBranchForm({ name: '', address: '', phone: '' });
           }}
         >
-          <input
-            required
-            minLength={2}
-            aria-label="Tên chi nhánh"
-            placeholder="Tên chi nhánh"
-            value={branchForm.name}
-            onChange={(event) => setBranchForm({ ...branchForm, name: event.target.value })}
-          />
-          <input
-            aria-label="Địa chỉ"
-            placeholder="Địa chỉ"
-            value={branchForm.address}
-            onChange={(event) => setBranchForm({ ...branchForm, address: event.target.value })}
-          />
-          <input
-            aria-label="Số điện thoại"
-            placeholder="Số điện thoại"
-            value={branchForm.phone}
-            onChange={(event) => setBranchForm({ ...branchForm, phone: event.target.value })}
-          />
+          <label>
+            Tên chi nhánh
+            <input
+              ref={branchFirstField}
+              required
+              minLength={2}
+              placeholder="Tên chi nhánh"
+              value={branchForm.name}
+              onChange={(event) => setBranchForm({ ...branchForm, name: event.target.value })}
+            />
+          </label>
+          <label>
+            Địa chỉ
+            <input
+              placeholder="Địa chỉ"
+              value={branchForm.address}
+              onChange={(event) => setBranchForm({ ...branchForm, address: event.target.value })}
+            />
+          </label>
+          <label>
+            Số điện thoại
+            <input
+              placeholder="Số điện thoại"
+              value={branchForm.phone}
+              onChange={(event) => setBranchForm({ ...branchForm, phone: event.target.value })}
+            />
+          </label>
           <button className="button button-primary" type="submit">
             Lưu chi nhánh
           </button>
         </form>
-        <div className="table-scroll">
+        <div className="table-scroll" role="region" aria-label="Danh sách chi nhánh" tabIndex={0}>
           <table>
             <thead>
               <tr>
@@ -515,6 +535,7 @@ function PageView(props: {
             </tbody>
           </table>
         </div>
+        {!branches.length && <EmptyState title="Chưa có chi nhánh" />}
       </section>
     );
   }
@@ -522,7 +543,7 @@ function PageView(props: {
     const item = data as Revenue;
     return (
       <>
-        <div className="period-tabs" role="tablist" aria-label="Khoảng thời gian">
+        <div className="period-tabs" role="group" aria-label="Khoảng thời gian">
           {[
             ['week', 'Tuần'],
             ['month', 'Tháng'],
@@ -530,8 +551,7 @@ function PageView(props: {
           ].map(([key, label]) => (
             <button
               key={key}
-              role="tab"
-              aria-selected={period === key}
+              aria-pressed={period === key}
               className={period === key ? 'selected' : ''}
               onClick={() => setPeriod(key)}
             >
@@ -568,7 +588,7 @@ function PageView(props: {
           </section>
           <section className="panel wide">
             <PanelTitle title="Món bán chạy" detail="Toàn doanh nghiệp" />
-            <div className="table-scroll">
+            <div className="table-scroll" role="region" aria-label="Món bán chạy" tabIndex={0}>
               <table>
                 <thead>
                   <tr>
@@ -590,6 +610,7 @@ function PageView(props: {
                 </tbody>
               </table>
             </div>
+            {!item.topItems.length && <EmptyState title="Chưa có món bán chạy trong kỳ" />}
           </section>
         </div>
       </>
@@ -600,7 +621,7 @@ function PageView(props: {
     return (
       <section className="panel">
         <PanelTitle title="Lợi nhuận theo món" detail="Ước tính theo công thức cơ bản hiện tại" />
-        <div className="table-scroll">
+        <div className="table-scroll" role="region" aria-label="Lợi nhuận theo món" tabIndex={0}>
           <table>
             <thead>
               <tr>
@@ -642,6 +663,7 @@ function PageView(props: {
             </tbody>
           </table>
         </div>
+        {!rows.length && <EmptyState title="Chưa có dữ liệu lợi nhuận theo món" />}
         <p className="footnote">
           Chi phí ước tính theo công thức cơ bản hiện tại nhân số lượng đã bán, chưa bao gồm tùy
           chọn món và biến động giá vốn lịch sử. Gợi ý được tạo theo quy tắc biên lợi nhuận.
@@ -695,14 +717,19 @@ function PageView(props: {
           <PanelTitle title="Thành viên doanh nghiệp" detail={`${members.length} tài khoản`} />
           <button
             className="button button-primary"
-            onClick={() => document.getElementById('member-form')?.classList.toggle('hidden')}
+            type="button"
+            aria-expanded={memberFormOpen}
+            aria-controls="member-form"
+            onClick={() => {
+              setMemberFormOpen(!memberFormOpen);
+            }}
           >
             <Plus size={16} /> Mời thành viên
           </button>
         </div>
         <form
           id="member-form"
-          className="inline-form hidden"
+          className={'inline-form' + (memberFormOpen ? '' : ' hidden')}
           onSubmit={(event) => {
             event.preventDefault();
             void submit('members', 'post', {
@@ -712,47 +739,62 @@ function PageView(props: {
             setMemberForm({ fullName: '', email: '', role: 'STAFF', branchId: '' });
           }}
         >
-          <input
-            required
-            aria-label="Họ tên"
-            placeholder="Họ tên"
-            value={memberForm.fullName}
-            onChange={(event) => setMemberForm({ ...memberForm, fullName: event.target.value })}
-          />
-          <input
-            required
-            type="email"
-            aria-label="Email"
-            placeholder="Email"
-            value={memberForm.email}
-            onChange={(event) => setMemberForm({ ...memberForm, email: event.target.value })}
-          />
-          <select
-            value={memberForm.role}
-            onChange={(event) => setMemberForm({ ...memberForm, role: event.target.value })}
-          >
-            <option value="STAFF">Nhân viên</option>
-            <option value="MANAGER">Quản lý</option>
-          </select>
-          <select
-            aria-label="Chi nhánh của thành viên mới"
-            value={memberForm.branchId}
-            onChange={(event) => setMemberForm({ ...memberForm, branchId: event.target.value })}
-          >
-            <option value="" disabled>
-              Chọn chi nhánh
-            </option>
-            {branches.map((branch) => (
-              <option key={branch.id} value={branch.id}>
-                {branch.name}
+          <label>
+            Họ tên
+            <input
+              ref={memberFirstField}
+              required
+              placeholder="Họ tên"
+              value={memberForm.fullName}
+              onChange={(event) => setMemberForm({ ...memberForm, fullName: event.target.value })}
+            />
+          </label>
+          <label>
+            Email
+            <input
+              required
+              type="email"
+              placeholder="Email"
+              value={memberForm.email}
+              onChange={(event) => setMemberForm({ ...memberForm, email: event.target.value })}
+            />
+          </label>
+          <label>
+            Vai trò của thành viên mới
+            <select
+              value={memberForm.role}
+              onChange={(event) => setMemberForm({ ...memberForm, role: event.target.value })}
+            >
+              <option value="STAFF">Nhân viên</option>
+              <option value="MANAGER">Quản lý</option>
+            </select>
+          </label>
+          <label>
+            Chi nhánh của thành viên mới
+            <select
+              value={memberForm.branchId}
+              onChange={(event) => setMemberForm({ ...memberForm, branchId: event.target.value })}
+            >
+              <option value="" disabled>
+                Chọn chi nhánh
               </option>
-            ))}
-          </select>
+              {branches.map((branch) => (
+                <option key={branch.id} value={branch.id}>
+                  {branch.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <button className="button button-primary" type="submit">
             Gửi lời mời
           </button>
         </form>
-        <div className="table-scroll">
+        <div
+          className="table-scroll"
+          role="region"
+          aria-label="Thành viên doanh nghiệp"
+          tabIndex={0}
+        >
           <table>
             <thead>
               <tr>
@@ -833,6 +875,7 @@ function PageView(props: {
             </tbody>
           </table>
         </div>
+        {!members.length && <EmptyState title="Chưa có thành viên" />}
         <p className="footnote">Quyền Chủ doanh nghiệp không thể được cấp từ màn hình này.</p>
       </section>
     );
@@ -889,7 +932,12 @@ function PageView(props: {
         <section className="panel">
           <PanelTitle title="Lịch sử thanh toán" detail="Hóa đơn của doanh nghiệp" />
           {item.billingHistory.length ? (
-            <div className="table-scroll">
+            <div
+              className="table-scroll"
+              role="region"
+              aria-label="Lịch sử thanh toán"
+              tabIndex={0}
+            >
               <table>
                 <thead>
                   <tr>
@@ -924,7 +972,7 @@ function PageView(props: {
             <div className="empty-state">
               <CreditCard size={22} />
               <strong>Chưa có lịch sử thanh toán</strong>
-              <span>Thanh toán gói nextvn chưa được kết nối.</span>
+              <span>Thanh toán gói NextVN chưa được kết nối.</span>
             </div>
           )}
         </section>
@@ -932,7 +980,12 @@ function PageView(props: {
     );
   }
   const form = settingsForm;
-  if (!form) return <div className="loading-panel">Đang chuẩn bị cài đặt…</div>;
+  if (!form)
+    return (
+      <div className="loading-panel" role="status">
+        Đang chuẩn bị cài đặt…
+      </div>
+    );
   return (
     <form
       className="settings-form"
@@ -982,13 +1035,13 @@ function PageView(props: {
         <div className="settings-grid">
           <label>
             Mã tiền tệ
-            <select value="VND" onChange={() => undefined}>
+            <select value="VND" disabled>
               <option value="VND">VND · Đồng Việt Nam</option>
             </select>
           </label>
           <label>
             Khu vực
-            <select value="vi-VN" onChange={() => undefined}>
+            <select value="vi-VN" disabled>
               <option value="vi-VN">Việt Nam · vi-VN</option>
             </select>
           </label>

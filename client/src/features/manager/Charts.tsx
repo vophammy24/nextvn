@@ -11,12 +11,23 @@ export function RevenueChart({
   mode?: 'orders' | 'cost' | 'revenue';
 }) {
   const series: ChartSeries[] = [
-    { key: 'revenue', name: 'Doanh thu', color: '#208778', money: true },
+    { key: 'revenue', name: 'Doanh thu', color: 'var(--chart-primary)', money: true },
   ];
   if (mode === 'orders')
-    series.push({ key: 'orders', name: 'Đơn hàng', color: '#3268d0', line: true, secondary: true });
+    series.push({
+      key: 'orders',
+      name: 'Đơn hàng',
+      color: 'var(--chart-secondary)',
+      line: true,
+      secondary: true,
+    });
   if (mode === 'cost')
-    series.push({ key: 'foodCost', name: 'Chi phí nguyên liệu', color: '#b88319', money: true });
+    series.push({
+      key: 'foodCost',
+      name: 'Chi phí nguyên liệu',
+      color: 'var(--chart-warning)',
+      money: true,
+    });
   return (
     <AnalyticsChart
       title={title}

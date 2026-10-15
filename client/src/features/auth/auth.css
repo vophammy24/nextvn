@@ -22,15 +22,7 @@
   text-decoration: none;
   letter-spacing: -1px;
 }
-.auth-brand > span {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  background: var(--primary);
-  color: white;
-  border-radius: var(--radius-lg);
-}
+
 .auth-card {
   background: var(--bg-primary);
   border: 1px solid var(--border-light);
@@ -61,7 +53,35 @@
   width: 100%;
   min-height: 46px;
 }
-.auth-card .btn {
+.auth-password-control {
+  position: relative;
+}
+.auth-password-control .ui-input {
+  width: 100%;
+  min-height: 46px;
+  padding-right: 52px;
+}
+.auth-password-toggle {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  background: transparent;
+  cursor: pointer;
+}
+.auth-password-toggle:hover {
+  color: var(--primary-dark);
+  background: var(--primary-bg);
+}
+.auth-card .btn,
+.auth-card .ui-button {
   min-height: 46px;
   width: 100%;
 }

@@ -1,3 +1,4 @@
+import { BrandLogo } from '@/components/common/BrandLogo';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -29,13 +30,13 @@ function ProductPreview() {
           <i />
           <i />
         </span>
-        <span>Không gian vận hành nextvn</span>
+        <span>Không gian vận hành NextVN</span>
         <span className="lp-demo-label">Bản xem trước</span>
       </div>
       <div className="lp-preview-body">
         <div className="lp-preview-sidebar" aria-hidden="true">
           <strong>
-            nextvn<span>.</span>
+            <BrandLogo tone="light" />
           </strong>
           <span className="selected">
             <LayoutDashboard size={16} />
@@ -159,8 +160,8 @@ export function LandingPage() {
         }}
       >
         <div className="lp-container lp-navbar">
-          <Link to="/" className="lp-logo" aria-label="nextvn — Trang chủ">
-            nextvn<span>.</span>
+          <Link to="/" className="lp-logo" aria-label="NextVN — Trang chủ">
+            <BrandLogo tone="light" />
           </Link>
           <button
             ref={menuButton}
@@ -208,7 +209,7 @@ export function LandingPage() {
                 <br className="lp-desktop-break" /> <em>trên cùng một hệ thống.</em>
               </h1>
               <p>
-                nextvn kết nối bán hàng, công thức, nguyên liệu, chi phí và dữ liệu vận hành để giúp
+                NextVN kết nối bán hàng, công thức, nguyên liệu, chi phí và dữ liệu vận hành để giúp
                 doanh nghiệp F&B quản lý hiệu quả hơn.
               </p>
               <div className="lp-hero-actions">
@@ -371,7 +372,7 @@ export function LandingPage() {
               </h2>
             </div>
             <p>
-              Từ thao tác tại quầy đến quản lý phía sau, nextvn kết nối những công việc mỗi ngày của
+              Từ thao tác tại quầy đến quản lý phía sau, NextVN kết nối những công việc mỗi ngày của
               doanh nghiệp F&B.
             </p>
           </div>
@@ -429,7 +430,7 @@ export function LandingPage() {
             <p>Kết nối công việc hôm nay. Hiểu rõ hoạt động ngày mai.</p>
             <div className="lp-cta-actions">
               <Link to="/register" className="lp-button lp-button-yellow">
-                Dùng thử NextVN <ArrowUpRight size={18} aria-hidden="true" />
+                Đăng ký NextVN <ArrowUpRight size={18} aria-hidden="true" />
               </Link>
               <Link to="/login" className="lp-button lp-button-outline">
                 Đăng nhập cho chủ doanh nghiệp <ArrowRight size={18} aria-hidden="true" />
@@ -447,9 +448,9 @@ export function LandingPage() {
           </div>
           <div className="lp-faq">
             <details>
-              <summary>nextvn phù hợp với mô hình nào?</summary>
+              <summary>NextVN phù hợp với mô hình nào?</summary>
               <p>
-                nextvn hướng đến quán cà phê, quán ăn, nhà hàng nhỏ, tiệm đồ uống và chuỗi F&B quy
+                NextVN hướng đến quán cà phê, quán ăn, nhà hàng nhỏ, tiệm đồ uống và chuỗi F&B quy
                 mô nhỏ và vừa có nhu cầu kết nối bán hàng với quản lý nguyên liệu.
               </p>
             </details>
@@ -461,7 +462,7 @@ export function LandingPage() {
               </p>
             </details>
             <details>
-              <summary>Bắt đầu với nextvn như thế nào?</summary>
+              <summary>Bắt đầu với NextVN như thế nào?</summary>
               <p>
                 Chọn <Link to="/register">Đăng ký</Link> để bắt đầu, hoặc{' '}
                 <Link to="/login">Đăng nhập</Link> nếu bạn đã có tài khoản.
@@ -474,9 +475,7 @@ export function LandingPage() {
         <div className="lp-container">
           <div className="lp-footer-top">
             <div>
-              <span className="lp-logo">
-                nextvn<span>.</span>
-              </span>
+              <BrandLogo />
               <p>Kết nối bán hàng. Thấu hiểu vận hành.</p>
             </div>
             <nav aria-label="Điều hướng cuối trang">
@@ -486,7 +485,7 @@ export function LandingPage() {
             </nav>
           </div>
           <div className="lp-footer-bottom">
-            <span>nextvn · Công nghệ cho doanh nghiệp F&B</span>
+            <span>NextVN · Công nghệ cho doanh nghiệp F&B</span>
             <div className="lp-legal">
               <details>
                 <summary>Điều khoản sử dụng</summary>

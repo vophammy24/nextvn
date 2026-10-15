@@ -1,5 +1,12 @@
 import type { Key, ReactNode } from 'react';
 import { EmptyState } from './Foundation';
+export function TableScroll({ caption, children }: { caption: string; children: ReactNode }) {
+  return (
+    <div className="table-scroll" role="region" aria-label={caption} tabIndex={0}>
+      {children}
+    </div>
+  );
+}
 export interface TableColumn<T> {
   key: string;
   header: string;
@@ -20,7 +27,7 @@ export function DataTable<T>({
   emptyMessage?: string;
 }) {
   return (
-    <div className="table-scroll" role="region" aria-label={caption} tabIndex={0}>
+    <TableScroll caption={caption}>
       <table>
         <caption className="sr-only">{caption}</caption>
         <thead>
@@ -52,6 +59,6 @@ export function DataTable<T>({
           )}
         </tbody>
       </table>
-    </div>
+    </TableScroll>
   );
 }

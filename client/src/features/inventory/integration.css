@@ -3,19 +3,18 @@
   --border: var(--gray-200);
   --surface: var(--bg-primary);
   --surface-muted: var(--gray-100);
-  --text-primary: var(--gray-900);
-  --text-secondary: var(--gray-600);
   --primary-action: var(--primary);
-  --secondary-blue: #1d4ed8;
+  --secondary-blue: var(--primary);
   min-width: 0;
 }
 .inventory-integration .section-card,
 .inventory-integration .stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: var(--radius-lg);
+  padding: var(--card-padding);
   min-width: 0;
+  box-shadow: var(--shadow-sm);
 }
 .inventory-integration .section-heading {
   display: flex;
@@ -32,9 +31,10 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  min-height: var(--control-height);
   padding: 10px 16px;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--primary);
   color: white;
   font: inherit;
@@ -61,7 +61,7 @@
   text-align: center;
 }
 .inventory-integration .error-state {
-  color: var(--danger);
+  color: var(--danger-text);
 }
 .inventory-integration .search-field {
   display: flex;
@@ -71,6 +71,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px;
+  min-height: var(--control-height);
 }
 .inventory-integration .search-field input {
   min-width: 0;
@@ -114,6 +115,12 @@
   text-align: left;
   border-bottom: 1px solid var(--border);
 }
+.inventory-integration th {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-semibold);
+}
 .inventory-integration .numeric {
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -126,24 +133,24 @@
   font-size: 12px;
 }
 .inventory-integration .badge-success {
-  color: #166534;
-  background: #dcfce7;
+  color: var(--success-text);
+  background: var(--success-bg);
 }
 .inventory-integration .badge-warning {
-  color: #92400e;
-  background: #fef3c7;
+  color: var(--warning-text);
+  background: var(--warning-bg);
 }
 .inventory-integration .badge-danger {
-  color: #991b1b;
-  background: #fee2e2;
+  color: var(--danger-text);
+  background: var(--danger-bg);
 }
 .inventory-integration .badge-info {
-  color: #1e40af;
-  background: #dbeafe;
+  color: var(--info-text);
+  background: var(--info-bg);
 }
 .inventory-integration .badge-neutral {
-  color: #374151;
-  background: #f3f4f6;
+  color: var(--gray-700);
+  background: var(--gray-100);
 }
 .inventory-integration .stat-value {
   display: block;

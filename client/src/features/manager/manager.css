@@ -76,7 +76,7 @@
 }
 .manager-shortcuts a:hover {
   border-color: var(--primary-action);
-  background: #eff8f5;
+  background: var(--primary-bg);
 }
 .manager-shortcuts a > svg:first-child {
   color: var(--primary-action);
@@ -280,7 +280,7 @@
   margin-top: 8px;
 }
 .manager-transaction-icon {
-  background: #e9f6f0;
+  background: var(--primary-bg);
   color: var(--primary-action);
   display: grid;
   place-items: center;
@@ -323,7 +323,7 @@
 }
 .recipe-select[aria-pressed='true'] {
   border-color: var(--primary-action);
-  background: #eaf7f1;
+  background: var(--primary-bg);
 }
 .recipe-select svg {
   color: var(--primary-action);
@@ -523,5 +523,120 @@
   .manager-toolbar > .manager-actions .button {
     flex: 1;
     font-size: 12px;
+  }
+}
+
+/* Phase D: readable operational forms and distinct alert/notice states. */
+.manager-workspace {
+  gap: var(--space-6);
+}
+.manager-muted,
+.manager-workspace .filter-tabs button,
+.manager-row-actions,
+.manager-text-button,
+.manager-form-footer p,
+.manager-transactions p,
+.manager-transactions small,
+.recipe-select small,
+.manager-recipe-kpis p,
+.manager-alert-content > p,
+.manager-alert-detail,
+.chart-data,
+.manager-workspace .chart-container figcaption {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+}
+.manager-field {
+  font-size: var(--font-size-base);
+  gap: var(--space-2);
+}
+.manager-field input,
+.manager-field select,
+.manager-field textarea {
+  min-height: var(--control-height);
+  padding: var(--space-3);
+  border-color: var(--border-control);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+}
+.manager-field textarea {
+  min-height: 96px;
+}
+.manager-field small {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+}
+.manager-form {
+  gap: var(--space-4);
+}
+.manager-notice {
+  background: var(--info-bg);
+  border-color: var(--primary-light);
+  color: var(--info-text);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+}
+.manager-notice-success {
+  background: var(--success-bg);
+  border-color: var(--success);
+  color: var(--success-text);
+}
+.manager-notice-error {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+  color: var(--danger-text);
+}
+.manager-transactions strong,
+.recipe-select strong,
+.manager-alert-content h2 {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-heading);
+}
+.manager-transactions article {
+  gap: var(--space-4);
+}
+.manager-recipe-list,
+.manager-alert-cards article {
+  box-shadow: var(--shadow-sm);
+}
+.recipe-select {
+  min-height: var(--control-height);
+}
+.manager-severity {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--warning-bg);
+  color: var(--warning-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-semibold);
+}
+.manager-severity.category-out_of_stock {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+.manager-severity.category-discrepancy {
+  background: var(--info-bg);
+  color: var(--info-text);
+}
+.manager-alert-detail {
+  border-color: var(--border-light);
+}
+@media (max-width: 600px) {
+  .manager-recipe-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .manager-recipe-list .search-field {
+    grid-column: 1;
+  }
+  .manager-alert-cards article {
+    align-items: flex-start;
+  }
+  .manager-field input,
+  .manager-field select,
+  .manager-field textarea {
+    font-size: var(--font-size-md);
   }
 }

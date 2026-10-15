@@ -4,6 +4,9 @@ import { isAxiosError } from 'axios';
 import { AuthCard } from '@/features/auth/AuthCard';
 import { ErrorState } from '@/components/common/Foundation';
 import { api } from '@/services/api';
+import { Input } from '@/components/common/Input';
+import { Button } from '@/components/common/Button';
+import { PasswordField } from '@/features/auth/PasswordField';
 
 export default function RegisterPage() {
   const [pending, setPending] = useState(false);
@@ -36,49 +39,30 @@ export default function RegisterPage() {
         </div>
       ) : (
         <form className="auth-form" onSubmit={(e) => void submit(e)} aria-busy={pending}>
-          <label className="input-group">
-            Tên đăng nhập
-            <input
-              className="input"
-              name="username"
-              autoComplete="username"
-              required
-              minLength={3}
-              maxLength={30}
-              pattern="[a-zA-Z0-9._]+"
-              aria-describedby="username-hint"
-            />
-          </label>
-          <small id="username-hint" className="auth-notice">
-            3–30 ký tự: chữ cái không dấu, số, dấu chấm hoặc gạch dưới.
-          </small>
-          <label className="input-group">
-            Họ và tên
-            <input className="input" name="fullName" autoComplete="name" required maxLength={120} />
-          </label>
-          <label className="input-group">
-            Email
-            <input className="input" name="email" type="email" autoComplete="email" required />
-          </label>
-          <label className="input-group">
-            Mật khẩu
-            <input
-              className="input"
-              name="password"
-              type="password"
-              autoComplete="new-password"
-              minLength={8}
-              required
-              aria-describedby="password-hint"
-            />
-          </label>
-          <small id="password-hint" className="auth-notice">
-            Ít nhất 8 ký tự, tối đa 72 byte.
-          </small>
+          <Input
+            label="Tên đăng nhập"
+            name="username"
+            autoComplete="username"
+            required
+            minLength={3}
+            maxLength={30}
+            pattern="[a-zA-Z0-9._]+"
+            hint="3–30 ký tự: chữ cái không dấu, số, dấu chấm hoặc gạch dưới."
+          />
+          <Input label="Họ và tên" name="fullName" autoComplete="name" required maxLength={120} />
+          <Input label="Email" name="email" type="email" autoComplete="email" required />
+          <PasswordField
+            label="Mật khẩu"
+            name="password"
+            autoComplete="new-password"
+            minLength={8}
+            required
+            hint="Ít nhất 8 ký tự."
+          />
           {error && <ErrorState message={error} />}
-          <button className="btn btn-primary" type="submit" disabled={pending}>
+          <Button type="submit" loading={pending}>
             {pending ? 'Đang tạo tài khoản…' : 'Đăng ký'}
-          </button>
+          </Button>
         </form>
       )}
       <p className="auth-switch">

@@ -7,6 +7,9 @@ import { isAxiosError } from 'axios';
 import { api } from '@/services/api';
 import type { WorkspaceContext } from '@/features/auth/workspaceContext';
 import { useCartStore } from '@/stores/cartStore';
+import { Input } from '@/components/common/Input';
+import { Button } from '@/components/common/Button';
+import { PasswordField } from '@/features/auth/PasswordField';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -53,32 +56,25 @@ export default function LoginPage() {
   return (
     <AuthCard title="Đăng nhập">
       <form onSubmit={(event) => void submit(event)} className="auth-form" aria-busy={pending}>
-        <label className="input-group">
-          Tên đăng nhập
-          <input
-            className="input"
-            required
-            autoComplete="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="owner.demo"
-          />
-        </label>
-        <label className="input-group">
-          Mật khẩu
-          <input
-            className="input"
-            required
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
+        <Input
+          label="Tên đăng nhập"
+          required
+          autoComplete="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="owner.demo"
+        />
+        <PasswordField
+          label="Mật khẩu"
+          required
+          autoComplete="current-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         {error && <ErrorState message={error} />}
-        <button className="btn btn-primary" type="submit" disabled={pending}>
+        <Button type="submit" loading={pending}>
           {pending ? 'Đang đăng nhập…' : 'Đăng nhập'}
-        </button>
+        </Button>
       </form>
       <p className="auth-switch">
         Chưa có tài khoản? <Link to="/register">Đăng ký</Link>

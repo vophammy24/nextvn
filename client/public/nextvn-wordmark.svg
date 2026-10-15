@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 40">
+  <title>NextVN</title>
+  <!-- Interim typographic lockup, not a replacement for official N artwork. -->
+  <rect width="144" height="40" rx="8" fill="#09265b"/>
+  <text x="10" y="28" fill="white" font-family="system-ui,sans-serif" font-size="25" font-weight="700">NextVN</text>
+  <circle cx="131" cy="26" r="4" fill="#ffc928"/>
+</svg>

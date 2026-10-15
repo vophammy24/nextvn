@@ -1,11 +1,11 @@
 .landing {
-  --lp-blue: #4f46e5;
-  --lp-deep-blue: #4338ca;
-  --lp-ink: #17203d;
-  --lp-muted: #59617b;
-  --lp-yellow: #ddd6fe;
-  --lp-line: #e3e2f5;
-  --lp-soft: #f6f5ff;
+  --lp-blue: var(--primary);
+  --lp-deep-blue: var(--primary-dark);
+  --lp-ink: var(--text-primary);
+  --lp-muted: var(--text-secondary);
+  --lp-yellow: var(--accent);
+  --lp-line: var(--border-light);
+  --lp-soft: var(--bg-secondary);
   color: var(--lp-ink);
   background: white;
   font-size: 15px;
@@ -61,9 +61,6 @@ html:has(.landing) {
   letter-spacing: -0.07em;
   line-height: 1;
 }
-.lp-logo span {
-  color: var(--lp-yellow);
-}
 .lp-navigation {
   display: flex;
   align-items: center;
@@ -103,10 +100,10 @@ html:has(.landing) {
 }
 .landing .lp-button-yellow {
   background: var(--lp-yellow);
-  color: #17294a;
+  color: var(--navy);
 }
 .landing .lp-button-yellow:hover {
-  background: #ffe694;
+  background: var(--accent-hover);
 }
 .landing .lp-button-outline {
   color: white;
@@ -604,8 +601,8 @@ html:has(.landing) {
   letter-spacing: -0.06em;
   margin: 0 10px 24px;
 }
-.lp-preview-sidebar > strong > span {
-  color: var(--lp-yellow);
+.lp-preview-sidebar > strong > .brand-logo {
+  color: var(--white);
 }
 .lp-preview-sidebar > span {
   display: flex;
@@ -900,7 +897,7 @@ html:has(.landing) {
   font-size: 11px;
 }
 .landing :focus-visible {
-  outline-color: #2459ac;
+  outline-color: var(--primary);
 }
 .lp-header :focus-visible,
 .lp-hero :focus-visible,

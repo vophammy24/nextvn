@@ -42,7 +42,7 @@ export function AnalyticsChart({
   series?: ChartSeries[];
 }) {
   const metrics = series ?? [
-    { key: 'value', name: measure, color: line ? '#3268d0' : '#208778', line, money },
+    { key: 'value', name: measure, color: 'var(--chart-primary)', line, money },
   ];
   const format = (value: number, metric: ChartSeries) =>
     metric.money ? formatCurrency(value) : formatNumber(value);

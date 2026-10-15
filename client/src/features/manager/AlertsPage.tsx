@@ -8,15 +8,19 @@ import { alertLabels } from './model';
 import type { ManagerData } from './types';
 export function Alerts({ data }: { data: ManagerData }) {
   const actions = useInventoryActions();
+  const [noticeTone, setNoticeTone] = useState<'success' | 'error'>('error');
   const changeStatus = async (id: string, status: 'IN_PROGRESS' | 'RESOLVED') => {
     if (!actions) {
+      setNoticeTone('error');
       setNotice('Cập nhật cảnh báo chưa khả dụng. Trạng thái cảnh báo chưa thay đổi.');
       return;
     }
     try {
       await actions.save(`/alerts/${id}`, 'PATCH', { status });
+      setNoticeTone('success');
       setNotice('Đã cập nhật cảnh báo.');
     } catch (error) {
+      setNoticeTone('error');
       setNotice((error as Error).message);
     }
   };
@@ -58,7 +62,10 @@ export function Alerts({ data }: { data: ManagerData }) {
         </label>
       </div>
       {notice && (
-        <p className="manager-notice" role="status">
+        <p
+          className={'manager-notice manager-notice-' + noticeTone}
+          role={noticeTone === 'error' ? 'alert' : 'status'}
+        >
           {notice}
         </p>
       )}
@@ -76,7 +83,9 @@ export function Alerts({ data }: { data: ManagerData }) {
             </div>
             <div className="manager-alert-content">
               <div>
-                <span className="manager-muted">{alertLabels[alert.category]}</span>
+                <span className={'manager-severity category-' + alert.category.toLowerCase()}>
+                  {alertLabels[alert.category]}
+                </span>
                 <StatusBadge status={alert.status} />
               </div>
               <h2>{alert.title}</h2>

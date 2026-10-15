@@ -19,9 +19,11 @@ export function Transactions({ data }: { data: ManagerData }) {
   const [expiry, setExpiry] = useState('');
   const [note, setNote] = useState('');
   const [message, setMessage] = useState('');
+  const [messageTone, setMessageTone] = useState<'success' | 'error'>('error');
   const ingredient = data.ingredients.find((item) => item.id === ingredientId);
   const submit = async (event: FormEvent) => {
     event.preventDefault();
+    setMessageTone('error');
     if (!quantity.trim()) {
       setMessage('Vui lòng nhập số lượng.');
       return;
@@ -68,6 +70,7 @@ export function Transactions({ data }: { data: ManagerData }) {
           expiry: expiry || null,
           reason: note,
         });
+        setMessageTone('success');
         setMessage('Đã ghi nhận giao dịch.');
         setQuantity('');
       } catch (error) {
@@ -177,7 +180,10 @@ export function Transactions({ data }: { data: ManagerData }) {
             />
           </label>
           {message && (
-            <p className="manager-notice manager-full" role="alert">
+            <p
+              className={'manager-notice manager-full manager-notice-' + messageTone}
+              role={messageTone === 'error' ? 'alert' : 'status'}
+            >
               {message}
             </p>
           )}
