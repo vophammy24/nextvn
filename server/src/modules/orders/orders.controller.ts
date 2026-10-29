@@ -5,6 +5,7 @@ import { validateBranchOwnership } from '../../middleware/membership.js';
 import type { AuthenticatedRequest } from '../../middleware/auth.js';
 import { createOrderSchema, updateOrderStatusSchema, orderQuerySchema } from './orders.schema.js';
 import * as ordersService from './orders.service.js';
+import { InventoryError } from '../../inventory/domain.js';
 
 function paramStr(val: string | string[] | undefined): string {
   return Array.isArray(val) ? val[0] : (val ?? '');
@@ -23,6 +24,7 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     const valid = await validateBranchOwnership(
       memberReq.membership.businessId,
       parsed.data.branchId,
+      res.locals.ordersDatabase,
     );
     if (!valid) {
       sendError(res, 'Chi nhánh không hợp lệ.', 403);
@@ -37,8 +39,9 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
 
     sendSuccess(res, order, 'Tạo đơn hàng thành công.', 201);
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Không thể tạo đơn hàng.';
-    sendError(res, message);
+    if (err instanceof InventoryError) sendError(res, err.message, err.status);
+    else if (err instanceof ordersService.OrderError) sendError(res, err.message);
+    else sendError(res, 'Không thể tạo đơn hàng. Vui lòng thử lại.', 503);
   }
 }
 
@@ -47,7 +50,11 @@ export async function getOrders(req: Request, res: Response): Promise<void> {
     const branchId = paramStr(req.params['branchId']);
     const memberReq = req as MemberRequest;
 
-    const valid = await validateBranchOwnership(memberReq.membership.businessId, branchId);
+    const valid = await validateBranchOwnership(
+      memberReq.membership.businessId,
+      branchId,
+      res.locals.ordersDatabase,
+    );
     if (!valid) {
       sendError(res, 'Chi nhánh không hợp lệ.', 403);
       return;
@@ -73,7 +80,11 @@ export async function getOrderById(req: Request, res: Response): Promise<void> {
     const orderId = paramStr(req.params['orderId']);
     const memberReq = req as MemberRequest;
 
-    const valid = await validateBranchOwnership(memberReq.membership.businessId, branchId);
+    const valid = await validateBranchOwnership(
+      memberReq.membership.businessId,
+      branchId,
+      res.locals.ordersDatabase,
+    );
     if (!valid) {
       sendError(res, 'Chi nhánh không hợp lệ.', 403);
       return;
@@ -97,7 +108,11 @@ export async function updateOrderStatus(req: Request, res: Response): Promise<vo
     const orderId = paramStr(req.params['orderId']);
     const memberReq = req as MemberRequest;
 
-    const valid = await validateBranchOwnership(memberReq.membership.businessId, branchId);
+    const valid = await validateBranchOwnership(
+      memberReq.membership.businessId,
+      branchId,
+      res.locals.ordersDatabase,
+    );
     if (!valid) {
       sendError(res, 'Chi nhánh không hợp lệ.', 403);
       return;
@@ -122,7 +137,8 @@ export async function updateOrderStatus(req: Request, res: Response): Promise<vo
 
     sendSuccess(res, order, 'Cập nhật trạng thái thành công.');
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Không thể cập nhật đơn hàng.';
-    sendError(res, message);
+    if (err instanceof InventoryError) sendError(res, err.message, err.status);
+    else if (err instanceof ordersService.OrderError) sendError(res, err.message);
+    else sendError(res, 'Không thể cập nhật đơn hàng. Vui lòng thử lại.', 503);
   }
 }

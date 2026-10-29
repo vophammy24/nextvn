@@ -23,6 +23,13 @@ export const alertLabels = {
   LOW_STOCK: 'Dưới mức tồn tối thiểu',
   DISCREPANCY: 'Chênh lệch tồn kho',
 } as const;
+export function isExpired(item: { expiry: string | null }, asOf: string) {
+  if (!item.expiry || !Number.isFinite(Date.parse(asOf))) return false;
+  const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' }).format(
+    new Date(asOf),
+  );
+  return item.expiry < today;
+}
 export function inventoryStatus(item: Ingredient, asOf: string): InventoryStatus {
   if (item.status) return item.status;
   if (item.stock <= 0) return 'OUT_OF_STOCK';

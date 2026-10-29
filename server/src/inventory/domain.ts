@@ -93,6 +93,15 @@ export interface Alert {
   updatedAt: string;
 }
 export interface InventoryState {
+  menuItems: {
+    id: string;
+    name: string;
+    price: number;
+    isActive: boolean;
+    categoryId?: string;
+    description?: string | null;
+  }[];
+  menuCategories?: { id: string; name: string; isActive: boolean; displayOrder: number }[];
   ingredients: Ingredient[];
   lots: Lot[];
   recipes: Recipe[];
@@ -100,8 +109,23 @@ export interface InventoryState {
   alerts: Alert[];
 }
 export interface InventoryStore {
+  recipeCatalog?(scope: Scope): Promise<RecipeCatalog>;
   transaction<T>(scope: Scope, run: (state: InventoryState) => Promise<T> | T): Promise<T>;
   branches(businessId: string): Promise<{ id: string; name: string }[]>;
+}
+export interface RecipeCatalog {
+  branchName: string;
+  categories: { id: string; name: string; isActive: boolean }[];
+  menuItems: {
+    id: string;
+    name: string;
+    price: number;
+    categoryId: string;
+    categoryName: string;
+    description: string | null;
+    isActive: boolean;
+    recipeId: string | null;
+  }[];
 }
 export function authorize(
   principal: Principal | null | undefined,
@@ -188,9 +212,9 @@ const partInput = z.object({
   unit,
 });
 export const recipeInput = z.object({
-  menuItemId: text,
-  name: text,
-  sellingPrice: amount,
+  menuItemId: z.uuid('Vui lòng chọn món hợp lệ trong chi nhánh.'),
+  name: text.optional(),
+  sellingPrice: amount.optional(),
   ingredients: z.array(partInput).min(1, 'Công thức cần ít nhất một nguyên liệu.').max(100),
   modifiers: z
     .array(
@@ -204,6 +228,27 @@ export const recipeInput = z.object({
     .max(20)
     .default([]),
 });
+export const createMenuRecipeInput = z
+  .object({
+    requestKey: z.uuid('Mã yêu cầu không hợp lệ.'),
+    menu: z
+      .object({
+        name: text,
+        price: z.number().int().positive('Giá bán phải lớn hơn 0.').max(2147483647),
+        description: z.string().trim().max(2000).default(''),
+        isActive: z.boolean().default(true),
+        categoryId: z.uuid().optional(),
+        categoryName: text.optional(),
+      })
+      .strict()
+      .refine((v) => Boolean(v.categoryId) !== Boolean(v.categoryName), {
+        message: 'Chọn danh mục hoặc nhập danh mục mới.',
+      }),
+    ingredients: recipeInput.shape.ingredients,
+    modifiers: recipeInput.shape.modifiers,
+  })
+  .strict();
+export type CreateMenuRecipeInput = z.infer<typeof createMenuRecipeInput>;
 export const saleInput = z.object({
   orderId: text,
   state: z.enum(['PAID', 'CONFIRMED']),
@@ -222,6 +267,7 @@ export type StockInput = z.infer<typeof stockInput>;
 export type RecipeInput = z.infer<typeof recipeInput>;
 export type SaleInput = z.infer<typeof saleInput>;
 export const emptyState = (): InventoryState => ({
+  menuItems: [],
   ingredients: [],
   lots: [],
   recipes: [],

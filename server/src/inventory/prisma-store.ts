@@ -11,6 +11,35 @@ import {
 type Database = typeof db;
 export class PrismaInventoryStore implements InventoryStore {
   constructor(private database: Database = db) {}
+  async recipeCatalog(scope: Scope) {
+    const branch = await this.database.orm.public.Branch.where({
+      id: scope.branchId,
+      businessId: scope.businessId,
+      isActive: true,
+    })
+      .select('name')
+      .first();
+    if (!branch) fail('BRANCH_NOT_FOUND', 'Chi nhánh không tồn tại hoặc không hoạt động.', 404);
+    const orm = this.database.orm.public;
+    const categories = await orm.MenuCategory.where({ branchId: scope.branchId })
+      .select('id', 'name', 'isActive')
+      .all();
+    const items = await orm.MenuItem.where({ branchId: scope.branchId })
+      .select('id', 'name', 'price', 'categoryId', 'description', 'isActive')
+      .all();
+    const recipes = await orm.Recipe.where(scope).select('id', 'menuItemId').all();
+    const categoryNames = new Map(categories.map((category) => [category.id, category.name]));
+    const recipeIds = new Map(recipes.map((recipe) => [recipe.menuItemId, recipe.id]));
+    return {
+      branchName: branch!.name,
+      categories,
+      menuItems: items.map((item) => ({
+        ...item,
+        categoryName: categoryNames.get(item.categoryId) ?? '',
+        recipeId: recipeIds.get(item.id) ?? null,
+      })),
+    };
+  }
   async branches(businessId: string) {
     return this.database.orm.public.Branch.where({ businessId, isActive: true })
       .select('id', 'name')
@@ -33,18 +62,22 @@ export class PrismaInventoryStore implements InventoryStore {
         .include('balance')
         .include('lots')
         .all();
-      const balances = ingredients.map((i) => {
+      ingredients.forEach((i) => {
         if (!i.balance) fail('INVENTORY_INCONSISTENT', 'Dữ liệu tồn kho cần được kiểm tra.', 409);
-        return i.balance!;
       });
       const lots = ingredients.flatMap((i) => i.lots);
       const recipes = await orm.Recipe.where(scope).include('ingredients').all();
-      const recipeParts = recipes.flatMap((r) => r.ingredients);
       const transactions = await orm.StockTransaction.where(scope).all();
       const alerts = await orm.InventoryAlert.where(scope).all();
       const state: InventoryState = {
+        menuItems: await orm.MenuItem.where({ branchId: scope.branchId })
+          .select('id', 'name', 'price', 'isActive', 'categoryId', 'description')
+          .all(),
+        menuCategories: await orm.MenuCategory.where({ branchId: scope.branchId })
+          .select('id', 'name', 'isActive', 'displayOrder')
+          .all(),
         ingredients: ingredients.map((i) => {
-          const balance = balances.find((b) => b.ingredientId === i.id)!;
+          const balance = i.balance!;
           return {
             id: i.id,
             name: i.name,
@@ -62,12 +95,12 @@ export class PrismaInventoryStore implements InventoryStore {
           name: r.name,
           sellingPrice: r.sellingPrice,
           version: r.version,
-          ingredients: recipeParts
+          ingredients: r.ingredients
             .filter((p) => p.recipeId === r.id && p.modifierKey === '')
             .map((p) => ({ ingredientId: p.ingredientId, quantityMilli: p.quantityMilli })),
           modifiers: (r.modifiers as unknown as Omit<Modifier, 'ingredients'>[]).map((m) => ({
             ...m,
-            ingredients: recipeParts
+            ingredients: r.ingredients
               .filter((p) => p.recipeId === r.id && p.modifierKey === m.key)
               .map((p) => ({ ingredientId: p.ingredientId, quantityMilli: p.quantityMilli })),
           })),
@@ -77,10 +110,28 @@ export class PrismaInventoryStore implements InventoryStore {
       };
       const before = structuredClone(state);
       const result = await run(state);
-      const changed = <R extends { id: string }>(rows: R[], original: R[]) =>
-        rows.filter(
-          (r) => JSON.stringify(r) !== JSON.stringify(original.find((o) => o.id === r.id)),
-        );
+      for (const category of (state.menuCategories ?? []).filter(
+        (item) => !(before.menuCategories ?? []).some((old) => old.id === item.id),
+      ))
+        await orm.MenuCategory.create({ ...category, branchId: scope.branchId });
+      for (const item of state.menuItems.filter(
+        (menu) => !before.menuItems.some((old) => old.id === menu.id),
+      )) {
+        if (!item.categoryId) fail('CATEGORY_REQUIRED', 'Món cần danh mục hợp lệ.');
+        await orm.MenuItem.create({
+          id: item.id,
+          branchId: scope.branchId,
+          categoryId: item.categoryId,
+          name: item.name,
+          price: item.price,
+          description: item.description ?? null,
+          isActive: item.isActive,
+        });
+      }
+      const changed = <R extends { id: string }>(rows: R[], original: R[]) => {
+        const originals = new Map(original.map((row) => [row.id, row]));
+        return rows.filter((row) => JSON.stringify(row) !== JSON.stringify(originals.get(row.id)));
+      };
       for (const i of changed(state.ingredients, before.ingredients)) {
         const metadata = { name: i.name, category: i.category, unit: i.unit };
         const balance = {
@@ -115,7 +166,9 @@ export class PrismaInventoryStore implements InventoryStore {
         };
         if (before.recipes.some((o) => o.id === r.id)) {
           await orm.Recipe.where({ id: r.id }).update(metadata);
-          await orm.RecipeIngredient.where({ recipeId: r.id }).delete();
+          // Prisma 8 model.delete() removes one matching row. Replace every current
+          // part in this scoped recipe atomically; historical sales/stock JSON stays intact.
+          await orm.RecipeIngredient.where({ recipeId: r.id }).deleteAll();
         } else await orm.Recipe.create({ id: r.id, ...scope, ...metadata });
         for (const p of r.ingredients)
           await orm.RecipeIngredient.create({
@@ -134,9 +187,10 @@ export class PrismaInventoryStore implements InventoryStore {
             });
       }
       // Append only: never overwrite or delete an audit transaction.
-      for (const t of state.transactions.filter(
-        (t) => !before.transactions.some((o) => o.id === t.id),
-      ))
+      const previousTransactionIds = new Set(
+        before.transactions.map((transaction) => transaction.id),
+      );
+      for (const t of state.transactions.filter((t) => !previousTransactionIds.has(t.id)))
         await orm.StockTransaction.create({
           ...t,
           ...scope,

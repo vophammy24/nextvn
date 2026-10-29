@@ -5,6 +5,8 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
 
   PORT: z.coerce.number().int().positive().default(5000),
+  // Enable only behind a single trusted, non-bypassable proxy ingress.
+  TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(1).default(0),
 
   CLIENT_URL: z.string().url(),
 

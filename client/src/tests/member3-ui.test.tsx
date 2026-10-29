@@ -254,12 +254,16 @@ describe('Owner routes', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: 'Gửi lời mời' }));
     await waitFor(() =>
-      expect(api.post).toHaveBeenCalledWith('/business/business-test/owner/members', {
-        fullName: 'Nguyễn An',
-        email: 'an@example.test',
-        role: 'MANAGER',
-        branchId: 'branch-test',
-      }),
+      expect(api.post).toHaveBeenCalledWith(
+        '/business/business-test/owner/members',
+        {
+          fullName: 'Nguyễn An',
+          email: 'an@example.test',
+          role: 'MANAGER',
+          branchId: 'branch-test',
+        },
+        { timeout: 45000 },
+      ),
     );
     fireEvent.change(await screen.findByLabelText('Vai trò của Phạm Thu Hà'), {
       target: { value: 'MANAGER' },

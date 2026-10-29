@@ -1,7 +1,12 @@
 import ownerRouter from './owner/ownerRouter.js';
 import express from 'express';
 import cors from 'cors';
+import { env } from './config/env.js';
 import { authRouter } from './modules/auth/auth.routes.js';
+import { passwordResetRouter } from './modules/auth/passwordResetRouter.js';
+import adminRouter from './admin/router.js';
+import onboardingRouter from './admin/onboarding.js';
+import invitationRouter from './owner/invitationRouter.js';
 
 import { authenticate } from './middleware/auth.js';
 import { resolveMembership } from './middleware/membership.js';
@@ -16,12 +21,18 @@ import menuRoutes from './modules/menu/menu.routes.js';
 import ordersRoutes from './modules/orders/orders.routes.js';
 import tablesRoutes from './modules/tables/tables.routes.js';
 import shiftsRoutes from './modules/shifts/shifts.routes.js';
+import { createSalesRouter } from './sales/router.js';
 
 const app = express();
+if (env.TRUST_PROXY_HOPS) app.set('trust proxy', env.TRUST_PROXY_HOPS);
 
 app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRouter);
+app.use('/api/auth', passwordResetRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/onboarding', onboardingRouter);
+app.use('/api/invitations', invitationRouter);
 
 const inventoryService = new InventoryService(new PrismaInventoryStore());
 
@@ -39,6 +50,7 @@ app.use('/api/business/:businessId/menu', menuRoutes);
 app.use('/api/business/:businessId/orders', ordersRoutes);
 app.use('/api/business/:businessId/tables', tablesRoutes);
 app.use('/api/business/:businessId/shifts', shiftsRoutes);
+app.use('/api/business/:businessId/sales', createSalesRouter());
 app.use(
   '/api/business/:businessId/inventory',
   authenticate,

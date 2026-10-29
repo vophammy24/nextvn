@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import bcrypt from 'bcrypt';
+import { passwordPolicy as password, hashPassword, comparePassword } from './passwordPolicy.js';
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
 import { db } from '../../prisma/db.js';
@@ -12,10 +12,6 @@ const username = z
   .min(3)
   .max(30)
   .regex(/^[a-z0-9._]+$/);
-const password = z
-  .string()
-  .min(8)
-  .refine((v) => Buffer.byteLength(v, 'utf8') <= 72);
 const login = z.object({ username, password });
 const register = login.extend({
   email: z.email().trim().toLowerCase(),
@@ -25,7 +21,12 @@ type User = Awaited<ReturnType<typeof db.orm.public.User.create>>;
 function session(user: User) {
   return {
     accessToken: jwt.sign(
-      { userId: user.id, email: user.email, platformRole: user.platformRole },
+      {
+        userId: user.id,
+        email: user.email,
+        platformRole: user.platformRole,
+        credentialVersion: user.credentialVersion,
+      },
       env.JWT_ACCESS_SECRET,
       { expiresIn: env.JWT_ACCESS_EXPIRES_IN as jwt.SignOptions['expiresIn'] },
     ),
@@ -49,7 +50,7 @@ authRouter.post('/login', async (req, res) => {
     const user = await db.orm.public.User.where({ username: parsed.data.username }).first();
     if (
       !user ||
-      !(await bcrypt.compare(parsed.data.password, user.passwordHash)) ||
+      !(await comparePassword(parsed.data.password, user.passwordHash)) ||
       user.status !== 'ACTIVE'
     ) {
       res.status(401).json({
@@ -78,6 +79,7 @@ authRouter.post('/login', async (req, res) => {
         },
       },
     });
+    res.status(503).json({ message: 'Không thể đăng nhập. Vui lòng thử lại.' });
   }
 });
 authRouter.post('/register', async (req, res) => {
@@ -101,7 +103,7 @@ authRouter.post('/register', async (req, res) => {
     }
     const user = await db.orm.public.User.create({
       ...data,
-      passwordHash: await bcrypt.hash(secret, 12),
+      passwordHash: await hashPassword(secret),
     });
     res.status(201).json(session(user));
   } catch {

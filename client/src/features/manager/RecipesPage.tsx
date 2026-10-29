@@ -15,7 +15,16 @@ export function Recipes({ data }: { data: ManagerData }) {
   const [notice, setNotice] = useState('');
   const recipe = data.recipes.find((item) => item.id === selected) ?? data.recipes[0];
   if (actions && editor !== undefined)
-    return <RecipeEditor id={editor ?? undefined} onClose={() => setEditor(undefined)} />;
+    return (
+      <RecipeEditor
+        id={editor ?? undefined}
+        onClose={() => setEditor(undefined)}
+        onSaved={(savedId) => {
+          setSelected(savedId);
+          setEditor(undefined);
+        }}
+      />
+    );
   if (!recipe)
     return (
       <>

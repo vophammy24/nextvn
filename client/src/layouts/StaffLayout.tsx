@@ -6,9 +6,19 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { WorkspaceSessionContext } from '@/features/auth/workspaceContext';
 import { getShellDestination, getShellSections, roleLabels } from '@/app/shellNavigation';
 import { useCartStore } from '@/stores/cartStore';
+import { clearSalesDraftTabs } from '@/pages/staff/salesDraftTabs';
 
-export default function StaffLayout() {
+export interface PlatformShellSession {
+  user: { id: string; fullName: string };
+  role: 'SYSTEM_ADMIN';
+  business?: never;
+  branch?: never;
+}
+export default function StaffLayout({
+  platformSession,
+}: { platformSession?: PlatformShellSession } = {}) {
   const workspace = useContext(WorkspaceSessionContext);
+  const context = platformSession ?? workspace?.context;
   const client = useQueryClient();
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,7 +29,7 @@ export default function StaffLayout() {
   const profileContainer = useRef<HTMLDivElement>(null);
   const firstMenuLink = useRef<HTMLAnchorElement>(null);
   const mainArea = useRef<HTMLDivElement>(null);
-  const role = workspace?.context.role;
+  const role = context?.role;
   const currentPage = getShellDestination(location.pathname, role);
   const menuOpen = menuOpenPath === location.pathname;
   const profileOpen = profileOpenPath === location.pathname;
@@ -85,6 +95,8 @@ export default function StaffLayout() {
     setMenuOpenPath(null);
     setProfileOpenPath(null);
     localStorage.removeItem('access_token');
+    clearSalesDraftTabs();
+    sessionStorage.removeItem('nextvn_pending_invitation');
     useCartStore.getState().clearCart();
     void client.cancelQueries().then(() => {
       client.clear();
@@ -160,21 +172,22 @@ export default function StaffLayout() {
         <header className="app-header">
           <div className="app-header-page">
             <span className="app-header-eyebrow">
-              {workspace?.context.business
-                ? workspace.context.business.name +
-                  (workspace.context.branch ? ' · ' + workspace.context.branch.name : '')
-                : 'Không gian làm việc'}
+              {context?.business
+                ? context.business.name + (context.branch ? ' · ' + context.branch.name : '')
+                : platformSession
+                  ? 'Nền tảng NextVN'
+                  : 'Không gian làm việc'}
             </span>
             <span className="app-header-title">{currentPage?.label ?? 'NextVN'}</span>
           </div>
           <div className="app-header-context">
-            {workspace?.context.business && (
+            {context?.business && (
               <div className="app-context-details">
-                <span className="app-context-business">{workspace.context.business.name}</span>
-                {workspace.context.branch && <span>{workspace.context.branch.name}</span>}
+                <span className="app-context-business">{context.business.name}</span>
+                {context.branch && <span>{context.branch.name}</span>}
               </div>
             )}
-            {workspace?.context.user && (
+            {context?.user && (
               <div ref={profileContainer} className="app-profile">
                 <button
                   ref={profileButton}
@@ -182,16 +195,16 @@ export default function StaffLayout() {
                   type="button"
                   aria-expanded={profileOpen}
                   aria-controls="app-profile-menu"
-                  aria-label={'Tài khoản ' + workspace.context.user.fullName}
+                  aria-label={'Tài khoản ' + context.user.fullName}
                   onClick={() => setProfileOpenPath(profileOpen ? null : location.pathname)}
                 >
                   <UserRound aria-hidden="true" size={18} />
-                  <span>{workspace.context.user.fullName}</span>
+                  <span>{context.user.fullName}</span>
                   <ChevronDown aria-hidden="true" size={16} />
                 </button>
                 {profileOpen && (
                   <div id="app-profile-menu" className="app-profile-menu">
-                    <strong>{workspace.context.user.fullName}</strong>
+                    <strong>{context.user.fullName}</strong>
                     <span>{role ? roleLabels[role] : ''}</span>
                     <button type="button" onClick={logout}>
                       <LogOut aria-hidden="true" size={18} />

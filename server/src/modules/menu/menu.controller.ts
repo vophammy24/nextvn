@@ -13,7 +13,11 @@ export async function getCategories(req: Request, res: Response): Promise<void> 
   try {
     const branchId = paramStr(req.params['branchId']);
     const memberReq = req as MemberRequest;
-    const valid = await validateBranchOwnership(memberReq.membership.businessId, branchId);
+    const valid = await validateBranchOwnership(
+      memberReq.membership.businessId,
+      branchId,
+      res.locals.menuDatabase,
+    );
     if (!valid) {
       sendError(res, 'Chi nhánh không hợp lệ.', 403);
       return;
@@ -29,7 +33,11 @@ export async function createCategory(req: Request, res: Response): Promise<void>
   try {
     const branchId = paramStr(req.params['branchId']);
     const memberReq = req as MemberRequest;
-    const valid = await validateBranchOwnership(memberReq.membership.businessId, branchId);
+    const valid = await validateBranchOwnership(
+      memberReq.membership.businessId,
+      branchId,
+      res.locals.menuDatabase,
+    );
     if (!valid) {
       sendError(res, 'Chi nhánh không hợp lệ.', 403);
       return;
@@ -53,7 +61,11 @@ export async function getMenuItems(req: Request, res: Response): Promise<void> {
   try {
     const branchId = paramStr(req.params['branchId']);
     const memberReq = req as MemberRequest;
-    const valid = await validateBranchOwnership(memberReq.membership.businessId, branchId);
+    const valid = await validateBranchOwnership(
+      memberReq.membership.businessId,
+      branchId,
+      res.locals.menuDatabase,
+    );
     if (!valid) {
       sendError(res, 'Chi nhánh không hợp lệ.', 403);
       return;
@@ -75,7 +87,11 @@ export async function createMenuItem(req: Request, res: Response): Promise<void>
   try {
     const branchId = paramStr(req.params['branchId']);
     const memberReq = req as MemberRequest;
-    const valid = await validateBranchOwnership(memberReq.membership.businessId, branchId);
+    const valid = await validateBranchOwnership(
+      memberReq.membership.businessId,
+      branchId,
+      res.locals.menuDatabase,
+    );
     if (!valid) {
       sendError(res, 'Chi nhánh không hợp lệ.', 403);
       return;

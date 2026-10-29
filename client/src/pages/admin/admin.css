@@ -1,0 +1,58 @@
+.admin-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+}
+.admin-page {
+  padding: var(--space-6) var(--page-padding) var(--space-12);
+}
+.admin-page > .page-header {
+  margin-bottom: 0;
+}
+.admin-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--space-4);
+}
+.admin-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-4);
+}
+.admin-filters > * {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+.admin-details {
+  display: grid;
+  gap: var(--space-3);
+}
+.admin-details dt {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+.admin-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.admin-content td p {
+  margin: var(--space-1) 0 0;
+  color: var(--text-secondary);
+}
+/* Same table width as OwnerWorkspace: scroll the shared region instead of crushing columns. */
+.admin-content .table-scroll table {
+  min-width: 640px;
+  overflow-wrap: normal;
+}
+.admin-skeleton {
+  height: var(--space-12);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+}
+@media (max-width: 760px) {
+  .admin-page {
+    padding: var(--space-5) var(--space-4) var(--space-8);
+  }
+}

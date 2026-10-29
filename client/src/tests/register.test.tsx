@@ -26,6 +26,8 @@ it('submits the existing registration contract and explains membership setup', a
     email: 'an@example.test',
     password: 'Example@2026',
   });
-  expect(await screen.findByRole('status')).toHaveTextContent('Quản trị viên cần thêm bạn');
+  expect(await screen.findByRole('status')).toHaveTextContent(
+    'Đăng nhập để gửi hồ sơ doanh nghiệp xét duyệt',
+  );
   expect(screen.getByRole('link', { name: /^Đăng nhập$/ })).toHaveAttribute('href', '/login');
 });

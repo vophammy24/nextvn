@@ -1,11 +1,11 @@
-import { useRef, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useWorkspace } from '@/features/auth/workspaceContext';
 import { ErrorState, LoadingState } from '@/components/common/Foundation';
 import { Context } from './actions';
 import { adaptInventory } from './adapter';
 import type { ManagerData } from '@/features/manager/types';
-import { inventoryRequest, type InventorySnapshot } from './api';
+import { inventoryRequest, InventoryRequestError, type InventorySnapshot } from './api';
 export function InventoryDataBoundary({
   children,
 }: {
@@ -15,6 +15,7 @@ export function InventoryDataBoundary({
   const businessId = context.business.id;
   const branchId = context.branch?.id ?? '';
   const client = useQueryClient();
+  const [notice, setNotice] = useState('');
   const key = ['inventory', businessId, branchId];
   const query = useQuery({
     queryKey: key,
@@ -34,29 +35,51 @@ export function InventoryDataBoundary({
           requests.current.set(fingerprint, crypto.randomUUID());
         body = { ...(v.data as object), requestKey: requests.current.get(fingerprint) };
       }
-      await inventoryRequest(businessId, branchId, v.path, v.method, body);
+      const result = await inventoryRequest(businessId, branchId, v.path, v.method, body);
       requests.current.delete(fingerprint);
+      return result;
     },
     onSuccess: async () => {
+      setNotice('Đã lưu thay đổi.');
       await client.invalidateQueries({ queryKey: key });
+      await client.invalidateQueries({ queryKey: ['recipe-catalog', businessId, branchId] });
+      await client.invalidateQueries({ queryKey: ['menuItems'] });
+      await client.invalidateQueries({ queryKey: ['categories'] });
     },
   });
   if (!businessId || !branchId || context.role !== 'MANAGER')
     return <ErrorState message="Vui lòng chọn chi nhánh được phép quản lý." />;
   if (query.isPending) return <LoadingState />;
-  if (query.isError)
-    return <ErrorState message={query.error.message} onRetry={() => void query.refetch()} />;
+  if (
+    !query.data ||
+    (query.error instanceof InventoryRequestError && [401, 403].includes(query.error.status ?? 0))
+  )
+    return (
+      <ErrorState
+        message={query.error?.message ?? 'Không thể tải dữ liệu kho.'}
+        onRetry={() => void query.refetch()}
+      />
+    );
   return (
     <Context.Provider
       value={{
         pending: mutation.isPending,
         snapshot: query.data,
-        save: async (path, method, data) => {
-          await mutation.mutateAsync({ path, method, data });
-        },
+        save: (path, method, data) => mutation.mutateAsync({ path, method, data }),
       }}
     >
       <div className="manager-workspace">
+        {query.isError && (
+          <ErrorState
+            message={`Chưa thể làm mới dữ liệu. ${query.error.message}`}
+            onRetry={() => void query.refetch()}
+          />
+        )}
+        {notice && (
+          <p role="status" className="manager-notice">
+            {notice}
+          </p>
+        )}
         {children(adaptInventory(query.data, businessId, branchId))}
       </div>
     </Context.Provider>

@@ -1,12 +1,13 @@
 import { useInventoryActions } from '@/features/inventory/actions';
 import { useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Badge } from '@/components/common/Badge';
 import { z } from 'zod';
 import { Download, Plus, Pencil } from 'lucide-react';
 import { SearchInput, FilterTabs, StatusBadge, SectionCard } from '@/components/common/Foundation';
 import { DataTable } from '@/components/common/DataTable';
 import { formatDate, formatNumber } from '@/lib/format';
-import { categories, inventoryStatus } from './model';
+import { categories, inventoryStatus, isExpired } from './model';
 import { downloadDemoCsv } from './export';
 import type { ManagerData, Ingredient } from './types';
 const ingredientSchema = z.object({
@@ -17,7 +18,15 @@ const ingredientSchema = z.object({
     .finite()
     .nonnegative('Tồn tối thiểu không được âm.'),
 });
-function IngredientEditor({ item, onClose }: { item: Ingredient | null; onClose: () => void }) {
+export function IngredientEditor({
+  item,
+  onClose,
+  categoryOptions,
+}: {
+  item: Ingredient | null;
+  onClose: () => void;
+  categoryOptions: string[];
+}) {
   const actions = useInventoryActions();
   const [unitCost, setUnitCost] = useState(String(item?.costPerUnit ?? 0));
   const [name, setName] = useState(item?.name ?? '');
@@ -27,6 +36,7 @@ function IngredientEditor({ item, onClose }: { item: Ingredient | null; onClose:
   const [message, setMessage] = useState('');
   const submit = async (event: FormEvent) => {
     event.preventDefault();
+    if (actions?.pending) return;
     const result = ingredientSchema.safeParse({ name, unit, minimum });
     if (result.success && actions) {
       if (!unitCost.trim() || !Number.isFinite(Number(unitCost)) || Number(unitCost) < 0) {
@@ -55,7 +65,7 @@ function IngredientEditor({ item, onClose }: { item: Ingredient | null; onClose:
     <SectionCard
       title={item ? 'Chỉnh sửa nguyên liệu' : 'Thêm nguyên liệu'}
       actions={
-        <button className="manager-text-button" onClick={onClose}>
+        <button className="manager-text-button" onClick={onClose} disabled={actions?.pending}>
           Đóng
         </button>
       }
@@ -66,74 +76,89 @@ function IngredientEditor({ item, onClose }: { item: Ingredient | null; onClose:
         noValidate
         aria-label="Thông tin nguyên liệu"
       >
-        <label className="manager-field">
-          Tên nguyên liệu
-          <input value={name} onChange={(event) => setName(event.target.value)} required />
-        </label>
-        <label className="manager-field">
-          Danh mục
-          <select value={category} onChange={(event) => setCategory(event.target.value)}>
-            {categories.map((value) => (
-              <option key={value}>{value}</option>
-            ))}
-          </select>
-        </label>
-        <label className="manager-field">
-          Đơn vị
-          <select value={unit} disabled={!!item} onChange={(event) => setUnit(event.target.value)}>
-            {['g', 'kg', 'ml', 'L', 'cái'].map((value) => (
-              <option key={value}>{value}</option>
-            ))}
-          </select>
-        </label>
-        <label className="manager-field">
-          Tồn tối thiểu
-          <input
-            type="number"
-            min="0"
-            step="any"
-            value={minimum}
-            onChange={(event) => setMinimum(event.target.value)}
-          />
-        </label>
-        <label className="manager-field">
-          Đơn giá mỗi đơn vị (₫)
-          <input
-            type="number"
-            min="0"
-            step="any"
-            value={unitCost}
-            disabled={!!item}
-            onChange={(event) => setUnitCost(event.target.value)}
-          />
-        </label>
-        <div className="manager-form-footer">
-          <p>
-            {actions
-              ? 'Tồn kho và đơn giá được cập nhật qua giao dịch nhập / xuất kho.'
-              : 'Biểu mẫu minh họa. Chưa lưu thay đổi lên máy chủ.'}
-          </p>
-          <button className="button" type="submit" disabled={actions?.pending}>
-            Lưu nguyên liệu
-          </button>
-        </div>
-        {message && (
-          <p className="manager-notice" role="alert">
-            {message}
-          </p>
-        )}
+        <fieldset
+          disabled={actions?.pending}
+          className="manager-form manager-full manager-form-fields"
+        >
+          <label className="manager-field">
+            Tên nguyên liệu
+            <input value={name} onChange={(event) => setName(event.target.value)} required />
+          </label>
+          <label className="manager-field">
+            Danh mục
+            <select value={category} onChange={(event) => setCategory(event.target.value)}>
+              {categoryOptions.map((value) => (
+                <option key={value}>{value}</option>
+              ))}
+            </select>
+          </label>
+          <label className="manager-field">
+            Đơn vị
+            <select
+              value={unit}
+              disabled={!!item}
+              onChange={(event) => setUnit(event.target.value)}
+            >
+              {['g', 'kg', 'ml', 'L', 'cái'].map((value) => (
+                <option key={value}>{value}</option>
+              ))}
+            </select>
+          </label>
+          <label className="manager-field">
+            Tồn tối thiểu
+            <input
+              type="number"
+              min="0"
+              step="any"
+              value={minimum}
+              onChange={(event) => setMinimum(event.target.value)}
+            />
+          </label>
+          <label className="manager-field">
+            Đơn giá mỗi đơn vị (₫)
+            <input
+              type="number"
+              min="0"
+              step="any"
+              value={unitCost}
+              disabled={!!item}
+              onChange={(event) => setUnitCost(event.target.value)}
+            />
+          </label>
+          <div className="manager-form-footer">
+            <p>
+              {actions
+                ? 'Tồn kho và đơn giá được cập nhật qua giao dịch nhập / xuất kho.'
+                : 'Biểu mẫu minh họa. Chưa lưu thay đổi lên máy chủ.'}
+            </p>
+            <button className="button" type="submit" disabled={actions?.pending}>
+              Lưu nguyên liệu
+            </button>
+          </div>
+          {message && (
+            <p className="manager-notice" role="alert">
+              {message}
+            </p>
+          )}
+        </fieldset>
       </form>
     </SectionCard>
   );
 }
 export function Inventory({ data }: { data: ManagerData }) {
   const actions = useInventoryActions();
+  const categoryOptions = [
+    ...new Set([...categories, ...data.ingredients.map((item) => item.category)]),
+  ];
+  const [params, setParams] = useSearchParams();
+  const ingredientFilter = params.get('ingredient');
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('Tất cả');
   const [editor, setEditor] = useState<Ingredient | null | undefined>(undefined);
   const [notice, setNotice] = useState('');
   const rows = data.ingredients.filter(
     (item) =>
+      (!ingredientFilter || item.id === ingredientFilter) &&
       (category === 'Tất cả' || item.category === category) &&
       item.name.toLocaleLowerCase('vi-VN').includes(search.trim().toLocaleLowerCase('vi-VN')),
   );
@@ -179,7 +204,7 @@ export function Inventory({ data }: { data: ManagerData }) {
             <Download size={16} aria-hidden="true" />
             Xuất dữ liệu
           </button>
-          <button className="button" onClick={() => setEditor(null)}>
+          <button className="button" onClick={() => setEditor(null)} disabled={actions?.pending}>
             <Plus size={17} aria-hidden="true" />
             Thêm nguyên liệu
           </button>
@@ -196,9 +221,21 @@ export function Inventory({ data }: { data: ManagerData }) {
         value={search}
         onChange={setSearch}
       />
+      {ingredientFilter && (
+        <button
+          className="manager-text-button"
+          onClick={() => {
+            const next = new URLSearchParams(params);
+            next.delete('ingredient');
+            setParams(next);
+          }}
+        >
+          Xem tất cả nguyên liệu
+        </button>
+      )}
       <FilterTabs
         label="Danh mục nguyên liệu"
-        items={['Tất cả', ...categories].map((value) => ({ value, label: value }))}
+        items={['Tất cả', ...categoryOptions].map((value) => ({ value, label: value }))}
         value={category}
         onChange={setCategory}
       />
@@ -206,6 +243,7 @@ export function Inventory({ data }: { data: ManagerData }) {
         <IngredientEditor
           key={editor?.id ?? 'new'}
           item={editor}
+          categoryOptions={categoryOptions}
           onClose={() => setEditor(undefined)}
         />
       )}
@@ -237,7 +275,12 @@ export function Inventory({ data }: { data: ManagerData }) {
           {
             key: 'status',
             header: 'Trạng thái',
-            render: (item) => <StatusBadge status={inventoryStatus(item, data.asOf)} />,
+            render: (item) =>
+              isExpired(item, data.asOf) ? (
+                <Badge tone="danger">Đã hết hạn</Badge>
+              ) : (
+                <StatusBadge status={inventoryStatus(item, data.asOf)} />
+              ),
           },
           {
             key: 'actions',

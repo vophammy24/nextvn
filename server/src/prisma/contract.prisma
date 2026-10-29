@@ -46,6 +46,29 @@ enum ShiftStatus {
   CLOSED
 }
 
+enum SalesServiceType {
+  TAKEAWAY
+  DINE_IN
+  BOTH
+}
+
+enum CounterPaymentPolicy {
+  IMMEDIATE_ONLY
+  PAY_LATER_ALLOWED
+  STAFF_CHOICE
+}
+
+enum DineInOrderingMode {
+  COUNTER_ONLY
+  TABLE_ONLY
+  BOTH
+}
+
+enum OrderOrderingMode {
+  COUNTER
+  TABLE
+}
+
 model User {
   id           Uuid         @id @default(uuid())
   email        String       @unique
@@ -54,14 +77,54 @@ model User {
   fullName     String
   platformRole PlatformRole @default(USER)
   status       UserStatus   @default(ACTIVE)
+  credentialVersion Int @default(0)
+  /// Legacy metadata from an applied migration; unused by recovery. Recovery uses email.
+  recoveryEmailVerifiedAt TimestamptzString?
+  passwordResetTokens PasswordResetToken[]
+  authSecurityEvents AuthSecurityEvent[]
 
   memberships BusinessMember[]
+  submittedApplications BusinessApplication[] @relation("ApplicationOwner")
+  reviewedApplications BusinessApplication[] @relation("ApplicationReviewer")
+  adminAuditEvents AdminAuditEvent[]
+  sentInvitations BusinessInvitation[]
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
 }
 
+model PasswordResetToken {
+  id Uuid @id @default(uuid())
+  userId Uuid @unique
+  user User @relation(fields: [userId], references: [id])
+  tokenHash String @unique
+  credentialVersion Int
+  expiresAt TimestamptzString
+  consumedAt TimestamptzString?
+  createdAt TimestamptzString @default(now())
+  @@index([expiresAt])
+}
+
+model PasswordResetThrottle {
+  id String @id
+  hits Int
+  windowEndsAt TimestamptzString
+  lastRequestAt TimestamptzString
+  @@index([windowEndsAt])
+}
+
+model AuthSecurityEvent {
+  id Uuid @id @default(uuid())
+  userId Uuid
+  user User @relation(fields: [userId], references: [id])
+  action String
+  createdAt TimestamptzString @default(now())
+  @@index([userId, createdAt])
+}
+
 model Business {
+  approvalStatus BusinessApprovalStatus @default(APPROVED)
+  operationalStatus BusinessOperationalStatus @default(ACTIVE)
   id   Uuid   @id @default(uuid())
   name String
 
@@ -70,6 +133,8 @@ model Business {
   settings BusinessSettings?
   subscription BusinessSubscription?
   billingRecords BillingRecord[]
+  application BusinessApplication?
+  invitations BusinessInvitation[]
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
@@ -99,6 +164,7 @@ model BusinessMember {
 }
 
 model Branch {
+  invitations BusinessInvitation[]
   id Uuid @id @default(uuid())
 
   businessId Uuid
@@ -108,6 +174,7 @@ model Branch {
   address  String?
   phone    String?
   isActive Boolean @default(true)
+  salesSettings BranchSalesSettings?
 
   menuCategories  MenuCategory[]
   menuItems       MenuItem[]
@@ -125,6 +192,54 @@ model Branch {
   updatedAt temporal.updatedAtString()
 
   @@index([businessId])
+}
+
+model BranchSalesSettings {
+  id Uuid @id @default(uuid())
+  branchId Uuid @unique
+  branch Branch @relation(fields: [branchId], references: [id])
+  serviceType SalesServiceType @default(BOTH)
+  counterPaymentPolicy CounterPaymentPolicy @default(IMMEDIATE_ONLY)
+  dineInOrderingMode DineInOrderingMode @default(BOTH)
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REVOKED
+}
+
+enum InvitationDeliveryStatus {
+  PENDING_DELIVERY
+  SENT
+  FAILED
+}
+
+model BusinessInvitation {
+  id Uuid @id @default(uuid())
+  businessId Uuid
+  business Business @relation(fields: [businessId], references: [id])
+  invitedByUserId Uuid
+  invitedBy User @relation(fields: [invitedByUserId], references: [id])
+  branchId Uuid
+  branch Branch @relation(fields: [branchId], references: [id])
+  email String
+  fullName String
+  role BusinessRole
+  status InvitationStatus @default(PENDING)
+  deliveryStatus InvitationDeliveryStatus @default(PENDING_DELIVERY)
+  tokenHash String @unique
+  attemptId Uuid
+  expiresAt TimestamptzString
+  attemptedAt TimestamptzString @default(now())
+  acceptedAt TimestamptzString?
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@unique([businessId, email])
+  @@index([businessId, createdAt])
 }
 
 model MenuCategory {
@@ -178,6 +293,7 @@ model RestaurantArea {
 
   name         String
   displayOrder Int    @default(0)
+  isActive Boolean @default(true)
 
   tables RestaurantTable[]
 
@@ -199,6 +315,7 @@ model RestaurantTable {
   name     String
   seats    Int        @default(4)
   status   TableStatus @default(AVAILABLE)
+  isActive Boolean @default(true)
 
   orders Order[]
 
@@ -224,6 +341,10 @@ model Order {
   cashierId Uuid
   orderType OrderType  @default(DINE_IN)
   status    OrderStatus @default(OPEN)
+  orderingMode OrderOrderingMode?
+  requestKey Uuid? @unique
+  requestHash String?
+  revision Int @default(1)
 
   subtotal  Int @default(0)
   discount  Int @default(0)
@@ -258,6 +379,7 @@ model OrderItem {
   total     Int
 
   note String?
+  modifierKeys Json?
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
@@ -273,6 +395,8 @@ model OrderPayment {
 
   method PaymentMethod
   amount Int
+  shiftId Uuid?
+  confirmedBy Uuid?
 
   createdAt TimestamptzString @default(now())
 
@@ -546,4 +670,52 @@ model BillingRecord {
 
   @@index([businessId, createdAt])
   @@index([subscriptionId])
+}
+
+enum BusinessApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum BusinessOperationalStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+model BusinessApplication {
+  id Uuid @id @default(uuid())
+  businessId Uuid @unique
+  business Business @relation(fields: [businessId], references: [id])
+  ownerId Uuid
+  owner User @relation("ApplicationOwner", fields: [ownerId], references: [id])
+  status BusinessApprovalStatus @default(PENDING)
+  contactPhone String
+  address String
+  submittedAt TimestamptzString @default(now())
+  reviewedAt TimestamptzString?
+  reviewerId Uuid?
+  reviewer User? @relation("ApplicationReviewer", fields: [reviewerId], references: [id])
+  reviewReason String?
+
+  @@index([status, submittedAt])
+  @@index([ownerId])
+}
+
+model AdminAuditEvent {
+  id Uuid @id @default(uuid())
+  actorId Uuid
+  actor User @relation(fields: [actorId], references: [id])
+  action String
+  entityType String
+  entityId Uuid
+  previousStatus String?
+  newStatus String
+  reason String?
+  correlationId String
+  createdAt TimestamptzString @default(now())
+
+  @@index([createdAt])
+  @@index([entityId, createdAt])
+  @@index([action, createdAt])
 }

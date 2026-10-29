@@ -1,5 +1,7 @@
 # Kho và công thức — bàn giao Member 2
 
+> Cập nhật 28/10/2026: các ghi chú Member 1/Order integration bên dưới là lịch sử. Orders hiện đã dùng transaction chung qua atomicSale/notifyInventoryConsumption; xem [Manager integration report](../../../docs/manager/manager-integration-report.md) và [known release blockers](../../../docs/manager/manager-bug-report.md). Duplicate create-checkout chưa có operation key; không coi module production-ready.
+
 ## Phạm vi và trạng thái tích hợp
 
 Màn hình dùng lại từ `feature/mvp-foundation`: `/app/inventory`, `/app/stock-transactions`, `/app/recipes`, `/app/alerts`. Dùng chung AppShell, DataTable, StatusBadge, biểu mẫu và bộ định dạng tiếng Việt. Không có POS, Order, Shift, Owner UI hay payment mới. Các màn hình ngoài phạm vi được lấy nguyên từ foundation để cung cấp shell và kiểm thử có sẵn, không phải tính năng được triển khai trong lát cắt này.

@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { env } from '@/config/env';
+import { clearSalesDraftTabs } from '@/pages/staff/salesDraftTabs';
 
 export const api = axios.create({
   baseURL: env.VITE_API_URL,
@@ -18,3 +19,18 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (
+      axios.isAxiosError(error) &&
+      error.response?.status === 401 &&
+      !error.config?.url?.startsWith('/auth/')
+    ) {
+      localStorage.removeItem('access_token');
+      clearSalesDraftTabs();
+      window.dispatchEvent(new Event('nextvn:session-expired'));
+    }
+    return Promise.reject(error);
+  },
+);

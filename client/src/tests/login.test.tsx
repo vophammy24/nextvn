@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import LoginPage from '@/pages/auth/LoginPage';
 import { api } from '@/services/api';
 afterEach(() => {
+  sessionStorage.clear();
   vi.restoreAllMocks();
   localStorage.clear();
 });
@@ -19,6 +20,9 @@ function show() {
           <Route path="/app/owner" element={<p>Owner destination</p>} />
           <Route path="/app/inventory" element={<p>Manager destination</p>} />
           <Route path="/app/pos" element={<p>Staff destination</p>} />
+          <Route path="/app/admin" element={<p>Admin destination</p>} />
+          <Route path="/onboarding" element={<p>Onboarding destination</p>} />
+          <Route path="/invitations/accept" element={<p>Invitation destination</p>} />
         </Routes>
       </MemoryRouter>
     </QueryClientProvider>,
@@ -26,6 +30,33 @@ function show() {
   return client;
 }
 describe('local login UI', () => {
+  it('resumes an invitation before workspace discovery for an account with no membership', async () => {
+    sessionStorage.setItem('nextvn_pending_invitation', 'a'.repeat(64));
+    vi.spyOn(api, 'post').mockResolvedValue({
+      data: { accessToken: 'user-token', user: { platformRole: 'USER' } },
+    });
+    const get = vi.spyOn(api, 'get');
+    show();
+    const user = userEvent.setup();
+    await user.type(screen.getByLabelText('Tên đăng nhập'), 'new.user');
+    await user.type(screen.getByLabelText('Mật khẩu'), 'TestPassword@2026');
+    await user.click(screen.getByRole('button', { name: 'Đăng nhập' }));
+    expect(await screen.findByText('Invitation destination')).toBeInTheDocument();
+    expect(get).not.toHaveBeenCalled();
+  });
+  it('routes an authenticated platform admin to Admin without inventing a tenant workspace', async () => {
+    vi.spyOn(api, 'post').mockResolvedValue({
+      data: { accessToken: 'admin-token', user: { platformRole: 'ADMIN' } },
+    });
+    const get = vi.spyOn(api, 'get');
+    show();
+    const user = userEvent.setup();
+    await user.type(screen.getByLabelText('Tên đăng nhập'), 'platform.ops');
+    await user.type(screen.getByLabelText('Mật khẩu'), 'TestPassword@2026');
+    await user.click(screen.getByRole('button', { name: 'Đăng nhập' }));
+    expect(await screen.findByText('Admin destination')).toBeInTheDocument();
+    expect(get).not.toHaveBeenCalled();
+  });
   it.each([
     ['OWNER', 'Owner'],
     ['MANAGER', 'Manager'],

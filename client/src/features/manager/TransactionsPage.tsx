@@ -23,6 +23,7 @@ export function Transactions({ data }: { data: ManagerData }) {
   const ingredient = data.ingredients.find((item) => item.id === ingredientId);
   const submit = async (event: FormEvent) => {
     event.preventDefault();
+    if (actions?.pending) return;
     setMessageTone('error');
     if (!quantity.trim()) {
       setMessage('Vui lòng nhập số lượng.');
@@ -97,6 +98,7 @@ export function Transactions({ data }: { data: ManagerData }) {
             .map(([value, label]) => ({ value, label }))}
           value={type}
           onChange={(value) => {
+            if (actions?.pending) return;
             setType(value as TransactionType);
             setMessage('');
           }}
@@ -107,89 +109,98 @@ export function Transactions({ data }: { data: ManagerData }) {
           onSubmit={submit}
           aria-label="Giao dịch kho"
         >
-          <label className="manager-field manager-full">
-            Nguyên liệu
-            <select
-              value={ingredientId}
-              required
-              onChange={(event) => {
-                setIngredient(event.target.value);
-                setMessage('');
-              }}
-            >
-              <option value="">Chọn nguyên liệu</option>
-              {data.ingredients.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name} ({item.unit})
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="manager-field">
-            Số lượng
-            <input
-              type="number"
-              min={type === 'ADJUST' ? 0 : 0.001}
-              step="any"
-              value={quantity}
-              required
-              onChange={(event) => setQuantity(event.target.value)}
-            />
-            {ingredient && (
-              <small>
-                Tồn hiện tại: {formatNumber(ingredient.stock)} {ingredient.unit}
-              </small>
-            )}
-            {type === 'ADJUST' && (
-              <small>Nhập số lượng tồn thực tế sau kiểm kê, không phải phần chênh lệch.</small>
-            )}
-          </label>
-          <label className="manager-field">
-            Nhà cung cấp
-            <input
-              value={supplier}
-              required={type === 'IN'}
-              onChange={(event) => setSupplier(event.target.value)}
-              placeholder={type === 'IN' ? 'Nhập nhà cung cấp' : 'Không bắt buộc'}
-            />
-          </label>
-          {type === 'IN' && (
+          <fieldset
+            disabled={actions?.pending}
+            className="manager-form manager-full manager-form-fields"
+          >
+            <label className="manager-field manager-full">
+              Nguyên liệu
+              <select
+                value={ingredientId}
+                required
+                onChange={(event) => {
+                  setIngredient(event.target.value);
+                  setMessage('');
+                }}
+              >
+                <option value="">Chọn nguyên liệu</option>
+                {data.ingredients.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name} ({item.unit})
+                  </option>
+                ))}
+              </select>
+            </label>
             <label className="manager-field">
-              Đơn giá mỗi đơn vị (₫)
+              Số lượng
               <input
                 type="number"
-                min="0"
+                min={type === 'ADJUST' ? 0 : 0.001}
                 step="any"
-                value={unitCost}
-                onChange={(event) => setUnitCost(event.target.value)}
+                value={quantity}
+                required
+                onChange={(event) => setQuantity(event.target.value)}
+              />
+              {ingredient && (
+                <small>
+                  Tồn hiện tại: {formatNumber(ingredient.stock)} {ingredient.unit}
+                </small>
+              )}
+              {type === 'ADJUST' && (
+                <small>Nhập số lượng tồn thực tế sau kiểm kê, không phải phần chênh lệch.</small>
+              )}
+            </label>
+            <label className="manager-field">
+              Nhà cung cấp
+              <input
+                value={supplier}
+                required={type === 'IN'}
+                onChange={(event) => setSupplier(event.target.value)}
+                placeholder={type === 'IN' ? 'Nhập nhà cung cấp' : 'Không bắt buộc'}
               />
             </label>
-          )}
-          <label className="manager-field manager-full">
-            Hạn sử dụng
-            <input type="date" value={expiry} onChange={(event) => setExpiry(event.target.value)} />
-          </label>
-          <label className="manager-field manager-full">
-            Lý do / Ghi chú
-            <textarea
-              rows={3}
-              value={note}
-              required
-              onChange={(event) => setNote(event.target.value)}
-              placeholder="Nhập lý do giao dịch..."
-            />
-          </label>
-          {message && (
-            <p
-              className={'manager-notice manager-full manager-notice-' + messageTone}
-              role={messageTone === 'error' ? 'alert' : 'status'}
-            >
-              {message}
-            </p>
-          )}
-          <button type="submit" className="button manager-full" disabled={actions?.pending}>
-            {actions?.pending ? 'Đang ghi nhận...' : 'Ghi nhận giao dịch'}
-          </button>
+            {type === 'IN' && (
+              <label className="manager-field">
+                Đơn giá mỗi đơn vị (₫)
+                <input
+                  type="number"
+                  min="0"
+                  step="any"
+                  value={unitCost}
+                  onChange={(event) => setUnitCost(event.target.value)}
+                />
+              </label>
+            )}
+            <label className="manager-field manager-full">
+              Hạn sử dụng
+              <input
+                type="date"
+                value={expiry}
+                onChange={(event) => setExpiry(event.target.value)}
+              />
+            </label>
+            <label className="manager-field manager-full">
+              Lý do / Ghi chú
+              <textarea
+                rows={3}
+                value={note}
+                required
+                onChange={(event) => setNote(event.target.value)}
+                placeholder="Nhập lý do giao dịch..."
+              />
+            </label>
+            {message && (
+              <p
+                className={'manager-notice manager-full manager-notice-' + messageTone}
+                role={messageTone === 'error' ? 'alert' : 'status'}
+              >
+                {message}
+              </p>
+            )}
+            <button type="submit" className="button manager-full" disabled={actions?.pending}>
+              {actions?.pending ? 'Đang ghi nhận...' : 'Ghi nhận giao dịch'}
+            </button>
+          </fieldset>
         </form>
       </SectionCard>
       <SectionCard title="Giao dịch gần đây">

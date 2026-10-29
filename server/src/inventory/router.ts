@@ -46,6 +46,15 @@ export function createInventoryRouter(
       next(error);
     }
   });
+  router.get('/branches/:branchId/recipe-catalog', async (_req, res, next) => {
+    try {
+      res.json(
+        await service.recipeCatalog(res.locals.inventoryPrincipal, res.locals.inventoryScope),
+      );
+    } catch (error) {
+      next(error);
+    }
+  });
   router.post('/branches/:branchId/ingredients', async (req, res, next) => {
     try {
       res
@@ -101,6 +110,18 @@ export function createInventoryRouter(
             req.body,
           ),
         );
+    } catch (error) {
+      next(error);
+    }
+  });
+  router.post('/branches/:branchId/recipes/create-with-menu', async (req, res, next) => {
+    try {
+      const result = await service.createMenuWithRecipe(
+        res.locals.inventoryPrincipal,
+        res.locals.inventoryScope,
+        req.body,
+      );
+      res.status(result.created ? 201 : 200).json(result);
     } catch (error) {
       next(error);
     }

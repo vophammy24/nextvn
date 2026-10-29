@@ -8,6 +8,7 @@ import { branchRepository } from './branchRepository.js';
 import { memberRepository } from './memberRepository.js';
 import { settingsRepository } from './settingsRepository.js';
 import { subscriptionRepository } from './subscriptionRepository.js';
+import { invitationService, invitationInput, InvitationError } from './invitationService.js';
 import { salesAnalytics, menuProfit } from './persistedAnalytics.js';
 const router = Router({ mergeParams: true });
 router.use(authenticate, resolveMembership, requireBusinessRole('OWNER'));
@@ -166,23 +167,36 @@ router.get('/members', async (req, res) =>
   ),
 );
 router.post('/members', async (req, res) => {
-  const input = z
-    .object({
-      fullName: z.string().trim().min(2).max(120),
-      email: z.string().email(),
-      role: z.enum(['STAFF', 'MANAGER']),
-      branchId: z.string().uuid(),
-    })
-    .strict()
-    .safeParse(req.body);
+  const input = invitationInput.safeParse(req.body);
   if (!input.success)
     return res.status(400).json({ message: 'Thông tin thành viên không hợp lệ.' });
   const branch = await branchRepository.find(business(req), input.data.branchId);
   if (!branch?.isActive) return res.status(400).json({ message: 'Chi nhánh không hợp lệ.' });
-  return res.status(503).json({
-    code: 'INVITATIONS_NOT_CONFIGURED',
-    message: 'Chưa cấu hình dịch vụ mời thành viên. Chưa tạo tài khoản hoặc gửi lời mời.',
+  return res.status(201).json({
+    data: await invitationService.invite({
+      ...input.data,
+      businessId: business(req),
+      invitedByUserId: principal(req).userId,
+    }),
   });
+});
+router.get('/invitations', async (req, res) => {
+  const query = z
+    .object({ page: z.coerce.number().int().min(1).max(100000).default(1) })
+    .strict()
+    .safeParse(req.query);
+  if (!query.success) return res.status(400).json({ message: 'Phân trang không hợp lệ.' });
+  return envelope(res, await invitationService.list(business(req), query.data.page));
+});
+router.post('/invitations/:id/:action', async (req, res) => {
+  const id = z.uuid().safeParse(req.params.id);
+  const action = z.enum(['resend', 'revoke']).safeParse(req.params.action);
+  if (!id.success || !action.success || !z.object({}).strict().safeParse(req.body).success)
+    return res.status(400).json({ message: 'Thao tác lời mời không hợp lệ.' });
+  return envelope(
+    res,
+    await invitationService.manage(business(req), principal(req).userId, id.data, action.data),
+  );
 });
 router.patch('/members/:id', async (req, res) => {
   const id = z.string().uuid().safeParse(req.params.id);
@@ -268,8 +282,10 @@ router.post('/subscription/checkout', (_req, res) =>
   }),
 );
 router.use((_error: unknown, _req: Request, res: Response, _next: NextFunction) =>
-  res
-    .status(503)
-    .json({ message: 'Không thể tải hoặc cập nhật dữ liệu doanh nghiệp. Vui lòng thử lại.' }),
+  _error instanceof InvitationError
+    ? res.status(_error.status).json({ code: _error.code, message: _error.message })
+    : res
+        .status(503)
+        .json({ message: 'Không thể tải hoặc cập nhật dữ liệu doanh nghiệp. Vui lòng thử lại.' }),
 );
 export default router;

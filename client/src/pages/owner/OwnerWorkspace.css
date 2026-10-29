@@ -60,7 +60,7 @@
   font-family: var(--font-sans);
   font-size: var(--font-size-3xl);
   font-weight: var(--weight-bold);
-  line-height: 1.2;
+  line-height: var(--line-height-heading);
   letter-spacing: 0;
 }
 .owner-app h2 {
@@ -1043,7 +1043,7 @@
     align-items: flex-start;
   }
   .owner-app .page-heading h1 {
-    font-size: 26px;
+    font-size: var(--font-size-2xl);
   }
   .owner-app .page-heading > .button {
     display: none;

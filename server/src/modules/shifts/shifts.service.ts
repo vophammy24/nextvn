@@ -1,4 +1,6 @@
 import { ShiftRepo, OrderRepo } from '../../lib/repositories.js';
+import { atomicSale, salesTransaction } from '../../lib/repositories.js';
+import { db } from '../../prisma/db.js';
 
 export async function getActiveShift(staffId: string, branchId: string) {
   const shifts: Array<{
@@ -36,21 +38,39 @@ export async function startShift(staffId: string, branchId: string) {
 }
 
 export async function endShift(shiftId: string, staffId: string) {
-  const shift: { id: string; status: string } | null = await ShiftRepo.findFirst({
-    where: { id: shiftId, staffId },
-  });
+  return atomicSale(async () => {
+    const shift: { id: string; status: string } | null = await ShiftRepo.findFirst({
+      where: { id: shiftId, staffId },
+    });
 
-  if (!shift) return null;
-  if (shift.status !== 'ACTIVE') {
-    throw new Error('Ca làm việc đã kết thúc.');
-  }
+    if (!shift) return null;
+    if (shift.status !== 'ACTIVE') {
+      throw new Error('Ca làm việc đã kết thúc.');
+    }
 
-  return ShiftRepo.update({
-    where: { id: shiftId },
-    data: {
-      status: 'CLOSED',
-      endedAt: new Date().toISOString(),
-    },
+    const scoped = await ShiftRepo.findFirst({ where: { id: shiftId, staffId } });
+    await salesTransaction
+      .getStore()!
+      .query(
+        db.raw.sql`SELECT id FROM public."Branch" WHERE id = ${scoped.branchId}::uuid FOR UPDATE`
+          .returnsRow({ id: 'pg/uuid@1' })
+          .build(),
+      );
+    const orders = await OrderRepo.findMany({ where: { shiftId, branchId: scoped.branchId } });
+    if (
+      orders.some(
+        (order: { status: string }) => order.status === 'OPEN' || order.status === 'CONFIRMED',
+      )
+    )
+      throw new Error('Ca còn đơn chưa thanh toán. Hãy xử lý trước khi kết thúc ca.');
+
+    return ShiftRepo.update({
+      where: { id: shiftId },
+      data: {
+        status: 'CLOSED',
+        endedAt: new Date().toISOString(),
+      },
+    });
   });
 }
 

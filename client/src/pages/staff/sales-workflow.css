@@ -1,0 +1,229 @@
+.sales-pos .pos-layout {
+  height: auto;
+  align-items: start;
+}
+
+.sales-tabbar,
+.sales-category-chips,
+.sales-choice,
+.sales-table-choices,
+.sales-area-chips {
+  display: flex;
+  gap: var(--space-2);
+  align-items: stretch;
+}
+
+.sales-tabbar,
+.sales-category-chips,
+.sales-area-chips {
+  overflow-x: auto;
+  max-width: 100%;
+  padding: var(--space-2) 0;
+  scrollbar-width: thin;
+}
+
+.sales-tabbar {
+  margin-bottom: var(--space-2);
+}
+.sales-tab-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.sales-tab-hint {
+  display: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.sales-tab {
+  display: flex;
+  flex: 0 0 auto;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  background: var(--bg-primary);
+}
+.sales-tab-select {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 116px;
+  min-height: var(--control-height);
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+.sales-tab-select span {
+  font-size: 0.8rem;
+}
+.sales-tab-select.is-active {
+  background: var(--primary-bg);
+  color: var(--primary-dark);
+  box-shadow: inset 0 -3px var(--primary);
+}
+.sales-tab-close {
+  min-width: 36px;
+  border: 0;
+  border-left: 1px solid var(--border-light);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.25rem;
+}
+.sales-tabbar > .ui-button {
+  flex: 0 0 auto;
+}
+.sales-tabbar button:focus-visible,
+.sales-choice button:focus-visible,
+.sales-category-chips button:focus-visible,
+.sales-area-chips button:focus-visible,
+.sales-table-choices button:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
+}
+.sales-pos [role='tabpanel'][hidden] {
+  display: none;
+}
+
+.sales-choice {
+  margin-top: var(--space-2);
+  flex-wrap: wrap;
+}
+.sales-choice button,
+.sales-category-chips button,
+.sales-area-chips button,
+.sales-table-choices button {
+  min-height: var(--control-height);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.sales-choice button[aria-pressed='true'],
+.sales-category-chips button[aria-pressed='true'],
+.sales-area-chips button[aria-pressed='true'],
+.sales-table-choices button[aria-pressed='true'] {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+.sales-category-chips button,
+.sales-area-chips button {
+  flex: 0 0 auto;
+}
+.sales-table-choices {
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+.sales-table-choices button {
+  min-width: 84px;
+}
+.sales-pos .sales-cart-jump {
+  display: none;
+}
+.sales-pos .empty-state {
+  padding: var(--space-5) var(--space-3);
+}
+
+.sales-pos .pos-menu {
+  overflow: visible;
+}
+
+.sales-pos .pos-menu .card-header .ui-input {
+  width: 100%;
+}
+
+.sales-pos .pos-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-4);
+}
+
+.sales-pos .pos-layout > .card > .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sales-pos .pos-layout > .card > .card-body label {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.sales-orders-mobile {
+  display: none;
+}
+
+.sales-advanced-filters {
+  padding: 0 var(--space-5) var(--space-3);
+}
+.sales-advanced-filters summary {
+  cursor: pointer;
+  color: var(--primary);
+  font-weight: 600;
+}
+.sales-advanced-filters .filters-bar {
+  margin-top: var(--space-3);
+}
+.sales-advanced-filters label {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.sales-settings .card-body {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.sales-settings .card-body label {
+  display: grid;
+  gap: var(--space-2);
+}
+
+@media (max-width: 480px) {
+  .sales-tab-hint {
+    display: inline;
+  }
+  .sales-tab-actions {
+    flex-wrap: wrap;
+  }
+  .sales-pos .sales-cart-jump {
+    display: flex;
+    width: 100%;
+    margin-bottom: var(--space-3);
+  }
+  .sales-tabbar {
+    margin-inline: calc(-1 * var(--space-4));
+    padding-inline: var(--space-4);
+  }
+  .sales-pos .pos-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sales-pos .pos-layout > .card {
+    scroll-margin-top: var(--space-4);
+  }
+  .sales-orders-table {
+    display: none;
+  }
+
+  .sales-orders-mobile {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .sales-orders-mobile .card-body {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .sales-pos .pos-products {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+}

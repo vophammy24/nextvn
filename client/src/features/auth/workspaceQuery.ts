@@ -8,6 +8,7 @@ const schema = z.object({
   branch: z.object({ id: z.string(), name: z.string() }).optional(),
   role: z.enum(['STAFF', 'MANAGER', 'OWNER']),
 });
+export class WorkspaceAccessRestricted extends Error {}
 export function useWorkspaceQuery() {
   return useQuery({
     queryKey: ['workspace'],
@@ -18,6 +19,13 @@ export function useWorkspaceQuery() {
         const value = schema.parse(response.data);
         return value;
       } catch (error) {
+        if (
+          isAxiosError(error) &&
+          ['ONBOARDING_REQUIRED', 'BUSINESS_ACCESS_RESTRICTED'].includes(error.response?.data?.code)
+        )
+          throw new WorkspaceAccessRestricted(
+            'Doanh nghiệp chưa được phê duyệt hoặc đã tạm ngưng.',
+          );
         if (
           isAxiosError(error) &&
           error.response?.status === 409 &&

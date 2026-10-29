@@ -57,8 +57,13 @@ describe('authenticated application shell', () => {
 
   it('shows only implemented destinations for each role', () => {
     expect(getShellSections('STAFF').flatMap((section) => section.items)).toHaveLength(4);
-    expect(getShellSections('MANAGER').flatMap((section) => section.items)).toHaveLength(8);
-    expect(getShellSections('OWNER').flatMap((section) => section.items)).toHaveLength(9);
+    expect(getShellSections('MANAGER').flatMap((section) => section.items)).toHaveLength(9);
+    expect(getShellSections('OWNER').flatMap((section) => section.items)).toHaveLength(10);
+    expect(
+      getShellSections('STAFF')
+        .flatMap((section) => section.items)
+        .map((item) => item.path),
+    ).not.toContain('/app/sales-settings');
     for (const role of ['STAFF', 'MANAGER', 'OWNER'] as const) {
       expect(
         getShellSections(role)

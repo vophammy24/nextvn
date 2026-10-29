@@ -23,6 +23,7 @@ import { useWorkspace } from '@/features/auth/workspaceContext';
 import { formatCurrency, formatNumber, formatDate } from '@/lib/format';
 import { api } from '@/services/api';
 import './OwnerWorkspace.css';
+import { OwnerInvitations } from '@/features/invitations/OwnerInvitations';
 
 type PageKey =
   | 'overview'
@@ -212,29 +213,47 @@ export default function OwnerWorkspace() {
       path: string;
       method: 'post' | 'patch';
       body: unknown;
-    }) => api[method](base + '/' + path, body),
-    onSuccess: async () => {
-      setNotice('Đã cập nhật dữ liệu.');
+    }) =>
+      path === 'members'
+        ? api[method](base + '/' + path, body, { timeout: 45000 })
+        : api[method](base + '/' + path, body),
+    onSuccess: async (_response, variables) => {
+      setNotice(
+        variables.path === 'members'
+          ? 'Đã gửi lời mời tới máy chủ thư, đang chờ người nhận chấp nhận. Chưa tạo thành viên hoạt động.'
+          : 'Đã cập nhật dữ liệu.',
+      );
       await query.refetch();
       if (page === 'settings') await queryClient.invalidateQueries({ queryKey: ['workspace'] });
     },
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['owner-invitations', context.business.id] }),
   });
   async function submit(path: string, method: 'post' | 'patch', body: unknown) {
     setNotice('');
     try {
       await mutation.mutateAsync({ path, method, body });
+      return true;
     } catch {
       /* Error displayed below. */
+      return false;
     }
   }
-  const caught = mutation.error ?? query.error;
+  const caught = query.error;
   const error = caught
     ? axios.isAxiosError(caught)
       ? (caught.response?.data?.message ?? 'Không thể tải hoặc lưu dữ liệu doanh nghiệp.')
       : caught.message
     : '';
-  const loading = query.isPending || mutation.isPending;
+  const mutationError = mutation.error
+    ? axios.isAxiosError(mutation.error)
+      ? (mutation.error.response?.data?.message ?? 'Không thể thực hiện thao tác.')
+      : mutation.error.message
+    : '';
+  const loading = query.isPending;
   const data = query.data;
+  const canShowData =
+    !axios.isAxiosError(query.error) || ![401, 403].includes(query.error.response?.status ?? 0);
   const loadPage = async () => {
     mutation.reset();
     await query.refetch();
@@ -263,11 +282,19 @@ export default function OwnerWorkspace() {
           )}
           {error && (
             <div className="error-panel" role="alert">
-              <strong>Chưa thể hiển thị dữ liệu</strong>
+              <strong>
+                {query.data ? 'Chưa thể làm mới dữ liệu' : 'Chưa thể hiển thị dữ liệu'}
+              </strong>
               <span>{error}</span>
               <button className="button button-light" onClick={() => void loadPage()}>
                 Thử lại
               </button>
+            </div>
+          )}
+          {mutationError && page !== 'users' && (
+            <div className="error-panel" role="alert">
+              <strong>Không thể thực hiện thao tác</strong>
+              <span>{mutationError}</span>
             </div>
           )}
           {loading ? (
@@ -278,7 +305,7 @@ export default function OwnerWorkspace() {
           ) : (
             data !== null &&
             data !== undefined &&
-            !error && (
+            canShowData && (
               <PageView
                 page={page}
                 data={data}
@@ -291,6 +318,9 @@ export default function OwnerWorkspace() {
                 settingsForm={settingsForm ?? (page === 'settings' ? (data as SettingsData) : null)}
                 setSettingsForm={setSettingsForm}
                 submit={submit}
+                pending={mutation.isPending}
+                actionError={mutationError}
+                businessId={context.business.id}
               />
             )
           )}
@@ -316,7 +346,10 @@ function PageView(props: {
   }) => void;
   settingsForm: SettingsData | null;
   setSettingsForm: (form: SettingsData) => void;
-  submit: (path: string, method: 'post' | 'patch', body: unknown) => Promise<void>;
+  submit: (path: string, method: 'post' | 'patch', body: unknown) => Promise<boolean>;
+  pending: boolean;
+  actionError: string;
+  businessId: string;
 }) {
   const [branchFormOpen, setBranchFormOpen] = useState(false);
   const [memberFormOpen, setMemberFormOpen] = useState(false);
@@ -720,6 +753,7 @@ function PageView(props: {
             type="button"
             aria-expanded={memberFormOpen}
             aria-controls="member-form"
+            disabled={props.pending}
             onClick={() => {
               setMemberFormOpen(!memberFormOpen);
             }}
@@ -727,16 +761,23 @@ function PageView(props: {
             <Plus size={16} /> Mời thành viên
           </button>
         </div>
+        {props.actionError && (
+          <div className="error-panel" role="alert">
+            <strong>Không thể thực hiện thao tác thành viên</strong>
+            <span>{props.actionError}</span>
+          </div>
+        )}
         <form
           id="member-form"
           className={'inline-form' + (memberFormOpen ? '' : ' hidden')}
-          onSubmit={(event) => {
+          onSubmit={async (event) => {
             event.preventDefault();
-            void submit('members', 'post', {
+            if (props.pending) return;
+            const success = await submit('members', 'post', {
               ...memberForm,
               branchId: memberForm.branchId || null,
             });
-            setMemberForm({ fullName: '', email: '', role: 'STAFF', branchId: '' });
+            if (success) setMemberForm({ fullName: '', email: '', role: 'STAFF', branchId: '' });
           }}
         >
           <label>
@@ -744,6 +785,9 @@ function PageView(props: {
             <input
               ref={memberFirstField}
               required
+              minLength={2}
+              maxLength={120}
+              disabled={props.pending}
               placeholder="Họ tên"
               value={memberForm.fullName}
               onChange={(event) => setMemberForm({ ...memberForm, fullName: event.target.value })}
@@ -756,6 +800,8 @@ function PageView(props: {
               type="email"
               placeholder="Email"
               value={memberForm.email}
+              maxLength={254}
+              disabled={props.pending}
               onChange={(event) => setMemberForm({ ...memberForm, email: event.target.value })}
             />
           </label>
@@ -763,6 +809,7 @@ function PageView(props: {
             Vai trò của thành viên mới
             <select
               value={memberForm.role}
+              disabled={props.pending}
               onChange={(event) => setMemberForm({ ...memberForm, role: event.target.value })}
             >
               <option value="STAFF">Nhân viên</option>
@@ -772,20 +819,27 @@ function PageView(props: {
           <label>
             Chi nhánh của thành viên mới
             <select
+              required
               value={memberForm.branchId}
+              disabled={props.pending}
               onChange={(event) => setMemberForm({ ...memberForm, branchId: event.target.value })}
             >
               <option value="" disabled>
                 Chọn chi nhánh
               </option>
               {branches.map((branch) => (
-                <option key={branch.id} value={branch.id}>
+                <option key={branch.id} value={branch.id} disabled={!branch.isActive}>
                   {branch.name}
                 </option>
               ))}
             </select>
           </label>
-          <button className="button button-primary" type="submit">
+          <button
+            className="button button-primary"
+            type="submit"
+            disabled={props.pending}
+            aria-busy={props.pending}
+          >
             Gửi lời mời
           </button>
         </form>
@@ -820,6 +874,7 @@ function PageView(props: {
                     ) : (
                       <select
                         aria-label={`Vai trò của ${member.fullName}`}
+                        disabled={props.pending || member.canManageAccess === false}
                         value={member.role}
                         onChange={(event) =>
                           void submit(`members/${member.id}`, 'patch', { role: event.target.value })
@@ -836,6 +891,7 @@ function PageView(props: {
                     ) : (
                       <select
                         aria-label={`Chi nhánh của ${member.fullName}`}
+                        disabled={props.pending || member.canManageAccess === false}
                         value={member.branchId ?? ''}
                         onChange={(event) =>
                           void submit(`members/${member.id}`, 'patch', {
@@ -877,6 +933,7 @@ function PageView(props: {
         </div>
         {!members.length && <EmptyState title="Chưa có thành viên" />}
         <p className="footnote">Quyền Chủ doanh nghiệp không thể được cấp từ màn hình này.</p>
+        <OwnerInvitations businessId={props.businessId} branches={branches} />
       </section>
     );
   }

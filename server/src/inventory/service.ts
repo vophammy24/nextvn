@@ -2,6 +2,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import {
   authorize,
   baseUnit,
+  createMenuRecipeInput,
   fail,
   ingredientInput,
   parse,
@@ -182,10 +183,17 @@ export class InventoryService {
       return this.present(state);
     });
   }
+  async recipeCatalog(principal: Principal, scope: Scope) {
+    authorize(principal, scope);
+    if (!this.store.recipeCatalog)
+      fail('CATALOG_UNAVAILABLE', 'Danh mục món hiện chưa khả dụng.', 503);
+    return this.store.recipeCatalog!(scope);
+  }
   private present(state: InventoryState) {
     const now = this.clock();
     return {
       asOf: now.toISOString(),
+      menuItems: state.menuItems,
       ingredients: state.ingredients.map((item) => {
         const near =
           state.lots
@@ -208,14 +216,22 @@ export class InventoryService {
                 : 'IN_STOCK',
         };
       }),
-      recipes: state.recipes.map((recipe) => ({
-        ...recipe,
-        ...foodCost(recipe, state),
-        modifiers: recipe.modifiers.map((modifier) => ({
-          ...modifier,
-          ...foodCost(recipe, state, [modifier.key]),
-        })),
-      })),
+      recipes: state.recipes.map((recipe) => {
+        const menu = state.menuItems.find((item) => item.id === recipe.menuItemId);
+        const current = {
+          ...recipe,
+          name: menu?.name ?? recipe.name,
+          sellingPrice: menu?.price ?? recipe.sellingPrice,
+        };
+        return {
+          ...current,
+          ...foodCost(current, state),
+          modifiers: recipe.modifiers.map((modifier) => ({
+            ...modifier,
+            ...foodCost(current, state, [modifier.key]),
+          })),
+        };
+      }),
       transactions: [...state.transactions]
         .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
         .slice(0, 100),
@@ -227,6 +243,15 @@ export class InventoryService {
     const value = parse(ingredientInput, input);
     return this.store.transaction(scope, (state) => {
       const existing = id ? findIngredient(state, id) : undefined;
+      const normalizedName = value.name.normalize('NFC').toLocaleLowerCase('vi-VN');
+      if (
+        state.ingredients.some(
+          (item) =>
+            item.id !== id &&
+            item.name.trim().normalize('NFC').toLocaleLowerCase('vi-VN') === normalizedName,
+        )
+      )
+        fail('INGREDIENT_EXISTS', 'Tên nguyên liệu đã tồn tại trong chi nhánh.', 409);
       const base = baseUnit(value.unit);
       if (existing && existing.unit !== base)
         fail('UNIT_IMMUTABLE', 'Không thể đổi loại đơn vị của nguyên liệu đã tạo.');
@@ -338,28 +363,152 @@ export class InventoryService {
         ? (state.recipes.find((r) => r.id === id) ??
           fail('NOT_FOUND', 'Không tìm thấy công thức.', 404))
         : undefined;
+      if (existing && existing.menuItemId !== value.menuItemId)
+        fail('MENU_ITEM_IMMUTABLE', 'Không thể chuyển công thức sang món khác.', 409);
       if (state.recipes.some((r) => r.menuItemId === value.menuItemId && r.id !== id))
         fail('RECIPE_EXISTS', 'Món đã có công thức tại chi nhánh.', 409);
-      const convert = (parts: { ingredientId: string; quantity: number; unit: Unit }[]): Part[] => {
-        if (new Set(parts.map((p) => p.ingredientId)).size !== parts.length)
-          fail('PART_DUPLICATE', 'Nguyên liệu không được lặp trong cùng định lượng.');
-        return parts.map((p) => ({
-          ingredientId: p.ingredientId,
-          quantityMilli: toMilli(p.quantity, p.unit, findIngredient(state, p.ingredientId).unit),
-        }));
-      };
-      if (new Set(value.modifiers.map((m) => m.key)).size !== value.modifiers.length)
-        fail('MODIFIER_DUPLICATE', 'Mã tùy chọn không được trùng.');
+      const menu = state.menuItems.find((item) => item.id === value.menuItemId);
+      if (!menu || (!menu.isActive && existing?.menuItemId !== menu.id))
+        fail(
+          'MENU_ITEM_NOT_FOUND',
+          'Món không tồn tại hoặc không được phép chọn trong chi nhánh.',
+          404,
+        );
+      const parts = this.normalizeRecipeParts(state, value);
       const recipe: Recipe = {
-        ...value,
+        menuItemId: menu!.id,
+        name: menu!.name,
+        sellingPrice: menu!.price,
         id: existing?.id ?? randomUUID(),
         version: (existing?.version ?? 0) + 1,
-        ingredients: convert(value.ingredients),
-        modifiers: value.modifiers.map((m) => ({ ...m, ingredients: convert(m.ingredients) })),
+        ...parts,
       };
       if (existing) state.recipes[state.recipes.indexOf(existing)] = recipe;
       else state.recipes.push(recipe);
-      return { ...recipe, ...foodCost(recipe, state) };
+      return { ...recipe, ...foodCost(recipe, state), posEligible: menu!.isActive };
+    });
+  }
+  private normalizeRecipeParts(
+    state: InventoryState,
+    value: {
+      ingredients: { ingredientId: string; quantity: number; unit: Unit }[];
+      modifiers: {
+        key: string;
+        name: string;
+        priceExtra: number;
+        ingredients: { ingredientId: string; quantity: number; unit: Unit }[];
+      }[];
+    },
+  ) {
+    const convert = (parts: { ingredientId: string; quantity: number; unit: Unit }[]): Part[] => {
+      if (new Set(parts.map((p) => p.ingredientId)).size !== parts.length)
+        fail('PART_DUPLICATE', 'Nguyên liệu không được lặp trong cùng định lượng.');
+      return parts.map((part) => ({
+        ingredientId: part.ingredientId,
+        quantityMilli: toMilli(
+          part.quantity,
+          part.unit,
+          findIngredient(state, part.ingredientId).unit,
+        ),
+      }));
+    };
+    if (new Set(value.modifiers.map((modifier) => modifier.key)).size !== value.modifiers.length)
+      fail('MODIFIER_DUPLICATE', 'Mã tùy chọn không được trùng.');
+    return {
+      ingredients: convert(value.ingredients),
+      modifiers: value.modifiers.map((modifier) => ({
+        key: modifier.key,
+        name: modifier.name,
+        priceExtra: modifier.priceExtra,
+        ingredients: convert(modifier.ingredients),
+      })),
+    };
+  }
+  async createMenuWithRecipe(principal: Principal, scope: Scope, input: unknown) {
+    authorize(principal, scope);
+    const value = parse(createMenuRecipeInput, input);
+    return this.store.transaction(scope, (state) => {
+      const parts = this.normalizeRecipeParts(state, value);
+      const previousMenu = state.menuItems.find((item) => item.id === value.requestKey);
+      const previousRecipe = state.recipes.find((item) => item.id === value.requestKey);
+      if (previousMenu || previousRecipe) {
+        const category = (state.menuCategories ?? []).find(
+          (item) => item.id === previousMenu?.categoryId,
+        );
+        if (
+          !previousMenu ||
+          !previousRecipe ||
+          previousRecipe.menuItemId !== previousMenu.id ||
+          previousMenu.name !== value.menu.name ||
+          previousMenu.price !== value.menu.price ||
+          (previousMenu.description ?? '') !== value.menu.description ||
+          previousMenu.isActive !== value.menu.isActive ||
+          (value.menu.categoryId
+            ? previousMenu.categoryId !== value.menu.categoryId
+            : category?.name !== value.menu.categoryName) ||
+          digest({
+            ingredients: previousRecipe.ingredients,
+            modifiers: previousRecipe.modifiers,
+          }) !== digest(parts)
+        )
+          fail('IDEMPOTENCY_CONFLICT', 'Mã yêu cầu đã được dùng với nội dung khác.', 409);
+        return {
+          ...previousRecipe!,
+          ...foodCost(previousRecipe!, state),
+          posEligible: previousMenu!.isActive,
+          created: false,
+        };
+      }
+      const categories = state.menuCategories ?? (state.menuCategories = []);
+      let category = value.menu.categoryId
+        ? categories.find((item) => item.id === value.menu.categoryId && item.isActive)
+        : undefined;
+      if (value.menu.categoryId && !category)
+        fail('CATEGORY_NOT_FOUND', 'Danh mục không thuộc chi nhánh hoặc đã ngừng sử dụng.', 404);
+      if (value.menu.categoryName) {
+        if (
+          categories.some(
+            (item) =>
+              item.name.trim().normalize('NFC').toLocaleLowerCase('vi-VN') ===
+              value.menu.categoryName!.normalize('NFC').toLocaleLowerCase('vi-VN'),
+          )
+        )
+          fail('CATEGORY_EXISTS', 'Danh mục đã tồn tại trong chi nhánh.', 409);
+        category = {
+          id: randomUUID(),
+          name: value.menu.categoryName,
+          isActive: true,
+          displayOrder: categories.length,
+        };
+        categories.push(category);
+      }
+      if (
+        state.menuItems.some(
+          (item) =>
+            item.name.trim().normalize('NFC').toLocaleLowerCase('vi-VN') ===
+            value.menu.name.normalize('NFC').toLocaleLowerCase('vi-VN'),
+        )
+      )
+        fail('MENU_ITEM_EXISTS', 'Tên món đã tồn tại trong chi nhánh.', 409);
+      const menu = {
+        id: value.requestKey,
+        name: value.menu.name,
+        price: value.menu.price,
+        isActive: value.menu.isActive,
+        categoryId: category!.id,
+        description: value.menu.description,
+      };
+      const recipe: Recipe = {
+        id: value.requestKey,
+        menuItemId: menu.id,
+        name: menu.name,
+        sellingPrice: menu.price,
+        version: 1,
+        ...parts,
+      };
+      state.menuItems.push(menu);
+      state.recipes.push(recipe);
+      return { ...recipe, ...foodCost(recipe, state), posEligible: menu.isActive, created: true };
     });
   }
   // Internal Sales boundary only: caller must verify order state/lines from its DB.

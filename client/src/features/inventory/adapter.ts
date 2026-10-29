@@ -1,6 +1,6 @@
 import type { InventorySnapshot } from './api';
 import type { ManagerData } from '@/features/manager/types';
-import { alertLabels } from '@/features/manager/model';
+import { alertLabels, isExpired } from '@/features/manager/model';
 export function adaptInventory(
   snapshot: InventorySnapshot,
   businessId: string,
@@ -54,7 +54,7 @@ export function adaptInventory(
     alerts: snapshot.alerts.map((a) => ({
       ...a,
       category: a.type,
-      title: `${alertLabels[a.type]} · ${snapshot.ingredients.find((i) => i.id === a.ingredientId)?.name ?? 'Nguyên liệu'}`,
+      title: `${a.type === 'NEAR_EXPIRY' && isExpired({ expiry: snapshot.ingredients.find((i) => i.id === a.ingredientId)?.expiry ?? null }, snapshot.asOf) ? 'Đã hết hạn' : alertLabels[a.type]} · ${snapshot.ingredients.find((i) => i.id === a.ingredientId)?.name ?? 'Nguyên liệu'}`,
       detail:
         a.type === 'NEAR_EXPIRY'
           ? 'Có lô còn tồn đã hết hạn hoặc sẽ hết hạn trong 3 ngày. Kiểm tra hạn sử dụng trước khi dùng.'

@@ -14,6 +14,7 @@ export interface RecipeDraft {
   }[];
 }
 export interface InventorySnapshot {
+  menuItems?: { id: string; name: string; price: number; isActive: boolean }[];
   asOf: string;
   ingredients: {
     id: string;
@@ -57,6 +58,13 @@ export interface InventorySnapshot {
     updatedAt: string;
   }[];
 }
+export class InventoryRequestError extends Error {
+  readonly status?: number;
+  constructor(message: string, status?: number) {
+    super(message);
+    this.status = status;
+  }
+}
 export async function inventoryRequest<T>(
   businessId: string,
   branchId: string,
@@ -76,9 +84,10 @@ export async function inventoryRequest<T>(
     ).data;
   } catch (error) {
     if (isAxiosError(error)) {
-      if (error.response?.status === 401) throw new Error('Vui lòng đăng nhập để tiếp tục.');
+      if (error.response?.status === 401)
+        throw new InventoryRequestError('Vui lòng đăng nhập để tiếp tục.', 401);
       if (error.response?.status === 403)
-        throw new Error('Bạn không có quyền quản lý kho tại chi nhánh này.');
+        throw new InventoryRequestError('Bạn không có quyền quản lý kho tại chi nhánh này.', 403);
       if (
         [400, 404, 409, 422].includes(error.response?.status ?? 0) &&
         typeof error.response?.data?.message === 'string'

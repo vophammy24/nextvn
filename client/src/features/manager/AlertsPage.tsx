@@ -121,7 +121,9 @@ export function Alerts({ data }: { data: ManagerData }) {
               {detail === alert.id && (
                 <div id={`detail-${alert.id}`} className="manager-alert-detail">
                   <p>{alert.detail}</p>
-                  <Link to="/app/inventory">Kiểm tra kho hàng</Link>
+                  <Link to={`/app/inventory?ingredient=${encodeURIComponent(alert.ingredientId)}`}>
+                    Kiểm tra kho hàng
+                  </Link>
                 </div>
               )}
             </div>

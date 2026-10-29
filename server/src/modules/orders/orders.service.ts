@@ -6,20 +6,22 @@ import { db } from '../../prisma/db.js';
 import { InventoryService } from '../../inventory/service.js';
 import { PrismaInventoryStore } from '../../inventory/prisma-store.js';
 
-export async function notifyInventoryConsumption(orderId: string): Promise<void> {
+export class OrderError extends Error {}
+
+export async function notifyInventoryConsumption(orderId: string, actorId?: string): Promise<void> {
   const database = salesDatabase();
   const order = await database.orm.public.Order.where({ id: orderId }).include('items').first();
   if (!order || !['PAID', 'CONFIRMED'].includes(order.status))
-    throw new Error('Đơn hàng chưa sẵn sàng thanh toán.');
+    throw new OrderError('Đơn hàng chưa sẵn sàng thanh toán.');
   const branch = await database.orm.public.Branch.where({ id: order.branchId }).first();
-  if (!branch) throw new Error('Chi nhánh không tồn tại.');
+  if (!branch) throw new OrderError('Chi nhánh không tồn tại.');
   const member = await database.orm.public.BusinessMember.where({
     businessId: branch.businessId,
-    userId: order.cashierId,
+    userId: actorId ?? order.cashierId,
     isActive: true,
   }).first();
   if (!member || member.branchId !== branch.id || member.role === 'OWNER')
-    throw new Error('Thu ngân không thuộc chi nhánh.');
+    throw new OrderError('Thu ngân không thuộc chi nhánh.');
   // Reuse the caller's transaction; inventory acquires its usual branch lock.
   const storeDatabase = {
     raw: db.raw,
@@ -27,7 +29,7 @@ export async function notifyInventoryConsumption(orderId: string): Promise<void>
   } as typeof db;
   await new InventoryService(new PrismaInventoryStore(storeDatabase)).consumeSale(
     {
-      userId: order.cashierId,
+      userId: actorId ?? order.cashierId,
       businessId: branch.businessId,
       role: member.role,
       branchIds: [branch.id],
@@ -39,7 +41,7 @@ export async function notifyInventoryConsumption(orderId: string): Promise<void>
       items: order.items.map((i) => ({
         menuItemId: i.menuItemId,
         quantity: i.quantity,
-        modifiers: [],
+        modifiers: Array.isArray(i.modifierKeys) ? (i.modifierKeys as string[]) : [],
       })),
     },
   );
@@ -81,7 +83,7 @@ async function createOrderInTransaction(input: CreateOrderInput) {
   // 2. Validate all items exist
   for (const item of input.items) {
     if (!menuItemMap.has(item.menuItemId)) {
-      throw new Error(`Món với mã ${item.menuItemId} không tồn tại hoặc đã ngừng bán.`);
+      throw new OrderError(`Món với mã ${item.menuItemId} không tồn tại hoặc đã ngừng bán.`);
     }
   }
 
@@ -91,7 +93,7 @@ async function createOrderInTransaction(input: CreateOrderInput) {
     const table = await RestaurantTableRepo.findFirst({
       where: { id: input.tableId, branchId: input.branchId },
     });
-    if (!table) throw new Error('Bàn không hợp lệ hoặc không thuộc chi nhánh này.');
+    if (!table) throw new OrderError('Bàn không hợp lệ hoặc không thuộc chi nhánh này.');
   }
 
   // 2.2 Validate shift belongs to branch
@@ -105,7 +107,7 @@ async function createOrderInTransaction(input: CreateOrderInput) {
         status: 'ACTIVE',
       },
     });
-    if (!shift) throw new Error('Ca làm việc không hợp lệ hoặc không thuộc chi nhánh này.');
+    if (!shift) throw new OrderError('Ca làm việc không hợp lệ hoặc không thuộc chi nhánh này.');
   }
 
   // 3. Calculate authoritative totals from stored menu prices
@@ -273,13 +275,13 @@ async function updateOrderStatusInTransaction(
   };
 
   if (!validTransitions[order.status]?.includes(status)) {
-    throw new Error(`Không thể chuyển trạng thái đơn từ ${order.status} sang ${status}.`);
+    throw new OrderError(`Không thể chuyển trạng thái đơn từ ${order.status} sang ${status}.`);
   }
 
   // Idempotency: if transitioning to PAID, ensure payment record exists
   if (status === 'PAID') {
     if (!paymentMethod) {
-      throw new Error('paymentMethod is required to mark order as PAID');
+      throw new OrderError('paymentMethod is required to mark order as PAID');
     }
     const hasPayment = order.payments && order.payments.length > 0;
     if (!hasPayment) {
@@ -290,9 +292,10 @@ async function updateOrderStatusInTransaction(
           amount: order.total,
         },
       });
-      // Trigger integration boundary
-      await notifyInventoryConsumption(order.id);
     }
+    // Existing payment does not prove inventory was consumed. The inventory ledger
+    // uses sale:orderId to replay safely inside this same order transaction.
+    await notifyInventoryConsumption(order.id);
   }
 
   return OrderRepo.update({

@@ -6,6 +6,8 @@ import {
   ChartNoAxesCombined,
   Clock3,
   ClipboardList,
+  ClipboardCheck,
+  ScrollText,
   CreditCard,
   LayoutDashboard,
   LayoutGrid,
@@ -54,6 +56,7 @@ const owner: ShellSection[] = [
     items: [
       { path: '/app/owner', label: 'Tổng quan', icon: LayoutDashboard, end: true },
       { path: '/app/owner/branches', label: 'Chi nhánh', icon: Store },
+      { path: '/app/sales-settings', label: 'Cấu hình bán hàng', icon: Settings },
       { path: '/app/owner/revenue', label: 'Doanh thu', icon: ChartNoAxesCombined },
       { path: '/app/owner/menu-profit', label: 'Lợi nhuận món', icon: Utensils },
       { path: '/app/owner/inventory', label: 'Tổng quan kho doanh nghiệp', icon: Warehouse },
@@ -71,17 +74,42 @@ const owner: ShellSection[] = [
 ];
 
 // Only mounted routes appear here. Legacy metadata contains unimplemented pages.
-export function getShellSections(role?: BusinessRole): readonly ShellSection[] {
+export function getShellSections(role?: BusinessRole | 'SYSTEM_ADMIN'): readonly ShellSection[] {
+  if (role === 'SYSTEM_ADMIN')
+    return [
+      {
+        title: 'Quản trị nền tảng',
+        items: [
+          { path: '/app/admin', label: 'Tổng quan', icon: LayoutDashboard, end: true },
+          { path: '/app/admin/approvals', label: 'Phê duyệt doanh nghiệp', icon: ClipboardCheck },
+          { path: '/app/admin/businesses', label: 'Doanh nghiệp', icon: Store },
+          { path: '/app/admin/owners', label: 'Chủ doanh nghiệp', icon: Users },
+          { path: '/app/admin/subscriptions', label: 'Gói dịch vụ', icon: CreditCard },
+          { path: '/app/admin/audit-logs', label: 'Nhật ký quản trị', icon: ScrollText },
+        ],
+      },
+    ];
   if (role === 'OWNER') return owner;
-  if (role === 'MANAGER') return [sales, inventory];
+  if (role === 'MANAGER')
+    return [
+      {
+        ...sales,
+        items: [
+          ...sales.items,
+          { path: '/app/sales-settings', label: 'Cấu hình bán hàng', icon: Settings },
+        ],
+      },
+      inventory,
+    ];
   return [sales];
 }
-export function getShellDestination(pathname: string, role?: BusinessRole) {
+export function getShellDestination(pathname: string, role?: BusinessRole | 'SYSTEM_ADMIN') {
   return getShellSections(role)
     .flatMap((section) => section.items)
     .find((item) => item.path === pathname);
 }
-export const roleLabels: Record<BusinessRole, string> = {
+export const roleLabels: Record<BusinessRole | 'SYSTEM_ADMIN', string> = {
+  SYSTEM_ADMIN: 'Quản trị viên hệ thống',
   STAFF: 'Nhân viên',
   MANAGER: 'Quản lý',
   OWNER: 'Chủ doanh nghiệp',

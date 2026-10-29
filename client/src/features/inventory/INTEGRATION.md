@@ -1,5 +1,7 @@
 # Tích hợp Inventory vào nhánh Sales
 
+> Cập nhật 28/10/2026: xem [Manager integration report](../../../../docs/manager/manager-integration-report.md) cho wiring/auth/HTTP/PostgreSQL thực tế và [release readiness](../../../../docs/manager/manager-release-readiness.md). Các phần ghi Member 1/integration chưa nối bên dưới là mốc lịch sử, không phải trạng thái hiện tại.
+
 ## Nguồn khôi phục
 
 Chỉ khôi phục từng tệp còn thiếu từ `ae27cda`, không lấy nguyên thư mục:

@@ -34,8 +34,9 @@ export default function RegisterPage() {
     <AuthCard title="Đăng ký">
       {done ? (
         <div className="auth-success" role="status">
-          Tạo tài khoản thành công. Quản trị viên cần thêm bạn vào doanh nghiệp trước khi bạn có thể
-          vào không gian làm việc.
+          {sessionStorage.getItem('nextvn_pending_invitation')
+            ? 'Tạo tài khoản thành công. Đăng nhập bằng tài khoản vừa tạo để chấp nhận lời mời doanh nghiệp.'
+            : 'Tạo tài khoản thành công. Đăng nhập để gửi hồ sơ doanh nghiệp xét duyệt hoặc sử dụng doanh nghiệp đã được phân công.'}
         </div>
       ) : (
         <form className="auth-form" onSubmit={(e) => void submit(e)} aria-busy={pending}>

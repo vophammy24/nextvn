@@ -23,14 +23,28 @@ export default function LoginPage() {
     setPending(true);
     setError('');
     try {
-      const { data } = await api.post<{ accessToken: string }>('/auth/login', {
-        username,
-        password,
-      });
+      const { data } = await api.post<{ accessToken: string; user?: { platformRole: string } }>(
+        '/auth/login',
+        {
+          username,
+          password,
+        },
+      );
       await client.cancelQueries();
       client.clear();
       useCartStore.getState().clearCart();
       localStorage.setItem('access_token', data.accessToken);
+      if (
+        sessionStorage.getItem('nextvn_pending_invitation') &&
+        data.user?.platformRole !== 'ADMIN'
+      ) {
+        navigate('/invitations/accept', { replace: true });
+        return;
+      }
+      if (data.user?.platformRole === 'ADMIN') {
+        navigate('/app/admin', { replace: true });
+        return;
+      }
       const workspace = await api.get<WorkspaceContext>('/workspace');
       client.setQueryData(['workspace'], workspace.data);
       navigate(
@@ -42,6 +56,13 @@ export default function LoginPage() {
         { replace: true },
       );
     } catch (e) {
+      if (
+        isAxiosError(e) &&
+        ['ONBOARDING_REQUIRED', 'BUSINESS_ACCESS_RESTRICTED'].includes(e.response?.data?.code)
+      ) {
+        navigate('/onboarding', { replace: true });
+        return;
+      }
       localStorage.removeItem('access_token');
       client.clear();
       setError(
@@ -72,6 +93,7 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && <ErrorState message={error} />}
+        <Link to="/forgot-password">Quên mật khẩu?</Link>
         <Button type="submit" loading={pending}>
           {pending ? 'Đang đăng nhập…' : 'Đăng nhập'}
         </Button>

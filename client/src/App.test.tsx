@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -24,6 +24,29 @@ function renderApp(initialRoute = '/app/pos') {
 }
 
 describe('App', () => {
+  it('returns an expired Admin session to login instead of leaving protected data onscreen', async () => {
+    vi.spyOn(api, 'get').mockImplementation(async (url) =>
+      url === '/admin/session'
+        ? { data: { user: { id: 'admin', fullName: 'Admin' }, role: 'SYSTEM_ADMIN' } }
+        : {
+            data: {
+              businesses: 1,
+              pending: 0,
+              approved: 1,
+              suspended: 0,
+              owners: 1,
+              activeSubscriptions: 0,
+              expiringSubscriptions: 0,
+            },
+          },
+    );
+    renderApp('/app/admin');
+    expect(await screen.findByRole('heading', { name: 'Tổng quan nền tảng' })).toBeInTheDocument();
+    localStorage.removeItem('access_token');
+    fireEvent(window, new Event('nextvn:session-expired'));
+    expect(await screen.findByRole('heading', { name: 'Đăng nhập' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Tổng quan nền tảng' })).not.toBeInTheDocument();
+  });
   beforeEach(() => localStorage.setItem('access_token', 'test-session'));
   afterEach(() => vi.restoreAllMocks());
 
@@ -74,7 +97,7 @@ describe('App', () => {
   it('renders POS page with Vietnamese header', () => {
     renderApp('/app/pos');
 
-    expect(screen.getByRole('heading', { name: 'POS / Bán hàng' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Bán hàng' })).toBeInTheDocument();
   });
 
   it('renders sidebar navigation with Vietnamese labels', () => {

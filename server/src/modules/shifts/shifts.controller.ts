@@ -48,6 +48,16 @@ export async function endShift(req: Request, res: Response): Promise<void> {
     }
 
     const userId = (req as AuthenticatedRequest).user.userId;
+    const existing = await shiftsService.getShiftById(parsed.data.shiftId);
+    const membership = (req as MemberRequest).membership;
+    if (
+      existing &&
+      (!(await validateBranchOwnership(membership.businessId, existing.branchId)) ||
+        (membership.role !== 'OWNER' && membership.branchId !== existing.branchId))
+    ) {
+      sendError(res, 'Bạn không có quyền kết thúc ca tại chi nhánh này.', 403);
+      return;
+    }
     const shift = await shiftsService.endShift(parsed.data.shiftId, userId);
 
     if (!shift) {
